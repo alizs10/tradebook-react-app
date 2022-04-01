@@ -58,17 +58,11 @@ const Tradebook = () => {
 
                 </AuthCkeck>
             }>
-                <Route path='/panel' element={
-                    <ActivationCheck>
-                        <PanelHome />
-                    </ActivationCheck>
-
-                } />
+                <Route path='/panel' element={<PanelHome />} />
                 <Route path='accounts' element={
                     <ActivationCheck>
                         <PanelAccounts />
                     </ActivationCheck>
-
                 } />
                 <Route path='profile' element={<PanelProfile />} />
                 <Route path='plans' element={<PanelPlans />} />
@@ -76,7 +70,6 @@ const Tradebook = () => {
                     <ActivationCheck>
                         <PanelNotebook />
                     </ActivationCheck>
-
                 } />
                 <Route path='about' element={<PanelAbout />} />
 

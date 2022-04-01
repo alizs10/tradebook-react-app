@@ -1,17 +1,21 @@
-import React, { Fragment, useEffect, useRef, useState } from 'react';
+import React, { Fragment, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { useNavigate } from 'react-router';
+import { BeatLoader } from 'react-spinners';
 import { toast } from 'react-toastify';
 import SimpleReactValidator from 'simple-react-validator';
+import { notify } from '../Services/alerts';
 import { registerUser } from '../Services/AuthService';
 
 const Register = () => {
+    const [loading, setLoading] = useState(false)
 
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [mobile, setMobile] = useState("");
     const [password, setPassword] = useState("");
     const [password_confirm, setPasswordConfirm] = useState("");
+    const [referralCode, setReferralCode] = useState("");
 
 
     const [, forceUpdate] = useState();
@@ -32,36 +36,35 @@ const Register = () => {
 
     const handelRegister = async event => {
         event.preventDefault();
-
-        const user = {
-            name, email, password, mobile
+        if (loading) {
+            notify('سیستم در حال انجام درخواست شما می باشد، صبر کنید', 'warning')
+            return
         }
+        setLoading(true)
+        const user = {
+            name, email, password, password_confirmation: password_confirm, mobile, referral_code: referralCode
+        }
+        if (validator.current.allValid()) {
+            try {
 
-        try {
 
-            if (validator.current.allValid()) {
                 const { status } = await registerUser(user);
 
                 if (status === 201) {
-                    toast.success('تبریک، عضویت شما با موفقیت انجام شد', {
-                        position: "top-right",
-                        closeOnClick: true
-                    });
+                    notify('تبریک، عضویت شما با موفقیت انجام شد', 'success')
                     reset();
                     navigate("/", { replace: true })
                 }
-            } else {
-                validator.current.showMessages();
-                forceUpdate(1);
             }
 
-        } catch (error) {
-            toast.error('مشکلی پیش آمده است', {
-                position: "top-right",
-                closeOnClick: true
-            });
+            catch (error) {
+                notify('مشکلی پیش آمده است', 'error')
+            }
+        } else {
+            validator.current.showMessages();
+            forceUpdate(1);
         }
-
+        setLoading(false)
     }
 
     const reset = () => {
@@ -117,7 +120,7 @@ const Register = () => {
                         {validator.current.message("password", password, "required|min:8")}
                     </div>
                     <div className="flex flex-col gap-y-2">
-                        <label htmlFor="" className="text-xs">تکرار کلمه عبور</label>
+                        <label htmlFor="password_confirm" className="text-xs">تکرار کلمه عبور</label>
                         <input type="password" className='form-input' value={password_confirm} onChange={event => {
                             setPasswordConfirm(event.target.value)
                             validator.current.showMessageFor('password_confirm')
@@ -125,7 +128,21 @@ const Register = () => {
                         {validator.current.message("password_confirm", password_confirm, "required|min:8")}
                     </div>
 
-                    <button className="py-4 mt-4 text-black text-base bg-emerald-400 rounded-lg">ثبت نام</button>
+                    <div className="flex flex-col gap-y-2">
+                        <label htmlFor="referral_code" className="text-xs">کد معرف دارید؟</label>
+                        <input type="text" className="form-input" value={referralCode} onChange={event => {
+                            setReferralCode(event.target.value)
+                            validator.current.showMessageFor('referral_code')
+                        }} id="referral_code" />
+                        {validator.current.message("referral_code", referralCode, "size:6")}
+
+                    </div>
+
+                    <button className="py-3 mt-4 text-black text-base bg-emerald-400 rounded-lg">
+                        {loading ? (
+                            <BeatLoader color={'#000'} loading={loading} size={5} />
+                        ) : "ثبت نام"}
+                    </button>
                 </div>
             </form>
         </Fragment>

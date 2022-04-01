@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 
-const Paginate = ({ currentPage, pages, setCurrentPage }) => {
+const Paginate = ({ currentPage, pages, setCurrentPage, total, startIndex, endIndex }) => {
 
     const handlePageBack = () => {
         if (currentPage === 1) {
@@ -24,7 +24,7 @@ const Paginate = ({ currentPage, pages, setCurrentPage }) => {
         <Fragment>
             <div className="border-t-2 border-gray-100 flex justify-between pt-2 items-center gap-4 mx-2">
                 <span className="text-xs text-slate-600 dark:text-slate-400">
-                    نمایش 1 تا 10 از 34 مورد
+                    نمایش {startIndex+1} تا {endIndex} از {total} مورد
                 </span>
                 <div className="flex items-center gap-4">
                     <button className="rounded-lg text-lg bg-slate-200 dark:bg-slate-900 dark:text-slate-400 flex justify-center items-center p-2" onClick={() => handlePageBack()}>
@@ -32,7 +32,7 @@ const Paginate = ({ currentPage, pages, setCurrentPage }) => {
                     </button>
 
                     <span className="text-xxs dark:text-slate-400">
-                    {currentPage} از {pages}
+                        {currentPage} از {pages}
                     </span>
 
                     <button className="rounded-lg text-lg bg-slate-200 dark:bg-slate-900 dark:text-slate-400 flex justify-center items-center p-2" onClick={() => handlePageForward()}>

@@ -7,10 +7,11 @@ import { setHomeData } from '../Redux/Action/HomeData';
 const PanelHome = () => {
 
     const [loading, setLoading] = useState(true)
-    const [homeStat, setHomeStat] = useState({ accountsCount: 0, tradesCount: 0, notesCount: 0 })
+    const [homeStat, setHomeStat] = useState({ accountsCount: 0, tradesCount: 0, notesCount: 0, validFor: 0 })
 
     const dispatch = useDispatch()
     const data = useSelector(state => state.HomeData)
+    const user = useSelector(state => state.User)
 
     useEffect(() => {
 
@@ -103,7 +104,11 @@ const PanelHome = () => {
                     </span>
 
                     <span className="col-span-3 grid grid-rows-2 text-left ml-2">
-                        <span className="text-base lg:text-xl font-bold text-blue-600">29</span>
+                        <span className="text-base lg:text-xl font-bold text-blue-600">
+                            {loading ? (
+                                <ClipLoader color={'#fff'} size={15} />
+                            ) : (homeStat.validFor)}
+                        </span>
                         <span className="text-xs lg:text-base font-light text-slate-300">روزهای باقی
                             مانده</span>
                     </span>
@@ -128,6 +133,14 @@ const PanelHome = () => {
             <div className="flex flex-col gap-y-4 mx-2 mt-4">
 
                 <h2 className="text-slate-300 text-lg">پیغام های سیستم</h2>
+
+                {user.status ? null : (
+                    <div className="bg-red-600 rounded-lg drop-shadow-lg p-2 flex flex-col gap-y-2">
+                        <p className="font-semibold text-black text-base">
+                            اشتراک شما به پایان رسیده است. برای استفاده از امکانات تریدبوک، باید اشتراک خریداری کنید
+                        </p>
+                    </div>
+                )}
 
                 <div className="bg-green-500 rounded-lg drop-shadow-lg p-2 flex flex-col gap-y-2">
                     <p className="font-semibold text-black text-base">

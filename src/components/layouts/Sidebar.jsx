@@ -1,9 +1,16 @@
 import React, { Fragment } from 'react';
+import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 
 const Sidebar = ({ handleLogout, toggleSideBar }) => {
 
-    
+    const user = useSelector(state => state.User)
+
+    const handleProtectedNavLink = (e) => {
+        if (user.status === 0)
+            e.preventDefault();
+        toggleSideBar()
+    }
 
     return (
         <Fragment>
@@ -19,7 +26,7 @@ const Sidebar = ({ handleLogout, toggleSideBar }) => {
                             </NavLink>
                         </li>
                         <li>
-                            <NavLink to="/panel/accounts" onClick={() => toggleSideBar()}
+                            <NavLink to="/panel/accounts" onClick={(e) => handleProtectedNavLink(e)}
                                 className={(navData) => navData.isActive ? "bg-slate-700 flex items-center  py-4 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300 border-l-8 border-emerald-400" : "bg-slate-700 flex items-center  py-4 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300"}>
                                 <i className="fa-regular fa-rectangle-history text-2xl text-slate-400 mx-2"></i>
                                 <span className="text-base text-slate-300">حساب ها</span>
@@ -40,7 +47,7 @@ const Sidebar = ({ handleLogout, toggleSideBar }) => {
                             </NavLink>
                         </li>
                         <li>
-                            <NavLink to="/panel/notebook" onClick={() => toggleSideBar()}
+                            <NavLink to="/panel/notebook" onClick={(e) => handleProtectedNavLink(e)}
                                 className={(navData) => navData.isActive ? "bg-slate-700 flex items-center  py-4 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300 border-l-8 border-emerald-400" : "bg-slate-700 flex items-center  py-4 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300"}>
                                 <i className="fa-regular fa-notes text-2xl text-slate-400 mx-2"></i>
                                 <span className="text-base text-slate-300">یادداشت ها</span>
@@ -56,11 +63,11 @@ const Sidebar = ({ handleLogout, toggleSideBar }) => {
                         </li>
 
                         <li className="mt-4">
-                            <NavLink to="/panel/accounts" onClick={handleLogout}
+                            <button onClick={handleLogout}
                                 className="flex items-center text-slate-400 hover:text-red-400 transition ease-out duration-300">
                                 <i className="fa-light fa-right-from-bracket text-2xl mx-2"></i>
                                 <span className="text-base">خروج</span>
-                            </NavLink>
+                            </button>
                         </li>
                     </ul>
 

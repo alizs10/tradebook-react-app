@@ -197,6 +197,7 @@ const Trades = () => {
         }
     }
 
+    var iteration = pagination.startIndex + 1;
 
     return (
         <Fragment>
@@ -271,9 +272,9 @@ const Trades = () => {
 
                         <tbody>
 
-                            {pagination.sliced_array.map((trade, index) => (
+                            {pagination.sliced_array.map((trade) => (
 
-                                <Trade key={trade.id} trade={trade} index={index} setDoUserWantTradeDetails={setDoUserWantTradeDetails} setTrade={setTrade} setDoUserNeedEditTradeWindow={setDoUserNeedEditTradeWindow} handleDelTrade={handleDelTrade} />
+                                <Trade key={trade.id} trade={trade} index={iteration++} setDoUserWantTradeDetails={setDoUserWantTradeDetails} setTrade={setTrade} setDoUserNeedEditTradeWindow={setDoUserNeedEditTradeWindow} handleDelTrade={handleDelTrade} />
                             ))}
 
 
@@ -283,7 +284,7 @@ const Trades = () => {
                     </table>
 
                     {(showArr.length <= perPage) ? (null) : (
-                        <Paginate currentPage={currentPage} pages={pagination.pages} setCurrentPage={setCurrentPage} />
+                        <Paginate currentPage={currentPage} pages={pagination.pages} setCurrentPage={setCurrentPage} total={pagination.total} startIndex={pagination.startIndex} endIndex={pagination.endIndex} />
 
                     )}
 

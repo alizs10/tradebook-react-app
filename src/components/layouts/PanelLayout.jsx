@@ -73,7 +73,7 @@ const PanelLayout = ({ children }) => {
 
     }
 
-    
+
 
     return (
         <Fragment>
@@ -94,8 +94,12 @@ const PanelLayout = ({ children }) => {
                         </button>
 
                         <div className="flex items-center gap-x-2">
-                            
-                            {!avatar ? null : (<img src={`http://localhost:8000/${avatar}`} alt="avatar" className="rounded-full w-12 h-12 mr-2" />)}
+
+                            {!avatar ? (
+                                <span>
+                                    <i className='fa-regular fa-user text-slate-300 text-4xl'></i>
+                                </span>
+                            ) : (<img src={`http://localhost:8000/${avatar}`} alt="avatar" className="rounded-full w-12 h-12 mr-2" />)}
                             <div className="flex flex-col gap-y-2">
                                 <span className="text-slate-300 text-sm">{user.name}</span>
                                 <span className="text-emerald-400 text-xxs">آنلاین</span>

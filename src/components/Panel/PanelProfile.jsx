@@ -32,7 +32,7 @@ const PanelProfile = () => {
     const handleCloseOpenWindow = () => {
         if (doUserNeedActivationWindow) {
             setDoUserNeedActivationWindow(false)
-        } else if(doUserNeedResetPasswordWindow) {
+        } else if (doUserNeedResetPasswordWindow) {
             setDoUserNeedResetPasswordWindow(false)
         } else {
             setDoUserNeedEditProfileWindow(false)
@@ -116,7 +116,8 @@ const PanelProfile = () => {
                             <span className="text-xs font-light text-slate-400">شماره موبایل:</span>
                             <span className="text-sm font-semibold dark:text-slate-300">{mobile}</span>
                         </div>
-
+                        <span className="text-base text-slate-300">کد معرف شما: <span
+                            className="text-emerald-400 font-bold">{user.referral_code}</span></span>
                     </div>
                     {!avatar ? null : (<img src={`http://localhost:8000/${avatar}`} alt="avatar" className="rounded-full w-36 h-36" />)}
 
@@ -136,25 +137,33 @@ const PanelProfile = () => {
 
             </section>
 
-            {!isEmpty(userVerification) ? (null) : (
-                <div className="flex flex-col gap-y-4 mx-2 mt-4">
 
-                    <h2 className="text-slate-300 text-lg">پیغام های سیستم</h2>
+            <div className="flex flex-col gap-y-4 mx-2 mt-4">
 
-
-                    <div className="bg-yellow-500 rounded-lg drop-shadow-lg p-2 flex flex-col gap-y-2">
+                <h2 className="text-slate-300 text-lg">پیغام های سیستم</h2>
+                {user.referral.code_status === 0 && (
+                    <div className="bg-blue-300 rounded-lg drop-shadow-lg p-2 flex flex-col gap-y-2">
                         <p className="font-semibold text-black text-base">
-                            <span className="font-bold">توجه:</span>
-                            برای استفاده از اپلیکیشن تریدبوک، ابتدا باید حساب کاربری خود را فعال کنید
+                            از دوستان خود بخواهید با کد معرف شما ثبت نام کنند تا اشتراک 30 روزه هدیه بگیرید
                         </p>
                     </div>
+                )}
+                {!isEmpty(userVerification) ? (null) : (
+                    <div className='flex flex-col gap-y-1'>
+                        <div className="bg-yellow-500 rounded-lg drop-shadow-lg p-2 flex flex-col gap-y-2">
+                            <p className="font-semibold text-black text-base">
+                                <span className="font-bold">توجه:</span>
+                                برای استفاده از اپلیکیشن تریدبوک، ابتدا باید حساب کاربری خود را فعال کنید
+                            </p>
+                        </div>
 
-                    <button className="px-4 py-2 rounded-lg w-fit text-xs bg-emerald-400 flex items-center" onClick={() => setDoUserNeedActivationWindow(true)}>
-                        <i className="fa-light fa-badge-check text-xs lg:text-base ml-2"></i>
-                        فعالسازی حساب</button>
+                        <button className="px-4 py-2 rounded-lg w-fit text-xs bg-emerald-400 flex items-center" onClick={() => setDoUserNeedActivationWindow(true)}>
+                            <i className="fa-light fa-badge-check text-xs lg:text-base ml-2"></i>
+                            فعالسازی حساب</button>
+                    </div>
+                )}
+            </div>
 
-                </div>
-            )}
 
             {!doUserNeedResetPasswordWindow ? null : (<ResetPasswordWindow setDoUserNeedResetPasswordWindow={setDoUserNeedResetPasswordWindow} />)}
             {!doUserNeedActivationWindow ? null : (<EmailVerificationWindow userId={userId} setDoUserNeedActivationWindow={setDoUserNeedActivationWindow} />)}

@@ -1,10 +1,15 @@
 import http from './http';
 
 import config from './config.json';
+import axios from 'axios';
 
 
-export const registerUser = user => {
-    return http.post(`${config['base_url']}/register`, JSON.stringify(user));
+export const registerUser = async user => {
+    // delete axios.defaults.headers["Authorization"];
+
+    return await http.get(`${config['base_url']}/sanctum/csrf-cookie`).then(async response => {
+        return await http.post(`${config['base_url']}/api/register`, JSON.stringify(user));
+    });
 }
 
 export const loginUser = async user => {

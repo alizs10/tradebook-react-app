@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
+import { BeatLoader } from 'react-spinners';
 
 import SimpleReactValidator from 'simple-react-validator';
 import { AddUser } from '../Redux/Action/User';
@@ -11,6 +12,7 @@ import { loginUser } from '../Services/AuthService';
 
 const Login = () => {
 
+    const [loading, setLoading] = useState(false)
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("")
 
@@ -33,7 +35,11 @@ const Login = () => {
 
     const handelLogin = async event => {
         event.preventDefault();
-
+        if (loading) {
+            notify('سیستم در حال انجام درخواست شما می باشد، صبر کنید', 'warning')
+            return
+        }
+        setLoading(true)
         const user = {
             email, password
         }
@@ -46,7 +52,7 @@ const Login = () => {
                     reset()
                     localStorage.setItem('token', data.token)
                     dispatch(AddUser(data.user))
-                    navigate("/panel")
+                    navigate("/panel/")
                     notify('با موفقیت وارد شدید', 'success')
                 } else if (status === 401) {
                     notify('ایمیل یا کلمه عبور شما اشتباه می باشد', 'danger')
@@ -62,7 +68,10 @@ const Login = () => {
                 }
             }
 
+            setLoading(false)
+
         } else {
+            setLoading(false)
             validator.current.showMessages();
             forceUpdate(1);
         }
@@ -94,14 +103,18 @@ const Login = () => {
                     </div>
                     <div className="flex flex-col gap-y-2">
                         <label htmlFor="" className="text-xs">کلمه عبور</label>
-                        <input type="password" className="form-input"  value={password} onChange={event => {
+                        <input type="password" className="form-input" value={password} onChange={event => {
                             setPassword(event.target.value);
                             validator.current.showMessageFor('password')
                         }} id="password" />
                         {validator.current.message("password", password, "required|min:8")}
                     </div>
 
-                    <button className="py-4 mt-4 text-black text-base bg-emerald-400 rounded-lg">ورود</button>
+                    <button className="py-3 mt-4 text-black text-base bg-emerald-400 rounded-lg">
+                        {loading ? (
+                            <BeatLoader color={'#000'} loading={loading} size={5}  />
+                        ) : "ورود"}
+                    </button>
                     <Link to="/forgot-password" className="text-slate-400 text-xs mt-2">فراموشی کلمه عبور؟</Link>
 
                 </div>
