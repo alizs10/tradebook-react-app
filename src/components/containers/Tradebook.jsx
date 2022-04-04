@@ -4,13 +4,18 @@ import { Outlet, Route, Routes } from 'react-router';
 import AccountMain from '../Account/AccountMain';
 import Statistics from '../Account/Statistics/Statistics';
 import Trades from '../Account/Trades/Trades';
+import DashHome from '../AdminDashboard/DashHome';
+import DashProfile from '../AdminDashboard/DashProfile';
+import DashProducts from '../AdminDashboard/Products/DashProducts';
 import ActivationCheck from '../Auth/ActivationCheck';
+import AdminCheck from '../Auth/AdminCheck';
 import AuthCkeck from '../Auth/AuthCheck';
 import ForgotPassword from '../Auth/ForgotPassword';
 import Login from '../Auth/Login';
 import Register from '../Auth/Register';
 import ResetPassword from '../Auth/ResetPassword';
 import AccountLayout from '../layouts/AccountLayout';
+import AdmminDashLayout from '../layouts/AdminDashboard/AdminDashLayout';
 import AuthLayout from '../layouts/AuthLayout';
 import PanelLayout from '../layouts/PanelLayout';
 import PanelAbout from '../Panel/PanelAbout';
@@ -97,6 +102,30 @@ const Tradebook = () => {
                         </ActivationCheck>
                     </AuthCkeck>
                 }></Route>
+            </Route>
+
+            <Route path='admin' element={
+                <AuthCkeck>
+                    <AdminCheck>
+                        <AdmminDashLayout>
+                            <Outlet />
+                        </AdmminDashLayout>
+                    </AdminCheck>
+                </AuthCkeck>
+            }>
+
+
+                <Route path='index' element={
+                    <DashHome />
+                } />
+                <Route path='products' element={
+                    <DashProducts />
+                } />
+                <Route path='profile' element={
+                    <DashProfile />
+                } />
+
+
             </Route>
 
         </Routes>

@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { useSelector } from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 const Sidebar = ({ handleLogout, toggleSideBar }) => {
 
@@ -61,6 +61,16 @@ const Sidebar = ({ handleLogout, toggleSideBar }) => {
                                 <span className="text-base text-slate-300">درباره ما</span>
                             </NavLink>
                         </li>
+                        {user.is_admin === 1 && (
+                            <li>
+                                <Link to="/admin/index" onClick={() => toggleSideBar()}
+                                    className="bg-slate-700 flex items-center  py-4 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300 border-l-8"
+                                >
+                                    <i className="fa-regular fa-circle-info text-2xl text-slate-400 mx-2"></i>
+                                    <span className="text-base text-slate-300">پنل ادمین</span>
+                                </Link>
+                            </li>
+                        )}
 
                         <li className="mt-4">
                             <button onClick={handleLogout}

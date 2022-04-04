@@ -36,7 +36,7 @@ const AuthCkeck = ({ children }) => {
                 dispatch(AddUser(data.user))
                 setChecking(false)
                 if (location.pathname === '/' || location.pathname === '/register') {
-                    navigate('/panel')
+                    navigate('/panel/')
                 }
 
             }

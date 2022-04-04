@@ -1,5 +1,7 @@
 
 import React, { Fragment, useEffect, useState } from 'react';
+
+
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router';
 import { getAllTrades } from '../../Redux/Action/Trades';
@@ -16,13 +18,16 @@ import { confirm, notify } from '../../Services/alerts';
 import { DestroyTrade } from '../../Services/TradesServices';
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
-import { isEmpty } from 'lodash';
+import { isEmpty, isNull } from 'lodash';
 import { setCryptoPairs, setForexPairs } from '../../Redux/Action/Pairs';
 import UpdatePriceWindow from './UpdatePriceWindow';
+import { CSVLink } from 'react-csv';
+import DateRangePickerWindow from './DateRangePickerWindow';
 
 
 const Trades = () => {
 
+    const [doUserNeedDateRangeWindow, setDoUserNeedDateRangeWindow] = useState(false);
     const [doUserNeedCreateTradeWindow, setDoUserNeedCreateTradeWindow] = useState(false);
     const [doUserNeedEditTradeWindow, setDoUserNeedEditTradeWindow] = useState(false);
     const [doUserWantTradeDetails, setDoUserWantTradeDetails] = useState(false);
@@ -44,6 +49,12 @@ const Trades = () => {
     const [accType, setAccType] = useState("");
     const [filterMode, setFilterMode] = useState("all");
     const [pagination, setPagination] = useState(paginate(showArr, perPage, currentPage));
+
+    const [csvData, setCsvData] = useState([])
+    const [exportDate, setExportDate] = useState("")
+
+    const [startDate, setStartDate] = useState(null)
+    const [endDate, setEndDate] = useState(null)
 
     const { account_id } = useParams();
 
@@ -126,11 +137,47 @@ const Trades = () => {
 
     useEffect(() => {
         setPagination(paginate(showArr, 5, currentPage))
+
+        const dateInstance = new Date();
+        const now = dateInstance.getFullYear() + "-" + ("0" + (dateInstance.getMonth() + 1)).slice(-2) + "-" +
+            ("0" + dateInstance.getDate()).slice(-2) + "-" + ("0" + dateInstance.getHours()).slice(-2) + "-" + ("0" + dateInstance.getMinutes()).slice(-2) + "-" + ("0" + dateInstance.getSeconds()).slice(-2);
+        setExportDate(now)
+
+        if (showArr.length === 0) {
+            setCsvData([
+                { message: "no data" }
+            ])
+            return
+        }
+        createExportableCsvData(showArr)
     }, [showArr])
 
     useEffect(() => {
         setPagination(paginate(showArr, 5, currentPage))
     }, [currentPage])
+
+    const createExportableCsvData = (dataArr) => {
+
+        var exportableData = structuredClone(dataArr)
+
+        exportableData.forEach(val => {
+            delete val.id
+            delete val.account_id
+            val.contract_type = val.contract_type === 0 ? "buy" : "sell"
+            val.status = val.status === 0 ? "open" : "closed"
+            val.valume = JSON.parse(val.margin).valume
+            val.margin = JSON.parse(val.margin).margin
+            delete val.created_at
+            delete val.deleted_at
+            delete val.pair
+            delete val.user_id
+            delete val.updated_at
+            delete val.pair_id
+            return val
+        })
+        setCsvData(exportableData)
+
+    }
 
 
     const handleDelTrade = (acc_id, trade_id) => {
@@ -140,7 +187,9 @@ const Trades = () => {
 
                 if (status === 200) {
                     dispatch(DeleteTrade(trade_id))
-                    setDoUserWantTradeDetails(false)
+                    if (doUserWantTradeDetails) {
+                        setDoUserWantTradeDetails(false)
+                    }
                     notify('ترید شما با موفقیت حذف شد', 'success');
 
                 } else {
@@ -199,6 +248,40 @@ const Trades = () => {
 
     var iteration = pagination.startIndex + 1;
 
+    const handleDateRangeWindowToggle = () => {
+        if (doUserNeedDateRangeWindow) {
+            setDoUserNeedDateRangeWindow(false)
+        } else {
+            setDoUserNeedDateRangeWindow(true)
+        }
+    }
+
+    const handleDateFilter = () => {
+        let dateFrom = startDate;
+        let dateTo = endDate;
+
+
+        if (isNull(dateFrom) || isNull(dateTo)) {
+            notify("تاریخی انتخاب نشده است", "warning")
+            return
+        }
+
+        if (dateFrom > dateTo) {
+            notify("تاریخ های انتخابی صحیح نمی باشند", "warning")
+            return
+        }
+
+        let tradesInstance = trades;
+        let filteredTradesBySelectedDates = tradesInstance.filter(function (trade) {
+            if (trade.trade_date > dateFrom && trade.trade_date < dateTo) return true
+        })
+        setStartDate(null)
+        setEndDate(null)
+        handleDateRangeWindowToggle()
+        setShowArr(filteredTradesBySelectedDates)
+
+    }
+
     return (
         <Fragment>
 
@@ -220,11 +303,23 @@ const Trades = () => {
 
                     <SearchTrade handleSearchInp={handleSearchInp} />
 
-                    <div className="col-span-4 grid grid-cols-2 gap-x-1">
-                        <button className="col-span-1 backdrop-blur-lg bg-slate-900/70 rounded-lg py-4 text-xl" onClick={() => setDoUserNeedUpdatePriceWindow(true)}>
+                    <div className="col-span-6 md:col-span-4 grid grid-cols-4 gap-x-1">
+                        <div className={`relative col-span-1 backdrop-blur-lg ${doUserNeedDateRangeWindow ? "bg-slate-700" : "bg-slate-900/70"} rounded-lg text-sm md:text-xl text-center`}>
+                            <button className="block w-full h-full py-4 rounded-lg" onClick={() => handleDateRangeWindowToggle()}>
+                                <i className="fa-duotone fa-calendar-days text-orange-300"></i>
+                            </button>
+                            {!doUserNeedDateRangeWindow ? null : (
+                                <DateRangePickerWindow setStartDate={setStartDate} setEndDate={setEndDate} handleDateFilter={handleDateFilter} />
+                            )}
+                        </div>
+                        <CSVLink className="col-span-1 backdrop-blur-lg bg-slate-900/70 rounded-lg py-4 text-sm md:text-xl text-center" data={csvData}
+                            filename={`TradeBook-Exported-Trades-${exportDate}.csv`}>
+                            <i className="fa-duotone fa-file-export text-slate-300"></i>
+                        </CSVLink>
+                        <button className="col-span-1 backdrop-blur-lg bg-slate-900/70 rounded-lg py-4 text-sm md:text-xl text-center" onClick={() => setDoUserNeedUpdatePriceWindow(true)}>
                             <i className="fa-duotone fa-arrows-retweet text-emerald-400"></i>
                         </button>
-                        <button className="col-span-1 backdrop-blur-lg bg-slate-900/70 rounded-lg py-4 text-xl" onClick={() => setDoUserNeedCreateTradeWindow(true)}>
+                        <button className="col-span-1 backdrop-blur-lg bg-slate-900/70 rounded-lg py-4 text-sm md:text-xl text-center" onClick={() => setDoUserNeedCreateTradeWindow(true)}>
                             <i className="fa-solid fa-plus text-blue-500"></i>
                         </button>
                     </div>
@@ -290,6 +385,7 @@ const Trades = () => {
 
                 </section>
             </section>
+
 
             {!doUserNeedUpdatePriceWindow ? null : (<UpdatePriceWindow setDoUserNeedUpdatePriceWindow={setDoUserNeedUpdatePriceWindow} trades={trades} account_id={account_id} />)}
             {!doUserNeedCreateTradeWindow ? null : (<CreateTradeInputWindow setDoUserNeedCreateTradeWindow={setDoUserNeedCreateTradeWindow} acc_id={account_id} accType={accType} />)}
