@@ -7,6 +7,8 @@ import Trades from '../Account/Trades/Trades';
 import DashAdminPairs from '../AdminDashboard/AdminPairs/DashAdminPairs';
 import DashHome from '../AdminDashboard/DashHome';
 import DashProfile from '../AdminDashboard/DashProfile';
+import DashDiscounts from '../AdminDashboard/Discounts/DashDiscounts';
+import DashOrders from '../AdminDashboard/Orders/DashOrders';
 import DashPayments from '../AdminDashboard/Payments/DashPayments';
 import DashProducts from '../AdminDashboard/Products/DashProducts';
 import DashUsers from '../AdminDashboard/Users/DashUsers';
@@ -132,6 +134,12 @@ const Tradebook = () => {
                 } />
                 <Route path='pairs' element={
                     <DashAdminPairs />
+                } />
+                <Route path='discounts' element={
+                    <DashDiscounts />
+                } />
+                <Route path='orders' element={
+                    <DashOrders />
                 } />
                 <Route path='profile' element={
                     <DashProfile />

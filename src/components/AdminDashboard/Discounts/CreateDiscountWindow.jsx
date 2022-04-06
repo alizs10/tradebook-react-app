@@ -1,21 +1,25 @@
-import { isEmpty } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import SimpleReactValidator from 'simple-react-validator';
-import { EditOrder } from '../../Redux/Action/Admin/Orders';
+import { AddDiscount } from '../../Redux/Action/Admin/Discounts';
 import { notify } from '../../Services/alerts';
-import { UpdateOrder } from '../../Services/Admin/OrdersServices';
+import { CreateDiscount } from '../../Services/Admin/DiscountsServices';
 import { getAllUsers } from '../../Redux/Action/Admin/Users';
 import { getAllPlans } from '../../Redux/Action/Admin/Plans';
 
-const EditOrderWindow = ({ setDoUserNeedEditOrderWindow, order }) => {
+const CreateDiscountWindow = ({ setDoUserNeedCreateDiscountWindow }) => {
 
     const [userId, setUserId] = useState("")
     const [planId, setPlanId] = useState("")
-    const [discountCode, setDiscountCode] = useState("")
-    const [orderDate, setOrderDate] = useState("")
+    const [code, setCode] = useState("")
+    const [value, setValue] = useState("")
     const [status, setStatus] = useState("")
     const [, forceUpdate] = useState("");
+
+
+    const users = useSelector(state => state.Users)
+    const plans = useSelector(state => state.Plans)
+
     const validator = useRef(new SimpleReactValidator({
         messages: {
             required: "پر کردن این فیلد الزامی می باشد",
@@ -23,19 +27,6 @@ const EditOrderWindow = ({ setDoUserNeedEditOrderWindow, order }) => {
         },
         element: message => <span className='text-xs text-red-400'>{message}</span>
     }));
-
-    const users = useSelector(state => state.Users)
-    const plans = useSelector(state => state.Plans)
-
-    useEffect(() => {
-        if (isEmpty(order)) return
-
-        setUserId(order.user_id)
-        setPlanId(order.plan_id)
-        setDiscountCode("")   
-        setOrderDate(order.amount)
-        setStatus(order.status)
-    }, [order])
 
     const dispatch = useDispatch()
 
@@ -45,20 +36,20 @@ const EditOrderWindow = ({ setDoUserNeedEditOrderWindow, order }) => {
         dispatch(getAllPlans())
     }, [])
 
-    const handleEditOrder = async () => {
-        if (validator.current.allValid()) {
-            let editedOrder = {
 
+    const handleCreateDiscount = async () => {
+        if (validator.current.allValid()) {
+            let newDiscount = {
+                user_id: userId, plan_id: planId, status, code, value
             }
 
             try {
-                const { data, status } = await UpdateOrder(editedOrder);
+                const { data, status } = await CreateDiscount(newDiscount);
 
                 if (status === 200) {
-                    console.log(data.order);
-                    dispatch(EditOrder(data.order))
-                    setDoUserNeedEditOrderWindow(false)
-                    notify('سفارش موردنظر با موفقیت ویرایش شد', 'success')
+                    dispatch(AddDiscount(data.discount))
+                    setDoUserNeedCreateDiscountWindow(false)
+                    notify('کد تخفیف جدید با موفقیت اضافه شد', 'success')
                 }
             }
 
@@ -66,6 +57,8 @@ const EditOrderWindow = ({ setDoUserNeedEditOrderWindow, order }) => {
                 notify('مشکلی پیش آمده است', 'error')
             }
 
+
+            console.log(newDiscount);
         } else {
             validator.current.showMessages();
             forceUpdate(1);
@@ -79,27 +72,29 @@ const EditOrderWindow = ({ setDoUserNeedEditOrderWindow, order }) => {
                 className="flex flex-col gap-y-1 mx-2 rounded-lg shadow-lg bg-slate-100 dark:bg-slate-900 dark:text-white overflow-hidden">
 
                 <div className="flex justify-between items-center p-2">
-                    <h2 className="text-sm">ویرایش سفارش</h2>
+                    <h2 className="text-sm">جزییات سفارش</h2>
 
-                    <button className="p-2 text-lg dark:text-slate-300" onClick={() => setDoUserNeedEditOrderWindow(false)}>
+                    <button className="p-2 text-lg dark:text-slate-300" onClick={() => setDoUserNeedCreateDiscountWindow(false)}>
                         <i className="fa-regular fa-xmark"></i>
                     </button>
                 </div>
 
                 <div className="p-2 flex flex-col gap-y-1">
+
                     <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
                         <label htmlFor="userId">کاربر</label>
                         <select className='form-input' id="userId" value={userId} onChange={event => {
                             setUserId(event.target.value);
                             validator.current.showMessageFor('userId')
                         }}>
-                            <option value="">کاربر را انتخاب کنید</option>
+
+                            <option value="">عمومی</option>
                             {users.map(user => (
                                 <option key={user.id} value={user.id}>{user.name}</option>
                             ))}
 
                         </select>
-                        {validator.current.message("userId", userId, "required|numeric")}
+                        {validator.current.message("userId", userId, "numeric")}
                     </div>
                     <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
                         <label htmlFor="planId">محصول</label>
@@ -107,42 +102,41 @@ const EditOrderWindow = ({ setDoUserNeedEditOrderWindow, order }) => {
                             setPlanId(event.target.value);
                             validator.current.showMessageFor('planId')
                         }}>
-                            <option value="">محصول را انتخاب کنید</option>
+
+                            <option value="">همه محصولات</option>
                             {plans.map(plan => (
                                 <option key={plan.id} value={plan.id}>{plan.name}</option>
                             ))}
 
                         </select>
-                        {validator.current.message("planId", planId, "required|numeric")}
+                        {validator.current.message("planId", planId, "numeric")}
                     </div>
                     <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
                         <label className="text-xs h-fit">کد تخفیف</label>
-                        <input type="text" className="form-input" value={discountCode} onChange={event => {
-                            setDiscountCode(event.target.value);
-                            validator.current.showMessageFor('discountCode')
-                        }} id="discountCode" />
-                        {validator.current.message("discountCode", discountCode, "required")}
+                        <input type="text" className="form-input" value={code} onChange={event => {
+                            setCode(event.target.value);
+                            validator.current.showMessageFor('code')
+                        }} id="code" />
+                        {validator.current.message("code", code, "required")}
 
                     </div>
-
                     <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
-                        <label className="text-xs h-fit">تاریخ سفارش</label>
-                        <input type="date" className="form-input" value={orderDate} onChange={event => {
-                            setOrderDate(event.target.value);
-                            validator.current.showMessageFor('orderDate')
-                        }} id="orderDate" />
-                        {validator.current.message("orderDate", orderDate, "required")}
+                        <label className="text-xs h-fit">مقدار</label>
+                        <input type="text" className="form-input" value={value} onChange={event => {
+                            setValue(event.target.value);
+                            validator.current.showMessageFor('value')
+                        }} id="value" />
+                        {validator.current.message("value", value, "required|min:0|max:100")}
 
                     </div>
-
                     <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
                         <label htmlFor="status">وضعیت</label>
                         <select className='form-input' id="status" value={status} onChange={event => {
                             setStatus(event.target.value);
                             validator.current.showMessageFor('status')
                         }}>
-                            <option value="0">لغو شده</option>
-                            <option value="1" >پرداخت شده</option>
+                            <option value="0">معتبر</option>
+                            <option value="1" >منقضی</option>
                         </select>
                         {validator.current.message("status", status, "required|in:0,1")}
                     </div>
@@ -153,12 +147,12 @@ const EditOrderWindow = ({ setDoUserNeedEditOrderWindow, order }) => {
 
                 <div className="p-2">
                     <div className="flex justify-end gap-x-2 text-black">
-                        <button className="px-4 py-2 rounded-lg text-xs bg-gray-300 flex items-center" onClick={() => setDoUserNeedEditOrderWindow(false)}>
+                        <button className="px-4 py-2 rounded-lg text-xs bg-gray-300 flex items-center" onClick={() => setDoUserNeedCreateDiscountWindow(false)}>
                             <i className="fa-regular fa-ban text-xs lg:text-base ml-2"></i>
                             انصراف</button>
-                        <button className="px-4 py-2 rounded-lg text-xs bg-yellow-300 flex items-center" onClick={() => handleEditOrder()}>
+                        <button className="px-4 py-2 rounded-lg text-xs bg-green-500 flex items-center" onClick={() => handleCreateDiscount()}>
                             <i className="fa-regular fa-check text-xs lg:text-base ml-2"></i>
-                            ویرایش</button>
+                            ثبت</button>
                     </div>
                 </div>
 
@@ -169,4 +163,4 @@ const EditOrderWindow = ({ setDoUserNeedEditOrderWindow, order }) => {
     );
 }
 
-export default EditOrderWindow;
+export default CreateDiscountWindow;

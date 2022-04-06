@@ -56,18 +56,21 @@ const AdminDashSidebar = () => {
                                 </span>
                             </NavLink>
                         </li>
+                        
                         <li>
-                            <NavLink to="statistics"
+                            <NavLink to="discounts"
                                 className={(navData) => navData.isActive ? "py-4 px-2 navLinkActive rounded-md shadow-md flex items-center bg-white dark:bg-slate-800 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition-all ease-out duration-300" : "py-4 px-2 rounded-md shadow-md flex items-center bg-white dark:bg-slate-800 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition-all ease-out duration-300"}
                             >
-                                <i className="fa-light fa-comments text-xl text-gray-500 dark:text-slate-400"></i>
-                                <span
-                                    className="flex justify-between w-full items-center text-xs mr-2 text-gray-700 dark:text-slate-500">سفارشات
-
-                                    <span
-                                        className="text-xs text-white font-bold p-1 w-6 h-6 flex justify-center items-center rounded-full bg-red-600 dark:bg-red-500 dark:text-gray-300">5</span>
-
-                                </span>
+                                <i className="fa-light fa-credit-card text-xl text-gray-500 dark:text-slate-400"></i>
+                                <span className="text-xs mr-2 text-gray-700 dark:text-slate-500">کدهای تخفیف</span>
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink to="orders"
+                                className={(navData) => navData.isActive ? "py-4 px-2 navLinkActive rounded-md shadow-md flex items-center bg-white dark:bg-slate-800 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition-all ease-out duration-300" : "py-4 px-2 rounded-md shadow-md flex items-center bg-white dark:bg-slate-800 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition-all ease-out duration-300"}
+                            >
+                                <i className="fa-light fa-credit-card text-xl text-gray-500 dark:text-slate-400"></i>
+                                <span className="text-xs mr-2 text-gray-700 dark:text-slate-500">سفارشات</span>
                             </NavLink>
                         </li>
                         <li>

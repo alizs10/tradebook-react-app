@@ -21,7 +21,7 @@ export const EditPayment = (edited_payment) => {
         let filteredPayments = paymentsInstance.filter(payment => payment.id !== edited_payment.id)
         filteredPayments = [...filteredPayments, edited_payment]
 
-        await dispatch({ type: "UPDATE_PAYMENT", payload: paymentsInstance })
+        await dispatch({ type: "UPDATE_PAYMENT", payload: filteredPayments })
     }
 }
 

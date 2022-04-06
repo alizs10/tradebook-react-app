@@ -21,7 +21,7 @@ export const EditOrder = (edited_order) => {
         let filteredOrders = ordersInstance.filter(order => order.id !== edited_order.id)
         filteredOrders = [...filteredOrders, edited_order]
 
-        await dispatch({ type: "UPDATE_ORDER", payload: ordersInstance })
+        await dispatch({ type: "UPDATE_ORDER", payload: filteredOrders })
     }
 }
 
