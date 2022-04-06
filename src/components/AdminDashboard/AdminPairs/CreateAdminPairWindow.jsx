@@ -1,15 +1,15 @@
 import React, { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import SimpleReactValidator from 'simple-react-validator';
-import { AddPlan } from '../../Redux/Action/Admin/Plans';
+import { AddAdminPair } from '../../Redux/Action/Admin/AdminPairs';
 import { notify } from '../../Services/alerts';
-import { CreatePlan } from '../../Services/Admin/PlansServices';
+import { CreateAdminPair } from '../../Services/Admin/AdminPairsServices';
 
-const CreatePlanWindow = ({ setDoUserNeedCreatePlanWindow }) => {
+const CreateAdminPairWindow = ({ setDoUserNeedCreateAdminPairWindow }) => {
 
     const [name, setName] = useState("")
-    const [validFor, setValidFor] = useState("")
-    const [price, setPrice] = useState("")
+    const [type, setType] = useState("")
+    const [status, setStatus] = useState("")
     const [, forceUpdate] = useState("");
     const validator = useRef(new SimpleReactValidator({
         messages: {
@@ -21,19 +21,19 @@ const CreatePlanWindow = ({ setDoUserNeedCreatePlanWindow }) => {
 
     const dispatch = useDispatch()
 
-    const handleCreatePlan = async () => {
+    const handleCreateAdminPair = async () => {
         if (validator.current.allValid()) {
-            let newPlan = {
-                name, valid_for: validFor, price
+            let newAdminPair = {
+                name, type, status
             }
 
             try {
-                const { data, status } = await CreatePlan(newPlan);
+                const { data, status } = await CreateAdminPair(newAdminPair);
 
                 if (status === 200) {
-                    dispatch(AddPlan(data.plan))
-                    setDoUserNeedCreatePlanWindow(false)
-                    notify('محصول جدید با موفقیت اضافه شد', 'success')
+                    dispatch(AddAdminPair(data.pair))
+                    setDoUserNeedCreateAdminPairWindow(false)
+                    notify('جفت ارز جدید با موفقیت اضافه شد', 'success')
                 }
             }
 
@@ -42,7 +42,7 @@ const CreatePlanWindow = ({ setDoUserNeedCreatePlanWindow }) => {
             }
 
 
-            console.log(newPlan);
+            console.log(newAdminPair);
         } else {
             validator.current.showMessages();
             forceUpdate(1);
@@ -58,7 +58,7 @@ const CreatePlanWindow = ({ setDoUserNeedCreatePlanWindow }) => {
                 <div className="flex justify-between items-center p-2">
                     <h2 className="text-sm">جزییات محصول</h2>
 
-                    <button className="p-2 text-lg dark:text-slate-300" onClick={() => setDoUserNeedCreatePlanWindow(false)}>
+                    <button className="p-2 text-lg dark:text-slate-300" onClick={() => setDoUserNeedCreateAdminPairWindow(false)}>
                         <i className="fa-regular fa-xmark"></i>
                     </button>
                 </div>
@@ -66,7 +66,7 @@ const CreatePlanWindow = ({ setDoUserNeedCreatePlanWindow }) => {
                 <div className="p-2 flex flex-col gap-y-1">
 
                     <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
-                        <label className="text-xs h-fit">نام محصول:</label>
+                        <label className="text-xs h-fit">نام جفت ارز</label>
                         <input type="text" className="form-input" value={name} onChange={event => {
                             setName(event.target.value);
                             validator.current.showMessageFor('name')
@@ -74,23 +74,29 @@ const CreatePlanWindow = ({ setDoUserNeedCreatePlanWindow }) => {
                         {validator.current.message("name", name, "required|string")}
 
                     </div>
-                    <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
-                        <label className="text-xs h-fit">مدت اشتراک (روز):</label>
-                        <input type="text" className="form-input" value={validFor} onChange={event => {
-                            setValidFor(event.target.value);
-                            validator.current.showMessageFor('valid_for')
-                        }} id="valid_for" />
-                        {validator.current.message("valid_for", validFor, "required|numeric")}
 
+                    <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
+                        <label htmlFor="type">نوع</label>
+                        <select className='form-input' id="type" value={type} onChange={event => {
+                            setType(event.target.value);
+                            validator.current.showMessageFor('type')
+                        }}>
+                            <option value="0">crypto</option>
+                            <option value="1" >forex</option>
+                        </select>
+                        {validator.current.message("type", type, "required|in:0,1")}
                     </div>
-                    <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
-                        <label className="text-xs h-fit">قیمت:</label>
-                        <input type="text" className="form-input" value={price} onChange={event => {
-                            setPrice(event.target.value);
-                            validator.current.showMessageFor('price')
-                        }} id="price" />
-                        {validator.current.message("price", price, "required|numeric")}
 
+                    <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
+                        <label htmlFor="status">وضعیت</label>
+                        <select className='form-input' id="status" value={status} onChange={event => {
+                            setStatus(event.target.value);
+                            validator.current.showMessageFor('status')
+                        }}>
+                            <option value="0">غیرفعال</option>
+                            <option value="1" >فعال</option>
+                        </select>
+                        {validator.current.message("status", status, "required|in:0,1")}
                     </div>
 
 
@@ -99,10 +105,10 @@ const CreatePlanWindow = ({ setDoUserNeedCreatePlanWindow }) => {
 
                 <div className="p-2">
                     <div className="flex justify-end gap-x-2 text-black">
-                        <button className="px-4 py-2 rounded-lg text-xs bg-gray-300 flex items-center" onClick={() => setDoUserNeedCreatePlanWindow(false)}>
+                        <button className="px-4 py-2 rounded-lg text-xs bg-gray-300 flex items-center" onClick={() => setDoUserNeedCreateAdminPairWindow(false)}>
                             <i className="fa-regular fa-ban text-xs lg:text-base ml-2"></i>
                             انصراف</button>
-                        <button className="px-4 py-2 rounded-lg text-xs bg-green-500 flex items-center" onClick={() => handleCreatePlan()}>
+                        <button className="px-4 py-2 rounded-lg text-xs bg-green-500 flex items-center" onClick={() => handleCreateAdminPair()}>
                             <i className="fa-regular fa-check text-xs lg:text-base ml-2"></i>
                             ثبت</button>
                     </div>
@@ -115,4 +121,4 @@ const CreatePlanWindow = ({ setDoUserNeedCreatePlanWindow }) => {
     );
 }
 
-export default CreatePlanWindow;
+export default CreateAdminPairWindow;

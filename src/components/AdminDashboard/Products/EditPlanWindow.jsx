@@ -2,9 +2,9 @@ import { isEmpty } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import SimpleReactValidator from 'simple-react-validator';
-import { AddPlan, EditPlan } from '../../Redux/Action/Plans';
+import { AddPlan, EditPlan } from '../../Redux/Action/Admin/Plans';
 import { notify } from '../../Services/alerts';
-import { UpdatePlan } from '../../Services/PlansServices';
+import { UpdatePlan } from '../../Services/Admin/PlansServices';
 
 const EditPlanWindow = ({ setDoUserNeedEditPlanWindow, plan }) => {
 

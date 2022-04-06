@@ -1,4 +1,4 @@
-import { getPlans } from "../../Services/PlansServices";
+import { getPlans } from "../../../Services/Admin/PlansServices";
 
 export const getAllPlans = () => {
     return async dispatch => {

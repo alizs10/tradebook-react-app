@@ -4,9 +4,12 @@ import { Outlet, Route, Routes } from 'react-router';
 import AccountMain from '../Account/AccountMain';
 import Statistics from '../Account/Statistics/Statistics';
 import Trades from '../Account/Trades/Trades';
+import DashAdminPairs from '../AdminDashboard/AdminPairs/DashAdminPairs';
 import DashHome from '../AdminDashboard/DashHome';
 import DashProfile from '../AdminDashboard/DashProfile';
+import DashPayments from '../AdminDashboard/Payments/DashPayments';
 import DashProducts from '../AdminDashboard/Products/DashProducts';
+import DashUsers from '../AdminDashboard/Users/DashUsers';
 import ActivationCheck from '../Auth/ActivationCheck';
 import AdminCheck from '../Auth/AdminCheck';
 import AuthCkeck from '../Auth/AuthCheck';
@@ -120,6 +123,15 @@ const Tradebook = () => {
                 } />
                 <Route path='products' element={
                     <DashProducts />
+                } />
+                <Route path='users' element={
+                    <DashUsers />
+                } />
+                <Route path='payments' element={
+                    <DashPayments />
+                } />
+                <Route path='pairs' element={
+                    <DashAdminPairs />
                 } />
                 <Route path='profile' element={
                     <DashProfile />

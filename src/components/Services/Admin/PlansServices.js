@@ -1,5 +1,5 @@
-import http from "./http";
-import config from "./config.json";
+import http from "../http";
+import config from "../config.json";
 
 
 export const getPlans = async () => {

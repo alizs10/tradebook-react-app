@@ -2,15 +2,16 @@ import { isEmpty } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import SimpleReactValidator from 'simple-react-validator';
-import { AddPlan, EditPlan } from '../../Redux/Action/Plans';
+import { EditUser } from '../../Redux/Action/Admin/Users';
 import { notify } from '../../Services/alerts';
-import { UpdatePlan } from '../../Services/PlansServices';
+import { UpdateUser } from '../../Services/Admin/UsersServices';
 
-const EditUserWindow = ({ setDoUserNeedEditPlanWindow, plan }) => {
+const EditUserWindow = ({ setDoUserNeedEditUserWindow, user }) => {
 
     const [name, setName] = useState("")
-    const [validFor, setValidFor] = useState("")
-    const [price, setPrice] = useState("")
+    const [email, setEmail] = useState("")
+    const [mobile, setMobile] = useState("")
+    const [isAdmin, setIsAdmin] = useState("")
     const [, forceUpdate] = useState("");
     const validator = useRef(new SimpleReactValidator({
         messages: {
@@ -21,28 +22,30 @@ const EditUserWindow = ({ setDoUserNeedEditPlanWindow, plan }) => {
     }));
 
     useEffect(() => {
-        if (isEmpty(plan)) return
+        if (isEmpty(user)) return
 
-        setName(plan.name)
-        setValidFor(plan.valid_for)
-        setPrice(plan.price)
-    }, [plan])
+        setName(user.name)
+        setEmail(user.email)
+        setMobile(user.mobile)
+        setIsAdmin(`${user.is_admin}`)
+    }, [user])
 
     const dispatch = useDispatch()
 
-    const handleEditPlan = async () => {
+    const handleEditUser = async () => {
         if (validator.current.allValid()) {
-            let editedPlan = {
-                name, valid_for: validFor, price, _method: "PUT", id:plan.id
+            let editedUser = {
+                id: user.id, name, email, mobile, is_admin: isAdmin, _method: "PUT"
             }
 
             try {
-                const { data, status } = await UpdatePlan(editedPlan);
+                const { data, status } = await UpdateUser(editedUser);
 
                 if (status === 200) {
-                    dispatch(EditPlan(data.plan))
-                    setDoUserNeedEditPlanWindow(false)
-                    notify('محصول موردنظر با موفقیت ویرایش شد', 'success')
+                    console.log(data.user);
+                    dispatch(EditUser(data.user))
+                    setDoUserNeedEditUserWindow(false)
+                    notify('کاربر موردنظر با موفقیت ویرایش شد', 'success')
                 }
             }
 
@@ -63,9 +66,9 @@ const EditUserWindow = ({ setDoUserNeedEditPlanWindow, plan }) => {
                 className="flex flex-col gap-y-1 mx-2 rounded-lg shadow-lg bg-slate-100 dark:bg-slate-900 dark:text-white overflow-hidden">
 
                 <div className="flex justify-between items-center p-2">
-                    <h2 className="text-sm">جزییات محصول</h2>
+                    <h2 className="text-sm">جزییات کاربر</h2>
 
-                    <button className="p-2 text-lg dark:text-slate-300" onClick={() => setDoUserNeedEditPlanWindow(false)}>
+                    <button className="p-2 text-lg dark:text-slate-300" onClick={() => setDoUserNeedEditUserWindow(false)}>
                         <i className="fa-regular fa-xmark"></i>
                     </button>
                 </div>
@@ -73,7 +76,7 @@ const EditUserWindow = ({ setDoUserNeedEditPlanWindow, plan }) => {
                 <div className="p-2 flex flex-col gap-y-1">
 
                     <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
-                        <label className="text-xs h-fit">نام محصول:</label>
+                        <label className="text-xs h-fit">نام کاربر:</label>
                         <input type="text" className="form-input" value={name} onChange={event => {
                             setName(event.target.value);
                             validator.current.showMessageFor('name')
@@ -82,22 +85,34 @@ const EditUserWindow = ({ setDoUserNeedEditPlanWindow, plan }) => {
 
                     </div>
                     <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
-                        <label className="text-xs h-fit">مدت اشتراک (روز):</label>
-                        <input type="text" className="form-input" value={validFor} onChange={event => {
-                            setValidFor(event.target.value);
+                        <label className="text-xs h-fit">ایمیل:</label>
+                        <input type="text" className="form-input" value={email} onChange={event => {
+                            setEmail(event.target.value);
                             validator.current.showMessageFor('valid_for')
                         }} id="valid_for" />
-                        {validator.current.message("valid_for", validFor, "required|numeric")}
+                        {validator.current.message("valid_for", email, "required|email")}
 
                     </div>
                     <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
-                        <label className="text-xs h-fit">قیمت:</label>
-                        <input type="text" className="form-input" value={price} onChange={event => {
-                            setPrice(event.target.value);
-                            validator.current.showMessageFor('price')
-                        }} id="price" />
-                        {validator.current.message("price", price, "required|numeric")}
+                        <label className="text-xs h-fit">شماره موبایل:</label>
+                        <input type="text" className="form-input" value={mobile} onChange={event => {
+                            setMobile(event.target.value);
+                            validator.current.showMessageFor('mobile')
+                        }} id="mobile" />
+                        {validator.current.message("mobile", mobile, "required|numeric|size:11")}
 
+                    </div>
+
+                    <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
+                        <label htmlFor="isAdmin">نقش</label>
+                        <select className='form-input' id="isAdmin" value={isAdmin} onChange={event => {
+                            setIsAdmin(event.target.value);
+                            validator.current.showMessageFor('isAdmin')
+                        }}>
+                            <option value="0">کاربر عادی</option>
+                            <option value="1" >ادمین</option>
+                        </select>
+                        {validator.current.message("isAdmin", isAdmin, "required|in:0,1")}
                     </div>
 
 
@@ -106,10 +121,10 @@ const EditUserWindow = ({ setDoUserNeedEditPlanWindow, plan }) => {
 
                 <div className="p-2">
                     <div className="flex justify-end gap-x-2 text-black">
-                        <button className="px-4 py-2 rounded-lg text-xs bg-gray-300 flex items-center" onClick={() => setDoUserNeedEditPlanWindow(false)}>
+                        <button className="px-4 py-2 rounded-lg text-xs bg-gray-300 flex items-center" onClick={() => setDoUserNeedEditUserWindow(false)}>
                             <i className="fa-regular fa-ban text-xs lg:text-base ml-2"></i>
                             انصراف</button>
-                        <button className="px-4 py-2 rounded-lg text-xs bg-yellow-300 flex items-center" onClick={() => handleEditPlan()}>
+                        <button className="px-4 py-2 rounded-lg text-xs bg-yellow-300 flex items-center" onClick={() => handleEditUser()}>
                             <i className="fa-regular fa-check text-xs lg:text-base ml-2"></i>
                             ویرایش</button>
                     </div>

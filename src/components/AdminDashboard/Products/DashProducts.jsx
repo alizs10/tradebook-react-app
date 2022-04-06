@@ -1,12 +1,12 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { DeletePlan, getAllPlans } from '../../Redux/Action/Plans';
+import { DeletePlan, getAllPlans } from '../../Redux/Action/Admin/Plans';
 import { confirm, notify } from '../../Services/alerts';
 import { paginate } from '../../Services/Pagination';
 import CreatePlanWindow from './CreatePlanWindow';
 import Pagination from './Pagination';
 import Plan from './Plan';
-import {DestroyPlan} from '../../Services/PlansServices'
+import {DestroyPlan} from '../../Services/Admin/PlansServices'
 import EditPlanWindow from './EditPlanWindow';
 import DetailsPlanWindow from './DetailsPlanWindow';
 

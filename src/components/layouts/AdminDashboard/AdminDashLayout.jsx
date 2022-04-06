@@ -6,10 +6,12 @@ import AdminDashSidebar from './AdminDashSidebar';
 const AdmminDashLayout = ({ children }) => {
     const user = useSelector(state => state.User)
     const [avatar, setAvatar] = useState("");
+    const [name, setName] = useState("...");
 
     useEffect(() => {
         if (isEmpty(user)) return
         setAvatar(user.profile_photo_path)
+        setName(user.name)
     }, [user])
     return (
         <Fragment>
@@ -25,7 +27,7 @@ const AdmminDashLayout = ({ children }) => {
                             <i className='fa-regular fa-user text-slate-300 text-4xl'></i>
                         </span>
                     ) : (<img src={`http://localhost:8000/${avatar}`} alt="avatar" className="rounded-full w-12 h-12" />)}
-                    <span className="text-xs lg:text-base mr-2 dark:text-slate-300">سلام، علی!</span>
+                    <span className="text-xs lg:text-base mr-2 dark:text-slate-300">{name}</span>
                 </div>
                 <img src="../images/logo.svg" alt="logo" className="w-24 ml-2" />
 
