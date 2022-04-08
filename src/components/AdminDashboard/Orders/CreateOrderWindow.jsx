@@ -13,7 +13,7 @@ const CreateOrderWindow = ({ setDoUserNeedCreateOrderWindow }) => {
     const [planId, setPlanId] = useState("")
     const [discountCode, setDiscountCode] = useState("")
     const [orderDate, setOrderDate] = useState("")
-    const [status, setStatus] = useState("")
+    
     const [, forceUpdate] = useState("");
 
 
@@ -40,7 +40,7 @@ const CreateOrderWindow = ({ setDoUserNeedCreateOrderWindow }) => {
     const handleCreateOrder = async () => {
         if (validator.current.allValid()) {
             let newOrder = {
-                user_id: userId, plan_id: planId, status, order_date: orderDate, discount_code: discountCode
+                user_id: userId, plan_id: planId, order_date: orderDate, discount_code: discountCode
             }
 
             try {
@@ -89,7 +89,7 @@ const CreateOrderWindow = ({ setDoUserNeedCreateOrderWindow }) => {
                         }}>
                         <option value="">کاربر را انتخاب کنید</option>
                             {users.map(user => (
-                                <option key={user.id} value={user.id}>{user.name}</option>
+                                <option key={user.id} value={user.id}>{`${user.name} - ${user.email}`}</option>
                             ))}
 
                         </select>
@@ -128,19 +128,6 @@ const CreateOrderWindow = ({ setDoUserNeedCreateOrderWindow }) => {
                         {validator.current.message("orderDate", orderDate, "required")}
 
                     </div>
-
-                    <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
-                        <label htmlFor="status">وضعیت</label>
-                        <select className='form-input' id="status" value={status} onChange={event => {
-                            setStatus(event.target.value);
-                            validator.current.showMessageFor('status')
-                        }}>
-                            <option value="0">لغو شده</option>
-                            <option value="1" >پرداخت شده</option>
-                        </select>
-                        {validator.current.message("status", status, "required|in:0,1")}
-                    </div>
-
 
                 </div>
 

@@ -5,27 +5,28 @@ import React, { useEffect, useState } from 'react';
 
 const DetailsOrderWindow = ({ setDoUserNeedDetailsOrderWindow, order, handleDelOrder, setDoUserNeedEditOrderWindow }) => {
 
-    const [userName, setUserName] = useState("")
+    const [userInfo, setUserInfo] = useState("")
     const [planName, setPlanName] = useState("")
     const [amount, setAmount] = useState("")
     const [discountAmount, setDiscountAmount] = useState("")
+    const [discountInfo, setDiscountInfo] = useState("")
     const [totalAmount, setTotalAmount] = useState("")
     const [orderDate, setOrderDate] = useState("")
     const [status, setStatus] = useState("")
-    const [, forceUpdate] = useState("");
     
 
 
     useEffect(() => {
         if (isEmpty(order)) return
 
-        setUserName(order.user_name)
+        setUserInfo(`${order.user.name} - ${order.user.email}`)
         setPlanName(order.plan_name)
         setAmount(order.amount)
-        setDiscountAmount(order.amount)
-        setTotalAmount(order.amount)
-        setOrderDate(order.amount)
-        setStatus(order.status)
+        setDiscountAmount(order.discount_amount)
+        setDiscountInfo(order.discount_code)
+        setTotalAmount(order.total_amount)
+        setOrderDate(order.order_date)
+        setStatus(order.status_name)
     }, [order])
 
 
@@ -39,9 +40,9 @@ const DetailsOrderWindow = ({ setDoUserNeedDetailsOrderWindow, order, handleDelO
         <section className="absolute top-4 z-40 p-2 w-full">
 
             <div
-                className="flex flex-col gap-y-1 mx-2 rounded-lg shadow-lg bg-slate-100 dark:bg-slate-900 dark:text-white overflow-hidden">
+                className="grid grid-cols-2 gap-2 mx-2 rounded-lg shadow-lg bg-slate-100 dark:bg-slate-900 dark:text-white overflow-hidden">
 
-                <div className="flex justify-between items-center p-2">
+                <div className="col-span-2 flex justify-between items-center p-2">
                     <h2 className="text-sm">جزییات سفارش</h2>
 
                     <button className="p-2 text-lg dark:text-slate-300" onClick={() => setDoUserNeedDetailsOrderWindow(false)}>
@@ -56,7 +57,7 @@ const DetailsOrderWindow = ({ setDoUserNeedDetailsOrderWindow, order, handleDelO
                 </div>
                 <div className="col-span-1 rounded-lg bg-slate-700 mx-2 flex flex-col gap-y-1 p-2">
                     <span className="text-xs pb-2 border-b-2 border-slate-800">نام کاربر</span>
-                    <span className="text-base">{userName}</span>
+                    <span className="text-base">{userInfo}</span>
                 </div>
                 <div className="col-span-1 rounded-lg bg-slate-700 mx-2 flex flex-col gap-y-1 p-2">
                     <span className="text-xs pb-2 border-b-2 border-slate-800">نام محصول</span>
@@ -71,6 +72,10 @@ const DetailsOrderWindow = ({ setDoUserNeedDetailsOrderWindow, order, handleDelO
                     <span className="text-base">{discountAmount}</span>
                 </div>
                 <div className="col-span-1 rounded-lg bg-slate-700 mx-2 flex flex-col gap-y-1 p-2">
+                    <span className="text-xs pb-2 border-b-2 border-slate-800">کد تخفیف</span>
+                    <span className="text-base">{discountInfo}</span>
+                </div>
+                <div className="col-span-1 rounded-lg bg-slate-700 mx-2 flex flex-col gap-y-1 p-2">
                     <span className="text-xs pb-2 border-b-2 border-slate-800">مبلغ نهایی</span>
                     <span className="text-base">{totalAmount}</span>
                 </div>
@@ -82,7 +87,7 @@ const DetailsOrderWindow = ({ setDoUserNeedDetailsOrderWindow, order, handleDelO
                 </div>
                 
 
-                <div className="p-2">
+                <div className="col-span-2 p-2">
                     <div className="flex justify-end gap-x-2 text-black">
                         <button className="px-4 py-2 rounded-lg text-xs bg-gray-300 flex items-center" onClick={() => handleDelOrder(order.id)}>
                             <i className="fa-regular fa-ban text-xs lg:text-base ml-2"></i>

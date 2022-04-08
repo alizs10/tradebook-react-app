@@ -31,7 +31,7 @@ const Order = ({ order, iteration, setOrder, handleDelOrder, setDoUserNeedEditOr
             <td className="py-4">{order.plan_name}</td>
             <td className="py-4 hidden sm:block">{order.total_amount}</td>
             <td className="py-4">
-                {parseInt(order.status) === 0 ? "پرداخت شده" : "لغو شده"}
+               {order.status_name}
             </td>
             <td className="relative" ref={dropdownBtnRef}>
                 <button onClick={toggleDropDownBtn}

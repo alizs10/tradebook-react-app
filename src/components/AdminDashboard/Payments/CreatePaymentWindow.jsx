@@ -4,20 +4,22 @@ import SimpleReactValidator from 'simple-react-validator';
 import { AddPayment } from '../../Redux/Action/Admin/Payments';
 import { notify } from '../../Services/alerts';
 import { CreatePayment } from '../../Services/Admin/PaymentsServices';
-import { getAllUsers } from '../../Redux/Action/Admin/Users';
+import { getAllOrders } from '../../Redux/Action/Admin/Orders';
+import { isEmpty } from 'lodash';
 
 const CreatePaymentWindow = ({ setDoUserNeedCreatePaymentWindow }) => {
 
+    const [orderId, setOrderId] = useState("")
     const [transactionId, setTransactionId] = useState("")
-    const [userId, setUserId] = useState("")
-    const [amount, setAmount] = useState("")
     const [paymentDate, setPaymentDate] = useState("")
-    const [status, setStatus] = useState("")
-    const [type, setType] = useState("")
-    const [, forceUpdate] = useState("");
+    const [status, setStatus] = useState("0")
+    const [type, setType] = useState("0")
+    const [, forceUpdate] = useState("")
+
+    const [unpaidOrders, setUnpaidOrders] = useState([])
 
 
-    const users = useSelector(state => state.Users)
+    const orders = useSelector(state => state.Orders)
 
     const validator = useRef(new SimpleReactValidator({
         messages: {
@@ -31,14 +33,22 @@ const CreatePaymentWindow = ({ setDoUserNeedCreatePaymentWindow }) => {
 
 
     useEffect(() => {
-        dispatch(getAllUsers())
+        dispatch(getAllOrders())
     }, [])
+
+    useEffect(() => {
+        if(isEmpty(orders)) return
+
+        let unpaids = orders.filter(order => order.status !== 1)
+
+        setUnpaidOrders(unpaids)
+    }, [orders])
 
 
     const handleCreatePayment = async () => {
         if (validator.current.allValid()) {
             let newPayment = {
-                user_id: userId, transaction_id: transactionId, status, type, amount, payment_date: paymentDate
+                order_id: orderId, transaction_id: transactionId, status, type, payment_date: paymentDate
             }
 
             try {
@@ -70,7 +80,7 @@ const CreatePaymentWindow = ({ setDoUserNeedCreatePaymentWindow }) => {
                 className="flex flex-col gap-y-1 mx-2 rounded-lg shadow-lg bg-slate-100 dark:bg-slate-900 dark:text-white overflow-hidden">
 
                 <div className="flex justify-between items-center p-2">
-                    <h2 className="text-sm">جزییات محصول</h2>
+                    <h2 className="text-sm">پرداخت جدید</h2>
 
                     <button className="p-2 text-lg dark:text-slate-300" onClick={() => setDoUserNeedCreatePaymentWindow(false)}>
                         <i className="fa-regular fa-xmark"></i>
@@ -80,18 +90,18 @@ const CreatePaymentWindow = ({ setDoUserNeedCreatePaymentWindow }) => {
                 <div className="p-2 flex flex-col gap-y-1">
 
                     <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
-                        <label htmlFor="userId">کاربر</label>
-                        <select className='form-input' id="userId" value={userId} onChange={event => {
-                            setUserId(event.target.value);
-                            validator.current.showMessageFor('userId')
+                        <label htmlFor="orderId">سفارش</label>
+                        <select className='form-input' id="orderId" value={orderId} onChange={event => {
+                            setOrderId(event.target.value);
+                            validator.current.showMessageFor('orderId')
                         }}>
-                        <option value="">کاربر را انتخاب کنید</option>
-                            {users.map(user => (
-                                <option key={user.id} value={user.id}>{user.name}</option>
+                        <option value="">سفارش را انتخاب کنید</option>
+                            {unpaidOrders.map(order => (
+                                <option key={order.id} value={order.id}>{`${order.id} - ${order.user_name} - ${order.plan_name} - ${order.total_amount}`}</option>
                             ))}
 
                         </select>
-                        {validator.current.message("userId", userId, "required|numeric")}
+                        {validator.current.message("orderId", orderId, "required|numeric")}
                     </div>
                     <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
                         <label className="text-xs h-fit">کد پرداخت</label>
@@ -102,15 +112,7 @@ const CreatePaymentWindow = ({ setDoUserNeedCreatePaymentWindow }) => {
                         {validator.current.message("transaction_id", transactionId, "required|numeric")}
 
                     </div>
-                    <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
-                        <label className="text-xs h-fit">مبلغ پرداختی</label>
-                        <input type="text" className="form-input" value={amount} onChange={event => {
-                            setAmount(event.target.value);
-                            validator.current.showMessageFor('amount')
-                        }} id="amount" />
-                        {validator.current.message("amount", amount, "required|numeric")}
-
-                    </div>
+                    
                     <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
                         <label className="text-xs h-fit">تاریخ پرداخت</label>
                         <input type="date" className="form-input" value={paymentDate} onChange={event => {

@@ -1,6 +1,10 @@
 import React, { Fragment } from 'react';
+import { useSelector } from 'react-redux';
 
 const DashProfile = () => {
+
+    const user = useSelector(state => state.User)
+
     return (
         <Fragment>
             <section className="mt-4 mx-2">
@@ -16,22 +20,20 @@ const DashProfile = () => {
                         <div className="flex flex-col gap-y-4">
                             <div className="flex flex-col gap-y-1">
                                 <span className="text-xs font-light dark:text-slate-500 dark:text-slate-200">نام و نام خانوداگی:</span>
-                                <span className="text-sm font-semibold dark:text-slate-300">علی سلیمانی</span>
+                                <span className="text-sm font-semibold dark:text-slate-300">{user.name}</span>
                             </div>
                             <div className="flex flex-col gap-y-1">
                                 <span className="text-xs font-light dark:text-slate-500 dark:text-slate-200">ایمیل:</span>
-                                <span className="text-sm font-semibold dark:text-slate-300">ali.text77@gmail.com</span>
+                                <span className="text-sm font-semibold dark:text-slate-300">{user.email}</span>
                             </div>
                             <div className="flex flex-col gap-y-1">
                                 <span className="text-xs font-light dark:text-slate-500 dark:text-slate-200">شماره موبایل:</span>
-                                <span className="text-sm font-semibold dark:text-slate-300">09392983010</span>
+                                <span className="text-sm font-semibold dark:text-slate-300">{user.mobile}</span>
                             </div>
 
                         </div>
 
-
-                        <img src="images/avatar.jpg" alt="avatar" className="rounded-full w-20 h-20" />
-
+                        {user.profile_photo_path && (<img src={`http://localhost:8000/${user.profile_photo_path}`} alt="avatar" className="rounded-full w-12 h-12" />)}
                     </div>
 
                     <div className="flex gap-x-2 mt-4 mr-2">

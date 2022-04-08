@@ -97,7 +97,7 @@ const EditDiscountWindow = ({ setDoUserNeedEditDiscountWindow, discount }) => {
                         }}>
                             <option value="">عمومی</option>
                             {users.map(user => (
-                                <option key={user.id} value={user.id}>{user.name}</option>
+                                <option key={user.id} value={user.id}>{`${user.name} - ${user.email}`}</option>
                             ))}
 
                         </select>

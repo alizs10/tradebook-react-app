@@ -13,7 +13,7 @@ const CreateDiscountWindow = ({ setDoUserNeedCreateDiscountWindow }) => {
     const [planId, setPlanId] = useState("")
     const [code, setCode] = useState("")
     const [value, setValue] = useState("")
-    const [status, setStatus] = useState("")
+    const [status, setStatus] = useState("0")
     const [, forceUpdate] = useState("");
 
 
@@ -90,7 +90,7 @@ const CreateDiscountWindow = ({ setDoUserNeedCreateDiscountWindow }) => {
 
                             <option value="">عمومی</option>
                             {users.map(user => (
-                                <option key={user.id} value={user.id}>{user.name}</option>
+                                <option key={user.id} value={user.id}>{`${user.name} - ${user.email}`}</option>
                             ))}
 
                         </select>

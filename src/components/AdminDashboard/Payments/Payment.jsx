@@ -31,7 +31,9 @@ const Payment = ({ payment, iteration, setPayment, handleDelPayment, setDoUserNe
             <td className="py-4">{payment.plan_name}</td>
             <td className="py-4 hidden sm:block">{payment.amount}</td>
             <td className="py-4">
-                {parseInt(payment.status) === 0 ? "پرداخت شده" : "پرداخت نشده"}
+                <span className={`px-2 py-1 rounded-lg text-slate-900 ${payment.status == 1 ? "bg-emerald-400" : "bg-red-400"}`}>
+                    {payment.status == 1 ? "موفق" : "ناموفق"}
+                </span>
             </td>
             <td className="relative" ref={dropdownBtnRef}>
                 <button onClick={toggleDropDownBtn}

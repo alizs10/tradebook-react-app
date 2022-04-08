@@ -7,7 +7,7 @@ const Sidebar = ({ handleLogout, toggleSideBar }) => {
     const user = useSelector(state => state.User)
 
     const handleProtectedNavLink = (e) => {
-        if (user.status === 0)
+        if (user.status == 0)
             e.preventDefault();
         toggleSideBar()
     }
@@ -61,7 +61,7 @@ const Sidebar = ({ handleLogout, toggleSideBar }) => {
                                 <span className="text-base text-slate-300">درباره ما</span>
                             </NavLink>
                         </li>
-                        {user.is_admin === 1 && (
+                        {parseInt(user.is_admin) === 1 && (
                             <li>
                                 <Link to="/admin/index" onClick={() => toggleSideBar()}
                                     className="bg-slate-700 flex items-center  py-4 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300 border-l-8"

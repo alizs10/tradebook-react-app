@@ -5,20 +5,22 @@ import React, { useEffect, useState } from 'react';
 
 const DetailsPaymentWindow = ({ setDoUserNeedDetailsPaymentWindow, payment, handleDelPayment, setDoUserNeedEditPaymentWindow }) => {
 
-    const [userName, setUserName] = useState("")
+    const [userInfo, setUserInfo] = useState("")
     const [planName, setPlanName] = useState("")
     const [amount, setAmount] = useState("")
     const [status, setStatus] = useState("")
+    const [type, setType] = useState("")
     const [, forceUpdate] = useState("");
 
 
     useEffect(() => {
         if (isEmpty(payment)) return
 
-        setUserName(payment.user_name)
+        setUserInfo(`${payment.user.name} - ${payment.user.email}`)
         setPlanName(payment.plan_name)
         setAmount(payment.amount)
         setStatus(payment.status)
+        setType(payment.type)
     }, [payment])
 
 
@@ -45,7 +47,7 @@ const DetailsPaymentWindow = ({ setDoUserNeedDetailsPaymentWindow, payment, hand
 
                 <div className="col-span-1 rounded-lg bg-slate-700 mx-2 flex flex-col gap-y-1 p-2">
                     <span className="text-xs pb-2 border-b-2 border-slate-800">نام کاربر</span>
-                    <span className="text-base">{userName}</span>
+                    <span className="text-base">{userInfo}</span>
                 </div>
                 <div className="col-span-1 rounded-lg bg-slate-700 mx-2 flex flex-col gap-y-1 p-2">
                     <span className="text-xs pb-2 border-b-2 border-slate-800">نام محصول</span>
@@ -58,10 +60,16 @@ const DetailsPaymentWindow = ({ setDoUserNeedDetailsPaymentWindow, payment, hand
                 <div className="col-span-1 rounded-lg bg-slate-700 mx-2 flex flex-col gap-y-1 p-2">
                     <span className="text-xs pb-2 border-b-2 border-slate-800">وضعیت</span>
                     <span className="text-base">
-                        {status === 0 ? "پرداخت نشده" : "پرداخت شده"}
+                        {status == 1 ? "پرداخت موفق" : "پرداخت ناموفق"}
                     </span>
                 </div>
-                
+                <div className="col-span-1 rounded-lg bg-slate-700 mx-2 flex flex-col gap-y-1 p-2">
+                    <span className="text-xs pb-2 border-b-2 border-slate-800">نوع پرداخت</span>
+                    <span className="text-base">
+                        {type == 0 ? "آنلاین" : "کارت به کارت"}
+                    </span>
+                </div>
+
 
                 <div className="p-2">
                     <div className="flex justify-end gap-x-2 text-black">

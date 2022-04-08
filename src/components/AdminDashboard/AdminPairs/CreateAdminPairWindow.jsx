@@ -8,8 +8,8 @@ import { CreateAdminPair } from '../../Services/Admin/AdminPairsServices';
 const CreateAdminPairWindow = ({ setDoUserNeedCreateAdminPairWindow }) => {
 
     const [name, setName] = useState("")
-    const [type, setType] = useState("")
-    const [status, setStatus] = useState("")
+    const [type, setType] = useState("0")
+    const [status, setStatus] = useState("1")
     const [, forceUpdate] = useState("");
     const validator = useRef(new SimpleReactValidator({
         messages: {

@@ -32,9 +32,9 @@ const EditOrderWindow = ({ setDoUserNeedEditOrderWindow, order }) => {
 
         setUserId(order.user_id)
         setPlanId(order.plan_id)
-        setDiscountCode("")   
+        setDiscountCode(order.discount_code)   
         setOrderDate(order.amount)
-        setStatus(order.status)
+        setStatus(`${order.status}`)
     }, [order])
 
     const dispatch = useDispatch()
