@@ -31,7 +31,7 @@ const Trade = ({ setDoUserWantTradeDetails, setDoUserNeedEditTradeWindow, trade,
                 <td className="py-4 pr-1">{index}</td>
                 <td className="py-4">{moment(trade.trade_date, "YYYY-MM-DD").format('ll')}</td>
                 <td className="py-4">{trade.pair_name}</td>
-                <td className="py-4 hidden sm:block">{trade.contract_type === 0 ? 'Long' : 'Short'}</td>
+                <td className={`py-4 hidden sm:block ${trade.contract_type == 0 ? "text-emerald-400" : "text-red-400"}`}>{trade.contract_type === 0 ? 'Long' : 'Short'}</td>
                 <td className="py-4" style={{ direction: "ltr" }}>
                     <span className={trade.pnl > 0 ? '' : ' hidden'}>
                         <i className={`fa-regular fa-caret-up text-emerald-400 text-lg mr-1`}></i>

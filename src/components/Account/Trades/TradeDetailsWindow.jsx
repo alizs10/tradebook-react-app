@@ -51,7 +51,7 @@ const TradeDetailsWindow = ({ setDoUserWantTradeDetails, trade, handleDelTrade, 
                         </div>
                         <div className="col-span-1 rounded-lg bg-slate-400 flex flex-col gap-y-1 p-2">
                             <span className="text-xs pb-2 border-b-2 border-slate-700">مارجین</span>
-                            <span className="text-base">{`$ ${JSON.parse(trade.margin).margin}`}</span>
+                            <span className="text-base">{`$ ${trade.margin}`}</span>
                         </div>
                         <div className="col-span-1 rounded-lg bg-slate-400 flex flex-col gap-y-1 p-2">
                             <span className="text-xs pb-2 border-b-2 border-slate-700">لوریج</span>

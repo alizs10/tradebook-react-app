@@ -20,7 +20,8 @@ const CreateTradeInputWindow = ({ setDoUserNeedCreateTradeWindow, acc_id, accTyp
     const [pairName, setPairName] = useState("");
     const [pairId, setPairId] = useState("");
     const [selectedOption, setSelectedOption] = useState(null);
-    const [margin, setMargin] = useState({ margin: "", rate: "", valume: "" });
+    const [margin, setMargin] = useState("");
+    const [profit, setProfit] = useState("");
     const [leverage, setLeverage] = useState("");
     const [contractStatus, setContractStatus] = useState("0");
     const [contractType, setContractType] = useState("0");
@@ -52,49 +53,15 @@ const CreateTradeInputWindow = ({ setDoUserNeedCreateTradeWindow, acc_id, accTyp
 
     const handleCreateTrade = async () => {
 
-
-        if (validator.current.allValid()) {
+        console.log('here');
+      
 
 
             const newTrade = {
-                trade_date: date, pair_id: pairId, margin, leverage, entry_price: entryPrice, exit_price: exitPrice, status: contractStatus, contract_type: contractType, account_id: acc_id, user_id: user.id
+                trade_date: date, pair_id: pairId, margin, profit, leverage, entry_price: entryPrice, exit_price: exitPrice, status: contractStatus, contract_type: contractType, account_id: acc_id, user_id: user.id
             }
 
-            // margin: valume, margin, rate
-
-            if (accType === 'forex') {
-                let base = pairName.split("/")[0]
-                let symbol = 'USD';
-                let rate = 1
-
-                if (base !== 'USD') {
-                    if (base === 'EUR') {
-                        const { data } = await getHistoricalRates(date, base, symbol)
-                        rate = data.rates[symbol];
-                    } else {
-
-                        // state= NZD/CAD  => base = NZD
-
-                        const { data } = await getHistoricalRates(date, 'EUR', `USD,${base}`)
-                        let xRate = data.rates['USD'];
-                        let yRate = data.rates[base];
-
-                        rate = yRate / xRate;
-
-                    }
-                }
-
-
-
-                let newMargin = (rate * margin.valume * 100000) / leverage;
-                newTrade.margin.rate = rate;
-                newTrade.margin.margin = newMargin;
-            } else {
-                let valume = (margin.margin * leverage) / newTrade.entry_price;
-                newTrade.margin.rate = "";
-                newTrade.margin.valume = valume;
-            }
-
+            console.log(newTrade);
 
             CreateTrade(newTrade, acc_id).then(function ({ status }) {
                 if (status === 201) {
@@ -113,23 +80,8 @@ const CreateTradeInputWindow = ({ setDoUserNeedCreateTradeWindow, acc_id, accTyp
             })
 
 
-        } else {
-            validator.current.showMessages();
-            forceUpdate(1);
-        }
     }
 
-    const handleMargin = (event) => {
-        if (accType === 'crypto') {
-            setMargin({ ...margin, margin: event.target.value })
-        } else {
-            setMargin({ ...margin, valume: event.target.value })
-        }
-    }
-
-    const displayMargin = margin => {
-        return accType === 'crypto' ? margin.margin : margin.valume;
-    };
 
 
     const handlePairSelect = (event) => {
@@ -198,14 +150,6 @@ const CreateTradeInputWindow = ({ setDoUserNeedCreateTradeWindow, acc_id, accTyp
 
                             </div>
                             <div className="clo-span-1 flex flex-col gap-y-1">
-                                <label htmlFor="margin">{accType === 'crypto' ? 'مارجین' : 'لات'}</label>
-                                <input type="text" className="form-input" value={displayMargin(margin)} onChange={event => {
-                                    handleMargin(event);
-                                    validator.current.showMessageFor('margin')
-                                }} id="margin" />
-                                {validator.current.message("margin", displayMargin(margin), "required|numeric")}
-                            </div>
-                            <div className="clo-span-1 flex flex-col gap-y-1">
                                 <label htmlFor="leverage">لوریج</label>
                                 <input type="text" className="form-input" value={leverage} onChange={event => {
                                     setLeverage(event.target.value);
@@ -224,6 +168,25 @@ const CreateTradeInputWindow = ({ setDoUserNeedCreateTradeWindow, acc_id, accTyp
                                 </select>
                                 {validator.current.message("contractStatus", contractStatus, "required|in:0,1")}
                             </div>
+                            {(contractStatus == 1 && accType == "forex") ? (
+                                <div className="clo-span-1 flex flex-col gap-y-1">
+                                    <label htmlFor="profit">سود (دلار)</label>
+                                    <input type="text" className="form-input" value={profit} onChange={event => {
+                                        setProfit(event.target.value);
+                                      
+                                    }} id="profit" />
+                                    
+                                </div>
+                            ) : (
+                                <div className="clo-span-1 flex flex-col gap-y-1">
+                                    <label htmlFor="margin">مارجین</label>
+                                    <input type="text" className="form-input" value={margin} onChange={event => {
+                                        setMargin(event.target.value);
+                                       
+                                    }} id="margin" />
+                                    
+                                </div>
+                            )}
                             <div className="clo-span-1 flex flex-col gap-y-1">
                                 <label htmlFor="contractType">نوع قرارداد</label>
                                 <select className='form-input' id="contractType" value={contractType} onChange={event => {
