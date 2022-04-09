@@ -51,12 +51,7 @@ const Payment = ({ payment, iteration, setPayment, handleDelPayment, setDoUserNe
                                 <i className="fa-light fa-memo-circle-info text-xs lg:text-base mx-2"></i>
                                 جزییات</button>
                         </li>
-                        <li>
-                            <button onClick={() => handleOpenEditPaymentWindow()}
-                                className="w-full text-right text-xxxs lg:text-xs py-2 hover:bg-slate-200 dark:hover:bg-slate-700 transition ease-out duration-300">
-                                <i className="fa-light fa-pen-to-square text-xs lg:text-base mx-2"></i>
-                                ویرایش</button>
-                        </li>
+                       
                         <li>
                             <button onClick={() => handleDelPayment(payment.id)}
                                 className="w-full text-right text-xxxs lg:text-xs py-2 hover:bg-slate-200 dark:hover:bg-slate-700 transition ease-out duration-300">

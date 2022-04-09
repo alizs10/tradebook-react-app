@@ -61,7 +61,8 @@ const AdminDashSidebar = () => {
                             <NavLink to="discounts"
                                 className={(navData) => navData.isActive ? "py-4 px-2 navLinkActive rounded-md shadow-md flex items-center bg-white dark:bg-slate-800 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition-all ease-out duration-300" : "py-4 px-2 rounded-md shadow-md flex items-center bg-white dark:bg-slate-800 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition-all ease-out duration-300"}
                             >
-                                <i className="fa-light fa-credit-card text-xl text-gray-500 dark:text-slate-400"></i>
+                      
+                                <i className="fa-light fa-badge-percent text-xl text-gray-500 dark:text-slate-400"></i>
                                 <span className="text-xs mr-2 text-gray-700 dark:text-slate-500">کدهای تخفیف</span>
                             </NavLink>
                         </li>
@@ -69,7 +70,7 @@ const AdminDashSidebar = () => {
                             <NavLink to="orders"
                                 className={(navData) => navData.isActive ? "py-4 px-2 navLinkActive rounded-md shadow-md flex items-center bg-white dark:bg-slate-800 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition-all ease-out duration-300" : "py-4 px-2 rounded-md shadow-md flex items-center bg-white dark:bg-slate-800 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition-all ease-out duration-300"}
                             >
-                                <i className="fa-light fa-credit-card text-xl text-gray-500 dark:text-slate-400"></i>
+                                <i className="fa-light fa-clipboard-list text-xl text-gray-500 dark:text-slate-400"></i>
                                 <span className="text-xs mr-2 text-gray-700 dark:text-slate-500">سفارشات</span>
                             </NavLink>
                         </li>
@@ -109,7 +110,7 @@ const AdminDashSidebar = () => {
                             <NavLink to="/panel/"
                                 className="py-4 px-2 border-l-8 rounded-md shadow-md flex items-center bg-white dark:bg-slate-800 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition-all ease-out duration-300"
                             >
-                                <i className="fa-light fa-gears text-xl text-gray-500 dark:text-slate-400"></i>
+                                <i className="fa-light fa-globe text-xl text-gray-500 dark:text-slate-400"></i>
                                 <span className="text-xs mr-2 text-gray-700 dark:text-slate-500">سایت</span>
                             </NavLink>
                         </li>

@@ -90,11 +90,9 @@ const DetailsOrderWindow = ({ setDoUserNeedDetailsOrderWindow, order, handleDelO
                 <div className="col-span-2 p-2">
                     <div className="flex justify-end gap-x-2 text-black">
                         <button className="px-4 py-2 rounded-lg text-xs bg-gray-300 flex items-center" onClick={() => handleDelOrder(order.id)}>
-                            <i className="fa-regular fa-ban text-xs lg:text-base ml-2"></i>
+                            <i className="fa-regular fa-trash text-xs lg:text-base ml-2"></i>
                             حذف</button>
-                        <button className="px-4 py-2 rounded-lg text-xs bg-yellow-300 flex items-center" onClick={() => handleShowEditOrderWindow()}>
-                            <i className="fa-regular fa-edit text-xs lg:text-base ml-2"></i>
-                            ویرایش</button>
+                        
                     </div>
                 </div>
 

@@ -1,6 +1,7 @@
 import { combineReducers } from "redux";
 import { AccountReducer } from "./AccountReducer";
 import { AccountsReducer } from "./AccountsReducer";
+import { AdminHomeReducer } from "./Admin/AdminHomeReducer";
 import { AdminPairsReducer } from "./Admin/AdminPairsReducer";
 import { DiscountsReducer } from "./Admin/DiscountsReducer";
 import { OrdersReducer } from "./Admin/OrdersReducer";
@@ -28,5 +29,6 @@ export const Reducers = combineReducers({
     Payments: PaymentsReducer,
     AdminPairs: AdminPairsReducer,
     Orders: OrdersReducer,
-    Discounts: DiscountsReducer
+    Discounts: DiscountsReducer,
+    AdminHomeData: AdminHomeReducer
 })

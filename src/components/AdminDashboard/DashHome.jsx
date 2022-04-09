@@ -1,6 +1,43 @@
-import React, { Fragment } from 'react';
+import { isEmpty } from 'lodash';
+import React, { Fragment, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { ClipLoader } from 'react-spinners';
+import { setAdminHomeData } from '../Redux/Action/Admin/AdminHomeData';
+import { getAllPayments } from '../Redux/Action/Admin/Payments';
 
 const DashHome = () => {
+
+    const [loading, setLoading] = useState(true)
+    const [homeStat, setAdminHomeStat] = useState({ usersCount: 0, paymentsCount: 0, pairsCount: 0, income: 0, plansCount: 0 })
+    const [lastPayments, setLastPayments] = useState([])
+
+    const dispatch = useDispatch()
+    const data = useSelector(state => state.AdminHomeData)
+    const payments = useSelector(state => state.Payments)
+
+    useEffect(() => {
+        dispatch(setAdminHomeData())
+        dispatch(getAllPayments())
+    }, [])
+
+    useEffect(() => {
+        if (isEmpty(data))
+            return
+        setLoading(false)
+
+        setAdminHomeStat(data.data)
+    }, [data])
+
+    useEffect(() => {
+
+        if (!isEmpty(payments)) {
+            let slicedPayments = payments.slice(0, 10);
+            setLastPayments(slicedPayments)
+        }
+
+    }, [payments])
+
     return (
         <Fragment>
 
@@ -25,7 +62,11 @@ const DashHome = () => {
                     </span>
 
                     <span className="grid grid-rows-2 text-left ml-2">
-                        <span className="text-base lg:text-xl font-bold text-blue-600">43</span>
+                        <span className="text-base lg:text-xl font-bold text-blue-600">
+                            {loading ? (
+                                <ClipLoader color={'#fff'} size={15} />
+                            ) : (homeStat.usersCount)}
+                        </span>
                         <span className="text-xs lg:text-base font-light text-gray-600 dark:text-slate-300">کاربران</span>
                     </span>
 
@@ -37,7 +78,11 @@ const DashHome = () => {
                     </span>
 
                     <span className="grid grid-rows-2 text-left ml-2">
-                        <span className="text-base lg:text-xl font-bold text-blue-600">32</span>
+                        <span className="text-base lg:text-xl font-bold text-blue-600">
+                            {loading ? (
+                                <ClipLoader color={'#fff'} size={15} />
+                            ) : (homeStat.paymentsCount)}
+                        </span>
                         <span className="text-xs lg:text-base font-light text-gray-600 dark:text-slate-300">فروش</span>
                     </span>
 
@@ -49,7 +94,11 @@ const DashHome = () => {
                     </span>
 
                     <span className="grid grid-rows-2 text-left ml-2">
-                        <span className="text-base lg:text-xl font-bold text-blue-600">4</span>
+                        <span className="text-base lg:text-xl font-bold text-blue-600">
+                            {loading ? (
+                                <ClipLoader color={'#fff'} size={15} />
+                            ) : (homeStat.plansCount)}
+                        </span>
                         <span className="text-xs lg:text-base font-light text-gray-600 dark:text-slate-300">محصولات</span>
                     </span>
 
@@ -61,7 +110,11 @@ const DashHome = () => {
                     </span>
 
                     <span className="grid grid-rows-2 text-left ml-2">
-                        <span className="text-base lg:text-xl font-bold text-blue-600">1,300,500</span>
+                        <span className="text-base lg:text-xl font-bold text-blue-600">
+                            {loading ? (
+                                <ClipLoader color={'#fff'} size={15} />
+                            ) : (homeStat.income)}
+                        </span>
                         <span className="text-xs lg:text-base font-light text-gray-600 dark:text-slate-300">درآمد</span>
                     </span>
 
@@ -73,7 +126,11 @@ const DashHome = () => {
                     </span>
 
                     <span className="grid grid-rows-2 text-left ml-2">
-                        <span className="text-base lg:text-xl font-bold text-blue-600">3481</span>
+                        <span className="text-base lg:text-xl font-bold text-blue-600">
+                            {loading ? (
+                                <ClipLoader color={'#fff'} size={15} />
+                            ) : (homeStat.pairsCount)}
+                        </span>
                         <span className="text-xs lg:text-base font-light text-gray-600 dark:text-slate-300">جفت ارزها</span>
                     </span>
 
@@ -88,7 +145,7 @@ const DashHome = () => {
                         فروش
                         ها</h2>
 
-                    <a href="" className="text-xs text-blue-600">مشاهده همه</a>
+                    <Link to="payments" className="text-xs text-blue-600">مشاهده همه</Link>
                 </div>
 
 
@@ -109,48 +166,30 @@ const DashHome = () => {
                         </thead>
 
                         <tbody>
-                            <tr className="text-xxs lg:text-base font-light mt-2 py-2 dark:text-slate-300">
-                                <td className="py-2 pr-1">1</td>
-                                <td className="py-2">حسن روحانی</td>
-                                <td className="py-2">اشتراک 1 ماهه</td>
-                                <td className="py-2">32 هزارتومان</td>
-                                <td className="py-2">
-                                    <span
-                                        className="py-1 px-2 rounded text-xxxs lg:text-sm bg-red-400 font-semibold text-slate-900">
-                                        پرداخت نشده
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr className="text-xxs lg:text-base font-light dark:text-slate-300">
-                                <td className="py-2 pr-1">2</td>
-                                <td className="py-2">امیر تتلو</td>
-                                <td className="py-2">اشتراک 1 ماهه</td>
-                                <td className="py-2">32 هزارتومان</td>
-                                <td className="py-2">
-                                    <span
-                                        className="py-1 px-2 rounded text-xxxs lg:text-sm bg-red-400 font-semibold text-slate-900">
-                                        لغو شده
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr className="text-xxs lg:text-base font-light dark:text-slate-300">
-                                <td className="py-2 pr-1">3</td>
-                                <td className="py-2">استاد اسدی</td>
-                                <td className="py-2">اشتراک 1 ساله</td>
-                                <td className="py-2">120 هزارتومان</td>
-                                <td className="py-2">
-                                    <span
-                                        className="py-1 px-2 rounded text-xxxs lg:text-sm bg-green-400 font-semibold text-slate-900">
-                                        پرداخت شده
-                                    </span>
-                                </td>
-                            </tr>
+
+                            {lastPayments.map((payment, index) => (
+                                <tr key={index} className="text-xxs lg:text-base font-light dark:text-slate-300">
+                                    <td className="py-2 pr-1">{index + 1}</td>
+                                    <td className="py-2">{payment.user.name}</td>
+                                    <td className="py-2">{payment.plan_name}</td>
+                                    <td className="py-2">{payment.amount}</td>
+                                    <td className="py-2">
+                                        <span
+                                            className={`py-1 px-2 rounded-lg text-xxxs lg:text-sm text-slate-900 ${payment.status == 1 ? "bg-emerald-400" : "bg-red-400"}`}>
+                                            {payment.status == 1 ? "موفق" : "ناموفق"}
+                                        </span>
+                                    </td>
+                                </tr>
+                            ))}
+
                         </tbody>
 
 
                     </table>
 
-
+                    {lastPayments.length == 0 && (
+                        <span className='text-sm block mt-2 text-center w-full text-slate-500'>بدون پرداخت</span>
+                    )}
 
                 </section>
             </section>
