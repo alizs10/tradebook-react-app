@@ -7,7 +7,7 @@ import { setHomeData } from '../Redux/Action/HomeData';
 const PanelHome = () => {
 
     const [loading, setLoading] = useState(true)
-    const [homeStat, setHomeStat] = useState({ accountsCount: 0, tradesCount: 0, notesCount: 0, validFor: 0 })
+    const [homeStat, setHomeStat] = useState({ accountsCount: 0, tradesCount: 0, notesCount: 0, validFor: 0, planName: "..." })
 
     const dispatch = useDispatch()
     const data = useSelector(state => state.HomeData)
@@ -92,7 +92,11 @@ const PanelHome = () => {
                     </span>
 
                     <span className="col-span-3 grid grid-rows-2 text-left ml-2">
-                        <span className="text-base lg:text-xl font-bold text-blue-600">یک ماهه</span>
+                        <span className="text-base lg:text-xl font-bold text-blue-600">
+                        {loading ? (
+                            <ClipLoader color={'#fff'} size={15} />
+                        ) : (homeStat.planName)}
+                        </span>
                         <span className="text-xs lg:text-base font-light text-slate-300">اشتراک</span>
                     </span>
 

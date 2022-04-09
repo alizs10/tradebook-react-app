@@ -145,7 +145,7 @@ const DashHome = () => {
                         فروش
                         ها</h2>
 
-                    <Link to="payments" className="text-xs text-blue-600">مشاهده همه</Link>
+                    <Link to="/admin/payments" className="text-xs text-blue-600">مشاهده همه</Link>
                 </div>
 
 

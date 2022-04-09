@@ -27,7 +27,10 @@ const AdmminDashLayout = ({ children }) => {
                             <i className='fa-regular fa-user text-slate-300 text-4xl'></i>
                         </span>
                     ) : (<img src={`http://localhost:8000/${avatar}`} alt="avatar" className="rounded-full w-12 h-12" />)}
-                    <span className="text-xs lg:text-base mr-2 dark:text-slate-300">{name}</span>
+                    <div className="flex flex-col gap-y-2 mr-2">
+                        <span className="text-slate-300 text-sm">{name}</span>
+                        <span className="text-emerald-400 text-xxs">آنلاین</span>
+                    </div>
                 </div>
                 <img src="../images/logo.svg" alt="logo" className="w-24 ml-2" />
 
