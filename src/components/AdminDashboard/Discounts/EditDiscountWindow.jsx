@@ -1,7 +1,6 @@
 import { isEmpty } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import SimpleReactValidator from 'simple-react-validator';
 import { EditDiscount } from '../../Redux/Action/Admin/Discounts';
 import { notify } from '../../Services/alerts';
 import { UpdateDiscount } from '../../Services/Admin/DiscountsServices';
@@ -18,13 +17,6 @@ const EditDiscountWindow = ({ setDoUserNeedEditDiscountWindow, discount }) => {
     const [, forceUpdate] = useState("");
 
 
-    const validator = useRef(new SimpleReactValidator({
-        messages: {
-            required: "پر کردن این فیلد الزامی می باشد",
-            numeric: "باید عدد وارد کنید"
-        },
-        element: message => <span className='text-xs text-red-400'>{message}</span>
-    }));
 
     const users = useSelector(state => state.Users)
     const plans = useSelector(state => state.Plans)
@@ -48,7 +40,7 @@ const EditDiscountWindow = ({ setDoUserNeedEditDiscountWindow, discount }) => {
     }, [])
 
     const handleEditDiscount = async () => {
-        if (validator.current.allValid()) {
+  
             let editedDiscount = {
                 id: discount.id, user_id: userId, plan_id: planId, code, status, value, _method: "PUT"
             }
@@ -68,10 +60,6 @@ const EditDiscountWindow = ({ setDoUserNeedEditDiscountWindow, discount }) => {
                 notify('مشکلی پیش آمده است', 'error')
             }
 
-        } else {
-            validator.current.showMessages();
-            forceUpdate(1);
-        }
     }
 
     return (
@@ -93,7 +81,6 @@ const EditDiscountWindow = ({ setDoUserNeedEditDiscountWindow, discount }) => {
                         <label htmlFor="userId">کاربر</label>
                         <select className='form-input' id="userId" value={userId} onChange={event => {
                             setUserId(event.target.value);
-                            validator.current.showMessageFor('userId')
                         }}>
                             <option value="">عمومی</option>
                             {users.map(user => (
@@ -101,13 +88,11 @@ const EditDiscountWindow = ({ setDoUserNeedEditDiscountWindow, discount }) => {
                             ))}
 
                         </select>
-                        {validator.current.message("userId", userId, "numeric")}
                     </div>
                     <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
                         <label htmlFor="planId">محصول</label>
                         <select className='form-input' id="planId" value={planId} onChange={event => {
                             setPlanId(event.target.value);
-                            validator.current.showMessageFor('planId')
                         }}>
                             <option value="">همه محصولات</option>
                             {plans.map(plan => (
@@ -115,24 +100,19 @@ const EditDiscountWindow = ({ setDoUserNeedEditDiscountWindow, discount }) => {
                             ))}
 
                         </select>
-                        {validator.current.message("planId", planId, "numeric")}
                     </div>
                     <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
                         <label className="text-xs h-fit">کد تخفیف</label>
                         <input type="text" className="form-input" value={code} onChange={event => {
                             setCode(event.target.value);
-                            validator.current.showMessageFor('code')
                         }} id="code" />
-                        {validator.current.message("code", code, "required")}
 
                     </div>
                     <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
                         <label className="text-xs h-fit">مقدار</label>
                         <input type="text" className="form-input" value={value} onChange={event => {
                             setValue(event.target.value);
-                            validator.current.showMessageFor('value')
                         }} id="value" />
-                        {validator.current.message("value", value, "required|numeric")}
 
                     </div>
 
@@ -140,12 +120,10 @@ const EditDiscountWindow = ({ setDoUserNeedEditDiscountWindow, discount }) => {
                         <label htmlFor="status">وضعیت</label>
                         <select className='form-input' id="status" value={status} onChange={event => {
                             setStatus(event.target.value);
-                            validator.current.showMessageFor('status')
                         }}>
                             <option value="0">معتبر</option>
                             <option value="1" >منقضی</option>
                         </select>
-                        {validator.current.message("status", status, "required|in:0,1")}
                     </div>
 
 

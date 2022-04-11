@@ -1,8 +1,7 @@
 import { isEmpty } from 'lodash';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import SimpleReactValidator from 'simple-react-validator';
-import { AddPlan, EditPlan } from '../../Redux/Action/Admin/Plans';
+import { EditPlan } from '../../Redux/Action/Admin/Plans';
 import { notify } from '../../Services/alerts';
 import { UpdatePlan } from '../../Services/Admin/PlansServices';
 
@@ -12,13 +11,7 @@ const EditPlanWindow = ({ setDoUserNeedEditPlanWindow, plan }) => {
     const [validFor, setValidFor] = useState("")
     const [price, setPrice] = useState("")
     const [, forceUpdate] = useState("");
-    const validator = useRef(new SimpleReactValidator({
-        messages: {
-            required: "پر کردن این فیلد الزامی می باشد",
-            numeric: "باید عدد وارد کنید"
-        },
-        element: message => <span className='text-xs text-red-400'>{message}</span>
-    }));
+   
 
     useEffect(() => {
         if (isEmpty(plan)) return
@@ -31,7 +24,7 @@ const EditPlanWindow = ({ setDoUserNeedEditPlanWindow, plan }) => {
     const dispatch = useDispatch()
 
     const handleEditPlan = async () => {
-        if (validator.current.allValid()) {
+       
             let editedPlan = {
                 name, valid_for: validFor, price, _method: "PUT", id:plan.id
             }
@@ -50,10 +43,7 @@ const EditPlanWindow = ({ setDoUserNeedEditPlanWindow, plan }) => {
                 notify('مشکلی پیش آمده است', 'error')
             }
 
-        } else {
-            validator.current.showMessages();
-            forceUpdate(1);
-        }
+       
     }
 
     return (
@@ -76,27 +66,21 @@ const EditPlanWindow = ({ setDoUserNeedEditPlanWindow, plan }) => {
                         <label className="text-xs h-fit">نام محصول:</label>
                         <input type="text" className="form-input" value={name} onChange={event => {
                             setName(event.target.value);
-                            validator.current.showMessageFor('name')
                         }} id="name" />
-                        {validator.current.message("name", name, "required|string")}
 
                     </div>
                     <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
                         <label className="text-xs h-fit">مدت اشتراک (روز):</label>
                         <input type="text" className="form-input" value={validFor} onChange={event => {
                             setValidFor(event.target.value);
-                            validator.current.showMessageFor('valid_for')
                         }} id="valid_for" />
-                        {validator.current.message("valid_for", validFor, "required|numeric")}
 
                     </div>
                     <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
                         <label className="text-xs h-fit">قیمت:</label>
                         <input type="text" className="form-input" value={price} onChange={event => {
                             setPrice(event.target.value);
-                            validator.current.showMessageFor('price')
                         }} id="price" />
-                        {validator.current.message("price", price, "required|numeric")}
 
                     </div>
 

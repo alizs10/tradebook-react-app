@@ -1,15 +1,16 @@
-import React, { Fragment, useEffect, useRef, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import useCountDown from 'react-countdown-hook';
 import { BeatLoader } from 'react-spinners';
-import SimpleReactValidator from 'simple-react-validator';
 import { notify } from '../Services/alerts';
 import { forgotPassowrd, resetPassowrd } from '../Services/UserServices';
+import { resetPasswordProfileValidation } from '../Services/validation';
 
 const ResetPasswordWindow = ({ setDoUserNeedResetPasswordWindow }) => {
 
     const [oldPass, setOldPass] = useState("")
     const [newPass, setNewPass] = useState("")
     const [newPassConfirm, setNewPassConfirm] = useState("")
+    const [errors, setErrors] = useState({})
 
     const [loading, setLoading] = useState(false)
 
@@ -24,14 +25,7 @@ const ResetPasswordWindow = ({ setDoUserNeedResetPasswordWindow }) => {
             setIsNewPassSent(false)
     }, [timeLeft])
 
-    const validator = useRef(new SimpleReactValidator({
-        messages: {
-            required: "پر کردن این فیلد الزامی می باشد",
-            min: "باید حداقل 8 کارکتر باشد",
-            size: "باید 11 عدد باشد",
-        },
-        element: message => <span className='text-red-400 text-xxs'>{message}</span>
-    }));
+
 
     const handleResetPassword = async () => {
 
@@ -39,7 +33,10 @@ const ResetPasswordWindow = ({ setDoUserNeedResetPasswordWindow }) => {
             old_password: oldPass, password: newPass, password_confirmation: newPassConfirm
         }
 
-        if (validator.current.allValid()) {
+        const { success, errors } = resetPasswordProfileValidation(passArray);
+
+        if (success) {
+            setErrors({})
 
             try {
                 const { data, status } = await resetPassowrd(passArray)
@@ -70,16 +67,9 @@ const ResetPasswordWindow = ({ setDoUserNeedResetPasswordWindow }) => {
                     notify('مشکلی رخ داده است', 'error')
                 }
             }
-
-
-
-
-
         } else {
-            notify("لطفا موارد لازم را پر کنید", "warning")
-            return
+            setErrors(errors)
         }
-
     }
 
     const handleForgotPassword = async (e) => {
@@ -118,7 +108,7 @@ const ResetPasswordWindow = ({ setDoUserNeedResetPasswordWindow }) => {
             if (error.response.status === 429) {
                 notify('در هر دودقیقه، یک بار مجاز به ارسال درخواست هستید', 'warning')
             }
-           
+
 
         }
     }
@@ -143,25 +133,22 @@ const ResetPasswordWindow = ({ setDoUserNeedResetPasswordWindow }) => {
                             <label htmlFor="old-password">کلمه عبور فعلی</label>
                             <input type="password" className="form-input" value={oldPass} onChange={event => {
                                 setOldPass(event.target.value)
-                                validator.current.showMessageFor('old-password')
                             }} id='old-password' />
-                            {validator.current.message("old-password", oldPass, "required|min:8")}
+                            {errors.old_password && (<span className='text-xxs text-red-400'>{errors.old_password}</span>)}
                         </div>
                         <div className="clo-span-1 flex flex-col gap-y-1">
                             <label htmlFor="new-password">کلمه عبور جدید</label>
                             <input type="password" className="form-input" value={newPass} onChange={event => {
                                 setNewPass(event.target.value)
-                                validator.current.showMessageFor('new-password')
                             }} id='new-password' />
-                            {validator.current.message("new-password", newPass, "required|min:8")}
+                            {errors.password && (<span className='text-xxs text-red-400'>{errors.password}</span>)}
                         </div>
                         <div className="clo-span-1 flex flex-col gap-y-1">
                             <label htmlFor="new-password-confirm">تکرار کلمه عبور جدید</label>
                             <input type="password" className="form-input" value={newPassConfirm} onChange={event => {
                                 setNewPassConfirm(event.target.value)
-                                validator.current.showMessageFor('new-password-confirm')
                             }} id='new-password-confirm' />
-                            {validator.current.message("new-password-confirm", newPassConfirm, "required|min:8")}
+                            {errors.password_confirmation && (<span className='text-xxs text-red-400'>{errors.password_confirmation}</span>)}
                         </div>
 
                     </div>
@@ -169,16 +156,16 @@ const ResetPasswordWindow = ({ setDoUserNeedResetPasswordWindow }) => {
                     <div className="mt-4 flex justify-end gap-x-2">
                         <button className="px-4 py-2 rounded-lg text-sm bg-gray-300 text-slate-900" onClick={(e) => handleForgotPassword(e)}>
                             {isNewPassSent ? (timeLeft / 1000) : (
-                                
-                                    loading ? (
-                                        <BeatLoader color={'#000'} loading={loading} size={5} />
-                                    ): (
-                                        <span>
-                                            <i className="fa-regular fa-lock"></i>
-                                            <span className="mr-1">فراموشی کلمه عبور</span>
-                                        </span>
-                                    )
-                                
+
+                                loading ? (
+                                    <BeatLoader color={'#000'} loading={loading} size={5} />
+                                ) : (
+                                    <span>
+                                        <i className="fa-regular fa-lock"></i>
+                                        <span className="mr-1">فراموشی کلمه عبور</span>
+                                    </span>
+                                )
+
                             )}
                         </button>
                         <button className="px-4 py-2 rounded-lg text-sm bg-yellow-300 text-slate-900" onClick={() => handleResetPassword()}>

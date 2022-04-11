@@ -1,7 +1,6 @@
 import { isEmpty } from 'lodash';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import SimpleReactValidator from 'simple-react-validator';
 import { EditUser } from '../../Redux/Action/Admin/Users';
 import { notify } from '../../Services/alerts';
 import { UpdateUser } from '../../Services/Admin/UsersServices';
@@ -13,13 +12,7 @@ const EditUserWindow = ({ setDoUserNeedEditUserWindow, user }) => {
     const [mobile, setMobile] = useState("")
     const [isAdmin, setIsAdmin] = useState("")
     const [, forceUpdate] = useState("");
-    const validator = useRef(new SimpleReactValidator({
-        messages: {
-            required: "پر کردن این فیلد الزامی می باشد",
-            numeric: "باید عدد وارد کنید"
-        },
-        element: message => <span className='text-xs text-red-400'>{message}</span>
-    }));
+  
 
     useEffect(() => {
         if (isEmpty(user)) return
@@ -33,7 +26,7 @@ const EditUserWindow = ({ setDoUserNeedEditUserWindow, user }) => {
     const dispatch = useDispatch()
 
     const handleEditUser = async () => {
-        if (validator.current.allValid()) {
+       
             let editedUser = {
                 id: user.id, name, email, mobile, is_admin: isAdmin, _method: "PUT"
             }
@@ -53,10 +46,6 @@ const EditUserWindow = ({ setDoUserNeedEditUserWindow, user }) => {
                 notify('مشکلی پیش آمده است', 'error')
             }
 
-        } else {
-            validator.current.showMessages();
-            forceUpdate(1);
-        }
     }
 
     return (
@@ -79,27 +68,21 @@ const EditUserWindow = ({ setDoUserNeedEditUserWindow, user }) => {
                         <label className="text-xs h-fit">نام کاربر:</label>
                         <input type="text" className="form-input" value={name} onChange={event => {
                             setName(event.target.value);
-                            validator.current.showMessageFor('name')
                         }} id="name" />
-                        {validator.current.message("name", name, "required|string")}
 
                     </div>
                     <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
                         <label className="text-xs h-fit">ایمیل:</label>
                         <input type="text" className="form-input" value={email} onChange={event => {
                             setEmail(event.target.value);
-                            validator.current.showMessageFor('valid_for')
                         }} id="valid_for" />
-                        {validator.current.message("valid_for", email, "required|email")}
 
                     </div>
                     <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
                         <label className="text-xs h-fit">شماره موبایل:</label>
                         <input type="text" className="form-input" value={mobile} onChange={event => {
                             setMobile(event.target.value);
-                            validator.current.showMessageFor('mobile')
                         }} id="mobile" />
-                        {validator.current.message("mobile", mobile, "required|numeric|size:11")}
 
                     </div>
 
@@ -107,12 +90,10 @@ const EditUserWindow = ({ setDoUserNeedEditUserWindow, user }) => {
                         <label htmlFor="isAdmin">نقش</label>
                         <select className='form-input' id="isAdmin" value={isAdmin} onChange={event => {
                             setIsAdmin(event.target.value);
-                            validator.current.showMessageFor('isAdmin')
                         }}>
                             <option value="0">کاربر عادی</option>
                             <option value="1" >ادمین</option>
                         </select>
-                        {validator.current.message("isAdmin", isAdmin, "required|in:0,1")}
                     </div>
 
 

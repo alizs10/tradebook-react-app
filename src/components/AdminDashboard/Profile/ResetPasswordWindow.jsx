@@ -1,7 +1,6 @@
-import React, { Fragment, useEffect, useRef, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import useCountDown from 'react-countdown-hook';
 import { BeatLoader } from 'react-spinners';
-import SimpleReactValidator from 'simple-react-validator';
 import { notify } from '../Services/alerts';
 import { forgotPassowrd, resetPassowrd } from '../Services/UserServices';
 
@@ -24,14 +23,7 @@ const ResetPasswordWindow = ({ setDoUserNeedResetPasswordWindow }) => {
             setIsNewPassSent(false)
     }, [timeLeft])
 
-    const validator = useRef(new SimpleReactValidator({
-        messages: {
-            required: "پر کردن این فیلد الزامی می باشد",
-            min: "باید حداقل 8 کارکتر باشد",
-            size: "باید 11 عدد باشد",
-        },
-        element: message => <span className='text-red-400 text-xxs'>{message}</span>
-    }));
+    
 
     const handleResetPassword = async () => {
 
@@ -39,7 +31,7 @@ const ResetPasswordWindow = ({ setDoUserNeedResetPasswordWindow }) => {
             old_password: oldPass, password: newPass, password_confirmation: newPassConfirm
         }
 
-        if (validator.current.allValid()) {
+      
 
             try {
                 const { data, status } = await resetPassowrd(passArray)
@@ -70,15 +62,6 @@ const ResetPasswordWindow = ({ setDoUserNeedResetPasswordWindow }) => {
                     notify('مشکلی رخ داده است', 'error')
                 }
             }
-
-
-
-
-
-        } else {
-            notify("لطفا موارد لازم را پر کنید", "warning")
-            return
-        }
 
     }
 
@@ -143,25 +126,19 @@ const ResetPasswordWindow = ({ setDoUserNeedResetPasswordWindow }) => {
                             <label htmlFor="old-password">کلمه عبور فعلی</label>
                             <input type="password" className="form-input" value={oldPass} onChange={event => {
                                 setOldPass(event.target.value)
-                                validator.current.showMessageFor('old-password')
                             }} id='old-password' />
-                            {validator.current.message("old-password", oldPass, "required|min:8")}
                         </div>
                         <div className="clo-span-1 flex flex-col gap-y-1">
                             <label htmlFor="new-password">کلمه عبور جدید</label>
                             <input type="password" className="form-input" value={newPass} onChange={event => {
                                 setNewPass(event.target.value)
-                                validator.current.showMessageFor('new-password')
                             }} id='new-password' />
-                            {validator.current.message("new-password", newPass, "required|min:8")}
                         </div>
                         <div className="clo-span-1 flex flex-col gap-y-1">
                             <label htmlFor="new-password-confirm">تکرار کلمه عبور جدید</label>
                             <input type="password" className="form-input" value={newPassConfirm} onChange={event => {
                                 setNewPassConfirm(event.target.value)
-                                validator.current.showMessageFor('new-password-confirm')
                             }} id='new-password-confirm' />
-                            {validator.current.message("new-password-confirm", newPassConfirm, "required|min:8")}
                         </div>
 
                     </div>

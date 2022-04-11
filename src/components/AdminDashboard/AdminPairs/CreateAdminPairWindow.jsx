@@ -1,6 +1,5 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import SimpleReactValidator from 'simple-react-validator';
 import { AddAdminPair } from '../../Redux/Action/Admin/AdminPairs';
 import { notify } from '../../Services/alerts';
 import { CreateAdminPair } from '../../Services/Admin/AdminPairsServices';
@@ -11,18 +10,12 @@ const CreateAdminPairWindow = ({ setDoUserNeedCreateAdminPairWindow }) => {
     const [type, setType] = useState("0")
     const [status, setStatus] = useState("1")
     const [, forceUpdate] = useState("");
-    const validator = useRef(new SimpleReactValidator({
-        messages: {
-            required: "پر کردن این فیلد الزامی می باشد",
-            numeric: "باید عدد وارد کنید"
-        },
-        element: message => <span className='text-xs text-red-400'>{message}</span>
-    }));
+   
 
     const dispatch = useDispatch()
 
     const handleCreateAdminPair = async () => {
-        if (validator.current.allValid()) {
+        
             let newAdminPair = {
                 name, type, status
             }
@@ -42,11 +35,6 @@ const CreateAdminPairWindow = ({ setDoUserNeedCreateAdminPairWindow }) => {
             }
 
 
-            console.log(newAdminPair);
-        } else {
-            validator.current.showMessages();
-            forceUpdate(1);
-        }
     }
 
     return (
@@ -69,9 +57,7 @@ const CreateAdminPairWindow = ({ setDoUserNeedCreateAdminPairWindow }) => {
                         <label className="text-xs h-fit">نام جفت ارز</label>
                         <input type="text" className="form-input" value={name} onChange={event => {
                             setName(event.target.value);
-                            validator.current.showMessageFor('name')
                         }} id="name" />
-                        {validator.current.message("name", name, "required|string")}
 
                     </div>
 
@@ -79,24 +65,20 @@ const CreateAdminPairWindow = ({ setDoUserNeedCreateAdminPairWindow }) => {
                         <label htmlFor="type">نوع</label>
                         <select className='form-input' id="type" value={type} onChange={event => {
                             setType(event.target.value);
-                            validator.current.showMessageFor('type')
                         }}>
                             <option value="0">crypto</option>
                             <option value="1" >forex</option>
                         </select>
-                        {validator.current.message("type", type, "required|in:0,1")}
                     </div>
 
                     <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
                         <label htmlFor="status">وضعیت</label>
                         <select className='form-input' id="status" value={status} onChange={event => {
                             setStatus(event.target.value);
-                            validator.current.showMessageFor('status')
                         }}>
                             <option value="0">غیرفعال</option>
                             <option value="1" >فعال</option>
                         </select>
-                        {validator.current.message("status", status, "required|in:0,1")}
                     </div>
 
 

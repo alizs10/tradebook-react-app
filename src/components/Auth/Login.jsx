@@ -1,37 +1,27 @@
-import React, { Fragment, useRef, useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 import { BeatLoader } from 'react-spinners';
 
-import SimpleReactValidator from 'simple-react-validator';
 import { AddUser } from '../Redux/Action/User';
 import { notify } from '../Services/alerts';
 import { loginUser } from '../Services/AuthService';
+import { loginValidation } from '../Services/validation';
 
 const Login = () => {
 
     const [loading, setLoading] = useState(false)
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("")
-
-    const [, forceUpdate] = useState()
+    const [errors, setErrors] = useState({})
 
 
     const dispatch = useDispatch();
-    const navigate = useNavigate();;
+    const navigate = useNavigate();
 
 
-
-    const validator = useRef(new SimpleReactValidator({
-        messages: {
-            required: "پر کردن این فیلد الزامی می باشد",
-            email: "باید ایمیل بصورت صحیح وارد شود",
-            min: "باید حداقل 8 کارکتر باشد",
-        },
-        element: message => <span className='text-xs text-red-400'>{message}</span>
-    }));
 
     const handelLogin = async event => {
         event.preventDefault();
@@ -44,7 +34,11 @@ const Login = () => {
             email, password
         }
 
-        if (validator.current.allValid()) {
+
+
+        const { success, errors } = loginValidation(user);
+        if (success) {
+            setErrors({})
             try {
                 const { data, status } = await loginUser(user);
 
@@ -67,14 +61,13 @@ const Login = () => {
                     notify('مشکلی رخ داده است', 'error')
                 }
             }
-
-            setLoading(false)
-
         } else {
-            setLoading(false)
-            validator.current.showMessages();
-            forceUpdate(1);
+            setErrors(errors)
         }
+
+
+        setLoading(false)
+
 
 
     }
@@ -95,24 +88,19 @@ const Login = () => {
                 <div className="rounded-lg p-2 backdrop-blur-sm bg-white/10 flex flex-col gap-y-2">
                     <div className="flex flex-col gap-y-2">
                         <label htmlFor="" className="text-xs">ایمیل</label>
-                        <input type="email" className="form-input" value={email} onChange={event => {
-                            setEmail(event.target.value);
-                            validator.current.showMessageFor('email')
-                        }} id="email" />
-                        {validator.current.message("email", email, "required|email")}
+                        <input type="email" className="form-input" value={email} onChange={event => setEmail(event.target.value)} id="email" />
+                        {errors.email && (<span className='text-xxs text-red-400'>{errors.email}</span>)}
                     </div>
                     <div className="flex flex-col gap-y-2">
                         <label htmlFor="" className="text-xs">کلمه عبور</label>
-                        <input type="password" className="form-input" value={password} onChange={event => {
-                            setPassword(event.target.value);
-                            validator.current.showMessageFor('password')
-                        }} id="password" />
-                        {validator.current.message("password", password, "required|min:8")}
+                        <input type="password" className="form-input" value={password} onChange={event => setPassword(event.target.value)} id="password" />
+                        {errors.password && (<span className='text-xxs text-red-400'>{errors.password}</span>)}
+
                     </div>
 
                     <button className="py-3 mt-4 text-black text-base bg-emerald-400 rounded-lg">
                         {loading ? (
-                            <BeatLoader color={'#000'} loading={loading} size={5}  />
+                            <BeatLoader color={'#000'} loading={loading} size={5} />
                         ) : "ورود"}
                     </button>
                     <Link to="/forgot-password" className="text-slate-400 text-xs mt-2">فراموشی کلمه عبور؟</Link>

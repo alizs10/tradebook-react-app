@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AddUser } from '../Redux/Action/User';
 import { notify } from '../Services/alerts';
 import { UpdateProfile } from '../Services/UserServices';
+import { profileValidation } from '../Services/validation';
 import EditProfileWindow from './EditProfileWindow';
 import EmailVerificationWindow from './EmailVerificationWindow';
 import ResetPasswordWindow from './ResetPasswordWindow';
@@ -22,6 +23,7 @@ const PanelProfile = () => {
     const [avatar, setAvatar] = useState("");
     const [profile_photo_path, setProfilePath] = useState("");
     const [userVerification, setUserVerification] = useState("");
+    const [errors, setErrors] = useState({})
 
 
     const [doUserNeedActivationWindow, setDoUserNeedActivationWindow] = useState(false);
@@ -59,25 +61,30 @@ const PanelProfile = () => {
         formData.append('mobile', mobile);
         formData.append('profile_photo_path', profile_photo_path);
         formData.append('_method', "PUT");
+        const { success, errors } = profileValidation(formData);
+        
+        if (success) {
+            setErrors({})
+            try {
+                const { data, status } = await UpdateProfile(formData);
 
-        try {
-            const { data, status } = await UpdateProfile(formData);
+                if (status === 200) {
+                    dispatch(AddUser(data.user))
+                    setDoUserNeedEditProfileWindow(false)
+                    notify('پروفایل کاربری شما با موفقیت بروزرسانی شد', 'success')
+                }
+            } catch (e) {
 
-            if (status === 200) {
-                dispatch(AddUser(data.user))
-                setDoUserNeedEditProfileWindow(false)
-                notify('پروفایل کاربری شما با موفقیت بروزرسانی شد', 'success')
+                var error = Object.assign({}, e);
+                if (error.response.status === 422) {
+                    notify('اطلاعات وارد شده صحیح نمی باشد', 'warning')
+                } else {
+                    notify('خطای سرور', 'error')
+                }
             }
-        } catch (e) {
-
-            var error = Object.assign({}, e);
-            if (error.response.status === 422) {
-                notify('اطلاعات وارد شده صحیح نمی باشد', 'warning')
-            } else {
-                notify('خطای سرور', 'error')
-            }
+        } else {
+            setErrors(errors)
         }
-
     }
 
 
@@ -167,7 +174,7 @@ const PanelProfile = () => {
 
             {!doUserNeedResetPasswordWindow ? null : (<ResetPasswordWindow setDoUserNeedResetPasswordWindow={setDoUserNeedResetPasswordWindow} />)}
             {!doUserNeedActivationWindow ? null : (<EmailVerificationWindow userId={userId} setDoUserNeedActivationWindow={setDoUserNeedActivationWindow} />)}
-            {!doUserNeedEditProfileWindow ? null : (<EditProfileWindow name={name} email={email} mobile={mobile} setName={setName} setEmail={setEmail} setMobile={setMobile} setProfilePath={setProfilePath} handleUpdateProfile={handleUpdateProfile} setDoUserNeedEditProfileWindow={setDoUserNeedEditProfileWindow} />)}
+            {!doUserNeedEditProfileWindow ? null : (<EditProfileWindow errors={errors} name={name} email={email} mobile={mobile} setName={setName} setEmail={setEmail} setMobile={setMobile} setProfilePath={setProfilePath} handleUpdateProfile={handleUpdateProfile} setDoUserNeedEditProfileWindow={setDoUserNeedEditProfileWindow} />)}
             {!blurConditions ? null : (<div className="fixed top-0 left-0 w-3/4 h-screen md:w-full backdrop-blur-lg bg-slate-800/70 z-30" onClick={() => handleCloseOpenWindow()}></div>)}
 
         </Fragment>

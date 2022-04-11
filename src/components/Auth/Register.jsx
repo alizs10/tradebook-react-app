@@ -1,11 +1,10 @@
-import React, { Fragment, useRef, useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { useNavigate } from 'react-router';
 import { BeatLoader } from 'react-spinners';
-import { toast } from 'react-toastify';
-import SimpleReactValidator from 'simple-react-validator';
 import { notify } from '../Services/alerts';
 import { registerUser } from '../Services/AuthService';
+import { signupValidation } from '../Services/validation';
 
 const Register = () => {
     const [loading, setLoading] = useState(false)
@@ -18,21 +17,12 @@ const Register = () => {
     const [referralCode, setReferralCode] = useState("");
 
 
-    const [, forceUpdate] = useState();
+    const [errors, setErrors] = useState({})
     const navigate = useNavigate();
 
 
 
-    const validator = useRef(new SimpleReactValidator({
-        messages: {
-            required: "پر کردن این فیلد الزامی می باشد",
-            email: "باید ایمیل بصورت صحیح وارد شود",
-            min: "باید حداقل 8 کارکتر باشد",
-            size: "باید 11 عدد باشد",
-            numeric: "باید عدد باشد",
-        },
-        element: message => <span className='text-red-400 text-xxs'>{message}</span>
-    }));
+
 
     const handelRegister = async event => {
         event.preventDefault();
@@ -44,7 +34,11 @@ const Register = () => {
         const user = {
             name, email, password, password_confirmation: password_confirm, mobile, referral_code: referralCode
         }
-        if (validator.current.allValid()) {
+        const { success, errors } = signupValidation(user);
+        console.log(errors);
+        if (success) {
+            setErrors({})
+
             try {
 
 
@@ -61,8 +55,7 @@ const Register = () => {
                 notify('مشکلی پیش آمده است', 'error')
             }
         } else {
-            validator.current.showMessages();
-            forceUpdate(1);
+            setErrors(errors)
         }
         setLoading(false)
     }
@@ -91,50 +84,55 @@ const Register = () => {
                         <label htmlFor="" className="text-xs">نام و نام خانوادگی</label>
                         <input type="text" className='form-input' value={name} onChange={event => {
                             setName(event.target.value)
-                            validator.current.showMessageFor('name')
-                        }} id="firstname" />
-                        {validator.current.message("name", name, "required|min:5")}
+
+                        }} id="name" />
+                        {errors.name && (<span className='text-xxs text-red-400'>{errors.name}</span>)}
+
                     </div>
                     <div className="flex flex-col gap-y-2">
                         <label htmlFor="" className="text-xs">ایمیل</label>
                         <input type="email" className='form-input' value={email} onChange={event => {
                             setEmail(event.target.value)
-                            validator.current.showMessageFor('email')
+
                         }} id="email" />
-                        {validator.current.message("email", email, "required|email")}
+                        {errors.email && (<span className='text-xxs text-red-400'>{errors.email}</span>)}
+
                     </div>
                     <div className="flex flex-col gap-y-2">
                         <label htmlFor="" className="text-xs">شماره موبایل</label>
                         <input type="text" className='form-input' value={mobile} onChange={event => {
                             setMobile(event.target.value)
-                            validator.current.showMessageFor('mobile')
                         }} id="mobile" />
-                        {validator.current.message("mobile", mobile, "required|numeric|size:11")}
+                        {errors.mobile && (<span className='text-xxs text-red-400'>{errors.mobile}</span>)}
+
                     </div>
                     <div className="flex flex-col gap-y-2">
                         <label htmlFor="" className="text-xs">کلمه عبور</label>
                         <input type="password" className='form-input' value={password} onChange={event => {
                             setPassword(event.target.value)
-                            validator.current.showMessageFor('password')
+
                         }} id="password" />
-                        {validator.current.message("password", password, "required|min:8")}
+                        {errors.password && (<span className='text-xxs text-red-400'>{errors.password}</span>)}
+
                     </div>
                     <div className="flex flex-col gap-y-2">
                         <label htmlFor="password_confirm" className="text-xs">تکرار کلمه عبور</label>
                         <input type="password" className='form-input' value={password_confirm} onChange={event => {
                             setPasswordConfirm(event.target.value)
-                            validator.current.showMessageFor('password_confirm')
+
                         }} id="password_confirm" />
-                        {validator.current.message("password_confirm", password_confirm, "required|min:8")}
+                        {errors.password_confirm && (<span className='text-xxs text-red-400'>{errors.password_confirm}</span>)}
+
                     </div>
 
                     <div className="flex flex-col gap-y-2">
                         <label htmlFor="referral_code" className="text-xs">کد معرف دارید؟</label>
                         <input type="text" className="form-input" value={referralCode} onChange={event => {
                             setReferralCode(event.target.value)
-                            validator.current.showMessageFor('referral_code')
+
                         }} id="referral_code" />
-                        {validator.current.message("referral_code", referralCode, "size:6")}
+                        {errors.referral_code && (<span className='text-xxs text-red-400'>{errors.referral_code}</span>)}
+
 
                     </div>
 

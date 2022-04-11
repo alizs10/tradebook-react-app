@@ -3,7 +3,6 @@ import React, { Fragment, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import Select from 'react-select';
 import { SyncLoader } from 'react-spinners';
-import SimpleReactValidator from 'simple-react-validator';
 import { reloadAccount } from '../../Redux/Action/Account';
 import { getAllTrades } from '../../Redux/Action/Trades';
 import { notify } from '../../Services/alerts';
@@ -24,15 +23,7 @@ const UpdatePriceWindow = ({ setDoUserNeedUpdatePriceWindow, trades, account_id 
 
     const dispatch = useDispatch()
 
-    const validator = useRef(new SimpleReactValidator({
-        messages: {
-            required: "پر کردن این فیلد الزامی می باشد",
-            numeric: "باید عدد وارد کنید",
-            in: "باید یک گزینه را انتخاب کنید"
-        },
-        element: message => <span className='color-red text-size-1'>{message}</span>
-    }));
-
+ 
     useEffect(() => {
         if (isEmpty(trades)) return
 
@@ -76,7 +67,7 @@ const UpdatePriceWindow = ({ setDoUserNeedUpdatePriceWindow, trades, account_id 
     });
 
     const handleUpdatePrice = async () => {
-        if (validator.current.allValid()) {
+  
 
             let updatePrice = {
                 pair_id: pairId, exit_price: exitPrice, _method: "PUT"
@@ -92,7 +83,7 @@ const UpdatePriceWindow = ({ setDoUserNeedUpdatePriceWindow, trades, account_id 
             } else {
                 notify('خطا', 'error')
             }
-        }
+        
 
     }
 
@@ -126,16 +117,13 @@ const UpdatePriceWindow = ({ setDoUserNeedUpdatePriceWindow, trades, account_id 
                                     styles={customStyles(selectedOption)}
                                 />
 
-                                {validator.current.message("pairId", pairId, "required|numeric")}
 
                             </div>
                             <div className="clo-span-1 flex flex-col gap-y-1">
                                 <label htmlFor="exitPrice">قیمت فعلی</label>
                                 <input type="text" className="form-input" value={exitPrice} onChange={event => {
                                     setExitPrice(event.target.value);
-                                    validator.current.showMessageFor('exitPrice')
                                 }} id="exitPrice" />
-                                {validator.current.message("exitPrice", exitPrice, "required|numeric")}
                             </div>
                         </div>
 

@@ -1,6 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import SimpleReactValidator from 'simple-react-validator';
 import { AddPayment } from '../../Redux/Action/Admin/Payments';
 import { notify } from '../../Services/alerts';
 import { CreatePayment } from '../../Services/Admin/PaymentsServices';
@@ -21,13 +20,7 @@ const CreatePaymentWindow = ({ setDoUserNeedCreatePaymentWindow }) => {
 
     const orders = useSelector(state => state.Orders)
 
-    const validator = useRef(new SimpleReactValidator({
-        messages: {
-            required: "پر کردن این فیلد الزامی می باشد",
-            numeric: "باید عدد وارد کنید"
-        },
-        element: message => <span className='text-xs text-red-400'>{message}</span>
-    }));
+    
 
     const dispatch = useDispatch()
 
@@ -46,7 +39,6 @@ const CreatePaymentWindow = ({ setDoUserNeedCreatePaymentWindow }) => {
 
 
     const handleCreatePayment = async () => {
-        if (validator.current.allValid()) {
             let newPayment = {
                 order_id: orderId, transaction_id: transactionId, status, type, payment_date: paymentDate
             }
@@ -66,11 +58,6 @@ const CreatePaymentWindow = ({ setDoUserNeedCreatePaymentWindow }) => {
             }
 
 
-            console.log(newPayment);
-        } else {
-            validator.current.showMessages();
-            forceUpdate(1);
-        }
     }
 
     return (
@@ -93,7 +80,6 @@ const CreatePaymentWindow = ({ setDoUserNeedCreatePaymentWindow }) => {
                         <label htmlFor="orderId">سفارش</label>
                         <select className='form-input' id="orderId" value={orderId} onChange={event => {
                             setOrderId(event.target.value);
-                            validator.current.showMessageFor('orderId')
                         }}>
                         <option value="">سفارش را انتخاب کنید</option>
                             {unpaidOrders.map(order => (
@@ -101,15 +87,12 @@ const CreatePaymentWindow = ({ setDoUserNeedCreatePaymentWindow }) => {
                             ))}
 
                         </select>
-                        {validator.current.message("orderId", orderId, "required|numeric")}
                     </div>
                     <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
                         <label className="text-xs h-fit">کد پرداخت</label>
                         <input type="text" className="form-input" value={transactionId} onChange={event => {
                             setTransactionId(event.target.value);
-                            validator.current.showMessageFor('transaction_id')
                         }} id="transaction_id" />
-                        {validator.current.message("transaction_id", transactionId, "required|numeric")}
 
                     </div>
                     
@@ -117,9 +100,7 @@ const CreatePaymentWindow = ({ setDoUserNeedCreatePaymentWindow }) => {
                         <label className="text-xs h-fit">تاریخ پرداخت</label>
                         <input type="date" className="form-input" value={paymentDate} onChange={event => {
                             setPaymentDate(event.target.value);
-                            validator.current.showMessageFor('paymentDate')
                         }} id="paymentDate" />
-                        {validator.current.message("paymentDate", paymentDate, "required")}
 
                     </div>
 
@@ -127,24 +108,20 @@ const CreatePaymentWindow = ({ setDoUserNeedCreatePaymentWindow }) => {
                         <label htmlFor="status">وضعیت</label>
                         <select className='form-input' id="status" value={status} onChange={event => {
                             setStatus(event.target.value);
-                            validator.current.showMessageFor('status')
                         }}>
                             <option value="0">پرداخت نشده</option>
                             <option value="1" >پرداخت شده</option>
                         </select>
-                        {validator.current.message("status", status, "required|in:0,1")}
                     </div>
 
                     <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
                         <label htmlFor="type">نوع پرداخت</label>
                         <select className='form-input' id="type" value={type} onChange={event => {
                             setType(event.target.value);
-                            validator.current.showMessageFor('type')
                         }}>
                             <option value="0">پرداخت آنلاین</option>
                             <option value="1" >کارت به کارت</option>
                         </select>
-                        {validator.current.message("type", type, "required|in:0,1")}
                     </div>
 
 

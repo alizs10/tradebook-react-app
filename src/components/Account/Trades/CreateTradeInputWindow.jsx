@@ -1,9 +1,7 @@
-import React, { Fragment, useEffect, useRef, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import SimpleReactValidator from 'simple-react-validator';
 import { getAllTrades } from '../../Redux/Action/Trades';
 import { notify } from '../../Services/alerts';
-import { getHistoricalRates } from '../../Services/FroexServices';
 import { CreateTrade } from '../../Services/TradesServices';
 import { isEmpty } from 'lodash';
 import { SyncLoader } from 'react-spinners';
@@ -37,15 +35,7 @@ const CreateTradeInputWindow = ({ setDoUserNeedCreateTradeWindow, acc_id, accTyp
     const user = useSelector(state => state.User);
     const dispatch = useDispatch();
 
-    const validator = useRef(new SimpleReactValidator({
-        messages: {
-            required: "پر کردن این فیلد الزامی می باشد",
-            numeric: "باید عدد وارد کنید",
-            in: "باید یک گزینه را انتخاب کنید"
-        },
-        element: message => <span className='color-red text-size-1'>{message}</span>
-    }));
-
+    
     useEffect(() => {
         if (isEmpty(pairs)) return
         setChecking(false)
@@ -131,9 +121,9 @@ const CreateTradeInputWindow = ({ setDoUserNeedCreateTradeWindow, acc_id, accTyp
                                 <label htmlFor="date">تاریخ</label>
                                 <input type="date" className="form-input" value={date} onChange={event => {
                                     setDate(event.target.value);
-                                    validator.current.showMessageFor('date')
+                                  
                                 }} />
-                                {validator.current.message("date", date, "required")}
+                               
                             </div>
 
                             <div className="clo-span-1 flex flex-col gap-y-1">
@@ -146,27 +136,23 @@ const CreateTradeInputWindow = ({ setDoUserNeedCreateTradeWindow, acc_id, accTyp
                                     styles={customStyles(selectedOption)}
                                 />
 
-                                {validator.current.message("pairId", pairId, "required|numeric")}
+                                
 
                             </div>
                             <div className="clo-span-1 flex flex-col gap-y-1">
                                 <label htmlFor="leverage">لوریج</label>
                                 <input type="text" className="form-input" value={leverage} onChange={event => {
                                     setLeverage(event.target.value);
-                                    validator.current.showMessageFor('leverage')
                                 }} id="leverage" />
-                                {validator.current.message("leverage", leverage, "required|integer")}
                             </div>
                             <div className="clo-span-1 flex flex-col gap-y-1">
                                 <label htmlFor="contractStatus">وضعیت</label>
                                 <select className='form-input' id="contractStatus" value={contractStatus} onChange={event => {
                                     setContractStatus(event.target.value);
-                                    validator.current.showMessageFor('contractStatus')
                                 }}>
                                     <option value="0" >باز</option>
                                     <option value="1" >بسته</option>
                                 </select>
-                                {validator.current.message("contractStatus", contractStatus, "required|in:0,1")}
                             </div>
                             {(contractStatus == 1 && accType == "forex") ? (
                                 <div className="clo-span-1 flex flex-col gap-y-1">
@@ -191,28 +177,22 @@ const CreateTradeInputWindow = ({ setDoUserNeedCreateTradeWindow, acc_id, accTyp
                                 <label htmlFor="contractType">نوع قرارداد</label>
                                 <select className='form-input' id="contractType" value={contractType} onChange={event => {
                                     setContractType(event.target.value);
-                                    validator.current.showMessageFor('contractType')
                                 }}>
                                     <option value="0" >لانگ</option>
                                     <option value="1" >شورت</option>
                                 </select>
-                                {validator.current.message("contractType", contractType, "required|in:0,1")}
                             </div>
                             <div className="clo-span-1 flex flex-col gap-y-1">
                                 <label htmlFor="entryPrice">نقطه ورود</label>
                                 <input type="text" className="form-input" value={entryPrice} onChange={event => {
                                     setEntryPrice(event.target.value);
-                                    validator.current.showMessageFor('entryPrice')
                                 }} id="entryPrice" />
-                                {validator.current.message("entryPrice", entryPrice, "required|numeric")}
                             </div>
                             <div className="clo-span-1 flex flex-col gap-y-1">
                                 <label htmlFor="exitPrice">نقطعه خروج</label>
                                 <input type="text" className="form-input" value={exitPrice} onChange={event => {
                                     setExitPrice(event.target.value);
-                                    validator.current.showMessageFor('exitPrice')
                                 }} id="exitPrice" />
-                                {validator.current.message("exitPrice", exitPrice, "required|numeric")}
                             </div>
                         </div>
 
