@@ -51,7 +51,7 @@ const CreateTradeInputWindow = ({ setDoUserNeedCreateTradeWindow, acc_id, accTyp
         }
 
         const { success, errors } = tradeValidation(newTrade);
-        console.log(errors);
+        
         if (success) {
             setErrors({})
             try {
@@ -65,11 +65,7 @@ const CreateTradeInputWindow = ({ setDoUserNeedCreateTradeWindow, acc_id, accTyp
                 }
             } catch (e) {
                 var error = Object.assign({}, e);
-                if (error.response.status === 401) {
-                    notify('ایمیل یا کلمه عبور شما اشتباه می باشد', 'error')
-                } else {
-                    notify('مشکلی رخ داده است', 'error')
-                }
+               
             }
         } else {
             setErrors(errors)

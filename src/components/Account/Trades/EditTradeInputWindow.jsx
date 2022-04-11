@@ -1,13 +1,13 @@
 import { isEmpty } from 'lodash';
-import React, { Fragment, useEffect, useRef, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Select from 'react-select';
 import { SyncLoader } from 'react-spinners';
 import { reloadAccount } from '../../Redux/Action/Account';
 import { getAllTrades } from '../../Redux/Action/Trades';
 import { notify } from '../../Services/alerts';
-import { getHistoricalRates } from '../../Services/FroexServices';
 import { EditTrade } from '../../Services/TradesServices';
+import { tradeValidation } from '../../Services/validation';
 
 
 const EditTradeInputWindow = ({ setDoUserNeedEditTradeWindow, acc_id, trade, accType }) => {
@@ -26,100 +26,56 @@ const EditTradeInputWindow = ({ setDoUserNeedEditTradeWindow, acc_id, trade, acc
 
     const [date, setDate] = useState(justDate);
     const [pairName, setPairName] = useState(trade.pair_name);
-    const [pairId, setPairId] = useState(trade.pair_id);
+    const [pairId, setPairId] = useState(`${trade.pair_id}`);
     const [selectedOption, setSelectedOption] = useState(trade.pair_name);
-    const [margin, setMargin] = useState({});
-    const [leverage, setLeverage] = useState(trade.leverage);
+    const [margin, setMargin] = useState(`${trade.margin}`);
+    const [profit, setProfit] = useState(trade.profit);
+    const [leverage, setLeverage] = useState(`${trade.leverage}`);
     const [contractStatus, setContractStatus] = useState(`${trade.status}`);
     const [contractType, setContractType] = useState(`${trade.contract_type}`);
     const [entryPrice, setEntryPrice] = useState(trade.entry_price);
     const [exitPrice, setExitPrice] = useState(trade.exit_price);
-    const [, forceUpdate] = useState("");
+    const [errors, setErrors] = useState({})
+
 
     const dispatch = useDispatch();
 
-  
+
 
     useEffect(() => {
         if (isEmpty(pairs)) return
         setChecking(false)
     }, [pairs])
 
-    useEffect(() => {
-        if (isEmpty(trade)) return
-
-        setMargin(JSON.parse(trade.margin))
-    }, [trade])
-
 
     const handleEditTrade = async () => {
 
-            const editedTrade = {
-                ...trade,
-                trade_date: date, pair_id: pairId, margin, leverage, entry_price: entryPrice, exit_price: exitPrice, status: contractStatus, contract_type: contractType, account_id: acc_id, user_id: user.id
-            }
+        const editedTrade = {
+            accType, id: trade.id, trade_date: date, pair_id: pairId, margin, profit, leverage, entry_price: entryPrice, exit_price: exitPrice, status: contractStatus, contract_type: contractType, account_id: acc_id, user_id: user.id
+        }
 
-            if (accType === 'forex') {
-                let base = pairName.split("/")[0]
-                let symbol = 'USD';
-                let rate = 1
+        const { success, errors } = tradeValidation(editedTrade);
+console.log(errors);
+        if (success) {
+            setErrors({})
+            try {
+                const { status, data } = await EditTrade(editedTrade, acc_id)
 
-                if (base !== 'USD') {
-                    if (base === 'EUR') {
-                        const { data } = await getHistoricalRates(date, base, symbol)
-                        rate = data.rates[symbol];
-                    } else {
-
-                        // state= NZD/CAD  => base = NZD
-
-                        const { data } = await getHistoricalRates(date, 'EUR', `USD,${base}`)
-                        let xRate = data.rates['USD'];
-                        let yRate = data.rates[base];
-
-                        rate = yRate / xRate;
-
-                    }
-                }
-
-                let newMargin = (rate * margin.valume * 100000) / leverage;
-                editedTrade.margin.rate = rate;
-                editedTrade.margin.margin = newMargin;
-            } else {
-                let valume = (margin.margin * leverage) / editedTrade.entry_price;
-                editedTrade.margin.rate = "";
-                editedTrade.margin.valume = valume;
-            }
-
-            EditTrade(editedTrade, acc_id).then(function ({ status }) {
                 if (status === 200) {
                     dispatch(getAllTrades(acc_id))
                     dispatch(reloadAccount(acc_id))
                     setDoUserNeedEditTradeWindow(false)
                     notify('ترید مورد نظر با موفقیت ویرایش شد', 'success');
                 }
-            }).catch(function (error) {
-                if (error.response.status === 422) {
-                    notify('اطلاعات وارد شده صحیح نیست', 'warning');
-                } else if (error.response.status >= 500) {
-                    notify('خطای سرور', 'error');
-                }
-            })
+            } catch (e) {
+                var error = Object.assign({}, e);
 
-
-        
-    }
-
-    const handleMargin = (event) => {
-        if (accType === 'crypto') {
-            setMargin({ ...margin, margin: event.target.value })
+            }
         } else {
-            setMargin({ ...margin, valume: event.target.value })
+            setErrors(errors)
         }
-    }
 
-    const displayMargin = margin => {
-        return accType === 'crypto' ? margin.margin : margin.valume;
-    };
+    }
 
     const handlePairSelect = (event) => {
         setSelectedOption(event.value);
@@ -144,7 +100,7 @@ const EditTradeInputWindow = ({ setDoUserNeedEditTradeWindow, acc_id, trade, acc
 
     return (
         <Fragment>
-            
+
             {checking ? (
                 <div style={style}>
                     <SyncLoader color={'#ffffff'} loading={checking} size={15} />
@@ -167,9 +123,9 @@ const EditTradeInputWindow = ({ setDoUserNeedEditTradeWindow, acc_id, trade, acc
                                 <label htmlFor="date">تاریخ</label>
                                 <input type="date" className="form-input" value={date} onChange={event => {
                                     setDate(event.target.value);
-                                
+
                                 }} />
-                               
+                                {errors.trade_date && (<span className='text-xxs text-red-400'>{errors.trade_date}</span>)}
                             </div>
 
                             <div className="clo-span-1 flex flex-col gap-y-1">
@@ -182,20 +138,18 @@ const EditTradeInputWindow = ({ setDoUserNeedEditTradeWindow, acc_id, trade, acc
                                     styles={customStyles(selectedOption)}
                                 />
 
+                                {errors.pair_id && (<span className='text-xxs text-red-400'>{errors.pair_id}</span>)}
 
                             </div>
-                            <div className="clo-span-1 flex flex-col gap-y-1">
-                                <label htmlFor="margin">{accType === 'crypto' ? 'مارجین' : 'لات'}</label>
-                                <input type="text" className="form-input" value={displayMargin(margin)} onChange={event => {
-                                    handleMargin(event);
-                                }} id="margin" />
-                            </div>
+
                             <div className="clo-span-1 flex flex-col gap-y-1">
                                 <label htmlFor="leverage">لوریج</label>
                                 <input type="text" className="form-input" value={leverage} onChange={event => {
                                     setLeverage(event.target.value);
-                                    
+
                                 }} id="leverage" />
+                                {errors.leverage && (<span className='text-xxs text-red-400'>{errors.leverage}</span>)}
+
                             </div>
                             <div className="clo-span-1 flex flex-col gap-y-1">
                                 <label htmlFor="contractStatus">وضعیت</label>
@@ -205,7 +159,28 @@ const EditTradeInputWindow = ({ setDoUserNeedEditTradeWindow, acc_id, trade, acc
                                     <option value="0" >باز</option>
                                     <option value="1" >بسته</option>
                                 </select>
+                                {errors.status && (<span className='text-xxs text-red-400'>{errors.status}</span>)}
+
                             </div>
+                            {(contractStatus == 1 && accType == "forex") ? (
+                                <div className="clo-span-1 flex flex-col gap-y-1">
+                                    <label htmlFor="profit">سود/زیان (دلار)</label>
+                                    <input type="text" className="form-input" value={profit} onChange={event => {
+                                        setProfit(event.target.value);
+                                    }} id="profit" />
+                                    {errors.profit && (<span className='text-xxs text-red-400'>{errors.profit}</span>)}
+
+                                </div>
+                            ) : (
+                                <div className="clo-span-1 flex flex-col gap-y-1">
+                                    <label htmlFor="margin">مارجین</label>
+                                    <input type="text" className="form-input" value={margin} onChange={event => {
+                                        setMargin(event.target.value);
+                                    }} id="margin" />
+                                    {errors.margin && (<span className='text-xxs text-red-400'>{errors.margin}</span>)}
+
+                                </div>
+                            )}
                             <div className="clo-span-1 flex flex-col gap-y-1">
                                 <label htmlFor="contractType">نوع قرارداد</label>
                                 <select className='form-input' id="contractType" value={contractType} onChange={event => {
@@ -214,18 +189,25 @@ const EditTradeInputWindow = ({ setDoUserNeedEditTradeWindow, acc_id, trade, acc
                                     <option value="0" >لانگ</option>
                                     <option value="1" >شورت</option>
                                 </select>
+                                {errors.contract_type && (<span className='text-xxs text-red-400'>{errors.contract_type}</span>)}
+
                             </div>
+
                             <div className="clo-span-1 flex flex-col gap-y-1">
                                 <label htmlFor="entryPrice">نقطه ورود</label>
                                 <input type="text" className="form-input" value={entryPrice} onChange={event => {
                                     setEntryPrice(event.target.value);
                                 }} id="entryPrice" />
+                                {errors.entry_price && (<span className='text-xxs text-red-400'>{errors.entry_price}</span>)}
+
                             </div>
                             <div className="clo-span-1 flex flex-col gap-y-1">
                                 <label htmlFor="exitPrice">نقطعه خروج</label>
                                 <input type="text" className="form-input" value={exitPrice} onChange={event => {
                                     setExitPrice(event.target.value);
                                 }} id="exitPrice" />
+                                {errors.exit_price && (<span className='text-xxs text-red-400'>{errors.exit_price}</span>)}
+
                             </div>
                         </div>
 
