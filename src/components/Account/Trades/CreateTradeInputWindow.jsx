@@ -7,6 +7,7 @@ import { isEmpty } from 'lodash';
 import { SyncLoader } from 'react-spinners';
 import Select from 'react-select';
 import { reloadAccount } from '../../Redux/Action/Account';
+import { tradeValidation } from '../../Services/validation';
 
 const CreateTradeInputWindow = ({ setDoUserNeedCreateTradeWindow, acc_id, accType }) => {
 
@@ -25,7 +26,8 @@ const CreateTradeInputWindow = ({ setDoUserNeedCreateTradeWindow, acc_id, accTyp
     const [contractType, setContractType] = useState("0");
     const [entryPrice, setEntryPrice] = useState("");
     const [exitPrice, setExitPrice] = useState("");
-    const [, forceUpdate] = useState("");
+    const [errors, setErrors] = useState({})
+
 
     const [checking, setChecking] = useState(true);
     const style = { position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)" };
@@ -35,7 +37,7 @@ const CreateTradeInputWindow = ({ setDoUserNeedCreateTradeWindow, acc_id, accTyp
     const user = useSelector(state => state.User);
     const dispatch = useDispatch();
 
-    
+
     useEffect(() => {
         if (isEmpty(pairs)) return
         setChecking(false)
@@ -43,31 +45,35 @@ const CreateTradeInputWindow = ({ setDoUserNeedCreateTradeWindow, acc_id, accTyp
 
     const handleCreateTrade = async () => {
 
-        console.log('here');
-      
 
+        const newTrade = {
+            trade_date: date, pair_id: pairId, margin, profit, leverage, entry_price: entryPrice, exit_price: exitPrice, status: contractStatus, contract_type: contractType, account_id: acc_id, user_id: user.id, accType
+        }
 
-            const newTrade = {
-                trade_date: date, pair_id: pairId, margin, profit, leverage, entry_price: entryPrice, exit_price: exitPrice, status: contractStatus, contract_type: contractType, account_id: acc_id, user_id: user.id
-            }
+        const { success, errors } = tradeValidation(newTrade);
+        console.log(errors);
+        if (success) {
+            setErrors({})
+            try {
+                const { status, data } = await CreateTrade(newTrade, acc_id)
 
-            console.log(newTrade);
-
-            CreateTrade(newTrade, acc_id).then(function ({ status }) {
                 if (status === 201) {
                     dispatch(getAllTrades(acc_id))
                     dispatch(reloadAccount(acc_id))
                     setDoUserNeedCreateTradeWindow(false)
                     notify('ترید جدید شما با موفقیت اضافه شد', 'success');
                 }
-            }).catch(function (error) {
-                if (error.response.status === 422) {
-                    notify('اطلاعات وارد شده صحیح نیست', 'warning');
-                } else if (error.response.status >= 500) {
-
-                    notify('خطای سرور', 'error');
+            } catch (e) {
+                var error = Object.assign({}, e);
+                if (error.response.status === 401) {
+                    notify('ایمیل یا کلمه عبور شما اشتباه می باشد', 'error')
+                } else {
+                    notify('مشکلی رخ داده است', 'error')
                 }
-            })
+            }
+        } else {
+            setErrors(errors)
+        }
 
 
     }
@@ -77,7 +83,7 @@ const CreateTradeInputWindow = ({ setDoUserNeedCreateTradeWindow, acc_id, accTyp
     const handlePairSelect = (event) => {
         setSelectedOption(event.value);
         setPairName(event.value)
-        setPairId(event.id)
+        setPairId(`${event.id}`)
     }
 
     const displayItem = selected => {
@@ -121,29 +127,26 @@ const CreateTradeInputWindow = ({ setDoUserNeedCreateTradeWindow, acc_id, accTyp
                                 <label htmlFor="date">تاریخ</label>
                                 <input type="date" className="form-input" value={date} onChange={event => {
                                     setDate(event.target.value);
-                                  
                                 }} />
-                               
+                                {errors.trade_date && (<span className='text-xxs text-red-400'>{errors.trade_date}</span>)}
                             </div>
 
                             <div className="clo-span-1 flex flex-col gap-y-1">
                                 <label htmlFor="pair_id">جفت ارز</label>
                                 <Select
-
                                     value={displayItem(selectedOption)}
                                     onChange={event => handlePairSelect(event)}
                                     options={pairs[accType]}
                                     styles={customStyles(selectedOption)}
                                 />
-
-                                
-
+                                {errors.pair_id && (<span className='text-xxs text-red-400'>{errors.pair_id}</span>)}
                             </div>
                             <div className="clo-span-1 flex flex-col gap-y-1">
                                 <label htmlFor="leverage">لوریج</label>
                                 <input type="text" className="form-input" value={leverage} onChange={event => {
                                     setLeverage(event.target.value);
                                 }} id="leverage" />
+                                {errors.leverage && (<span className='text-xxs text-red-400'>{errors.leverage}</span>)}
                             </div>
                             <div className="clo-span-1 flex flex-col gap-y-1">
                                 <label htmlFor="contractStatus">وضعیت</label>
@@ -153,24 +156,25 @@ const CreateTradeInputWindow = ({ setDoUserNeedCreateTradeWindow, acc_id, accTyp
                                     <option value="0" >باز</option>
                                     <option value="1" >بسته</option>
                                 </select>
+                                {errors.status && (<span className='text-xxs text-red-400'>{errors.status}</span>)}
                             </div>
                             {(contractStatus == 1 && accType == "forex") ? (
                                 <div className="clo-span-1 flex flex-col gap-y-1">
-                                    <label htmlFor="profit">سود (دلار)</label>
+                                    <label htmlFor="profit">سود/زیان (دلار)</label>
                                     <input type="text" className="form-input" value={profit} onChange={event => {
                                         setProfit(event.target.value);
-                                      
                                     }} id="profit" />
-                                    
+                                    {errors.profit && (<span className='text-xxs text-red-400'>{errors.profit}</span>)}
+
                                 </div>
                             ) : (
                                 <div className="clo-span-1 flex flex-col gap-y-1">
                                     <label htmlFor="margin">مارجین</label>
                                     <input type="text" className="form-input" value={margin} onChange={event => {
                                         setMargin(event.target.value);
-                                       
                                     }} id="margin" />
-                                    
+                                    {errors.margin && (<span className='text-xxs text-red-400'>{errors.margin}</span>)}
+
                                 </div>
                             )}
                             <div className="clo-span-1 flex flex-col gap-y-1">
@@ -181,18 +185,21 @@ const CreateTradeInputWindow = ({ setDoUserNeedCreateTradeWindow, acc_id, accTyp
                                     <option value="0" >لانگ</option>
                                     <option value="1" >شورت</option>
                                 </select>
+                                {errors.contract_type && (<span className='text-xxs text-red-400'>{errors.contract_type}</span>)}
                             </div>
                             <div className="clo-span-1 flex flex-col gap-y-1">
                                 <label htmlFor="entryPrice">نقطه ورود</label>
                                 <input type="text" className="form-input" value={entryPrice} onChange={event => {
                                     setEntryPrice(event.target.value);
                                 }} id="entryPrice" />
+                                {errors.entry_price && (<span className='text-xxs text-red-400'>{errors.entry_price}</span>)}
                             </div>
                             <div className="clo-span-1 flex flex-col gap-y-1">
-                                <label htmlFor="exitPrice">نقطعه خروج</label>
+                                <label htmlFor="exitPrice">نقطه خروج</label>
                                 <input type="text" className="form-input" value={exitPrice} onChange={event => {
                                     setExitPrice(event.target.value);
                                 }} id="exitPrice" />
+                                {errors.exit_price && (<span className='text-xxs text-red-400'>{errors.exit_price}</span>)}
                             </div>
                         </div>
 

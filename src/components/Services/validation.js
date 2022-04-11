@@ -218,4 +218,84 @@ export const resetPasswordProfileValidation = payload => {
         errors
     };
 };
+export const tradeValidation = payload => {
+    const errors = {};
+    let isFormValid = true;
+
+    console.log(payload);
+
+    if (validator.isEmpty(payload.trade_date)) {
+        isFormValid = false;
+        errors.trade_date = "تاریخ معامله الزامی می باشد";
+    } else if (!validator.isDate(payload.trade_date)) {
+        isFormValid = false;
+        errors.trade_date = "تاریخ معامله صحیح نمی باشد";
+    }
+
+    if (validator.isEmpty(payload.pair_id)) {
+        isFormValid = false;
+        errors.pair_id = "انتخاب جفت ارز الزامی می باشد";
+    } else if (!validator.isInt(payload.pair_id)) {
+        isFormValid = false;
+        errors.pair_id = "جفت ارز انتخاب شده، صحیح نمی باشد";
+    }
+
+    if (validator.isEmpty(payload.status)) {
+        isFormValid = false;
+        errors.status = "وضعیت معامله الزامی می باشد";
+    } else if (!validator.isIn(payload.status, [0, 1])) {
+        isFormValid = false;
+        errors.status = "وضعیت معامله باید از بین باز و بسته انتخاب شود";
+    }
+
+    if (validator.isEmpty(payload.contract_type)) {
+        isFormValid = false;
+        errors.contract_type = "نوع قرارداد الزامی می باشد";
+    } else if (!validator.isIn(payload.contract_type, [0, 1])) {
+        isFormValid = false;
+        errors.contract_type = "نوع قرارداد باید از بین لانگ و شورت انتخاب شود";
+    }
+
+    if ((validator.isEmpty(payload.margin) && payload.status == 0) || (validator.isEmpty(payload.margin) && payload.accType === "crypto")) {
+        isFormValid = false;
+        errors.margin = "مارجین الزامی می باشد";
+    } else if ((!validator.isNumeric(payload.margin) && payload.status == 0) || (!validator.isNumeric(payload.margin) && payload.accType === "crypto")) {
+        isFormValid = false;
+        errors.margin = "مارجین باید از نوع عدد باشد";
+    }
+
+    if (validator.isEmpty(payload.profit) && payload.accType === "forex" && payload.status == 1) {
+        isFormValid = false;
+        errors.profit = "سود/زیان الزامی می باشد";
+    } else if (!validator.isNumeric(payload.profit) && payload.accType === "forex" && payload.status == 1) {
+        isFormValid = false;
+        errors.profit = "سود/زیان باید از نوع عدد باشد";
+    }
+    if (validator.isEmpty(payload.leverage)) {
+        isFormValid = false;
+        errors.leverage = "لوریج الزامی می باشد";
+    } else if (!validator.isNumeric(payload.leverage)) {
+        isFormValid = false;
+        errors.leverage = "لوریج باید از نوع عدد باشد";
+    }
+    if (validator.isEmpty(payload.entry_price)) {
+        isFormValid = false;
+        errors.entry_price = "نقطه ورود الزامی می باشد";
+    } else if (!validator.isNumeric(payload.entry_price)) {
+        isFormValid = false;
+        errors.entry_price = "نقطه ورود باید از نوع عدد باشد";
+    }
+    if (validator.isEmpty(payload.exit_price)) {
+        isFormValid = false;
+        errors.exit_price = "نقطه خروج الزامی می باشد";
+    } else if (!validator.isNumeric(payload.exit_price)) {
+        isFormValid = false;
+        errors.exit_price = "نقطه خروج باید از نوع عدد باشد";
+    }
+
+    return {
+        success: isFormValid,
+        errors
+    };
+};
 
