@@ -20,8 +20,9 @@ const DashOrders = () => {
 
     const [searchInp, setSearchInp] = useState("");
     const [searchRes, setSearchRes] = useState([]);
-    const [isOrderSearching, setIsOrderSearching] = useState(false);
+    const [isUserSearching, setIsUserSearching] = useState(false);
     const [order, setOrder] = useState({});
+    const [filterMode, setFilterMode] = useState("all");
 
     const [doUserNeedCreateOrderWindow, setDoUserNeedCreateOrderWindow] = useState(false);
     const [doUserNeedDetailsOrderWindow, setDoUserNeedDetailsOrderWindow] = useState(false);
@@ -44,7 +45,7 @@ const DashOrders = () => {
     }, [])
     useEffect(() => {
 
-        if (isOrderSearching) {
+        if (isUserSearching) {
 
             handleSearch(searchInp)
             return
@@ -66,7 +67,7 @@ const DashOrders = () => {
     var iteration = pagination.startIndex + 1;
 
     const handleSearchInp = event => {
-        setIsOrderSearching(true)
+        setIsUserSearching(true)
         setSearchInp(event.target.value)
         handleSearch(event.target.value)
     }
@@ -78,12 +79,49 @@ const DashOrders = () => {
         setShowArr(results)
 
         if (searchFor === "") {
-            setIsOrderSearching(false)
+            setIsUserSearching(false)
             setShowArr(orders)
         }
 
     }
 
+    const handleFiltringOnOrders = (filter) => {
+
+        let ordersInstance;
+
+        switch (filter) {
+            case "all":
+                setFilterMode('all')
+                isUserSearching ? setShowArr(searchRes) : setShowArr(orders)
+                break;
+
+            case "paid":
+                ordersInstance = isUserSearching ? structuredClone(searchRes) : structuredClone(orders)
+                let paidOrders = ordersInstance.filter(pair => pair.status == 1)
+                setFilterMode('paid')
+                setShowArr(paidOrders)
+                break;
+            case "unsuccessful":
+                ordersInstance = isUserSearching ? structuredClone(searchRes) : structuredClone(orders)
+                let unsuccessfulOrders = ordersInstance.filter(pair => pair.status == 3)
+                setFilterMode('unsuccessful')
+                setShowArr(unsuccessfulOrders)
+                break;
+            case "still":
+                ordersInstance = isUserSearching ? structuredClone(searchRes) : structuredClone(orders)
+                let stillOrders = ordersInstance.filter(pair => pair.status == 0)
+                setFilterMode('still')
+                setShowArr(stillOrders)
+                break;
+            case "canceled":
+                ordersInstance = isUserSearching ? structuredClone(searchRes) : structuredClone(orders)
+                let canceledOrders = ordersInstance.filter(pair => pair.status == 2)
+                setFilterMode('canceled')
+                setShowArr(canceledOrders)
+                break;
+
+        }
+    }
 
     const handleDelOrder = (order_id) => {
         confirm('حذف سفارش', 'آیا می خواهید سفارش مورد نظر را حذف کنید؟.',
@@ -112,15 +150,27 @@ const DashOrders = () => {
         <Fragment>
             <section className="mt-4 mx-2">
 
-                <h2 className="text-base pb-1 text-gray-600">سفارشات</h2>
+                <div className="flex justify-between items-center">
+                    <h2 className="text-base pb-1 text-gray-600">سفارشات</h2>
 
+
+                    <div
+                        className="p-2 rounded-lg bg-white dark:bg-slate-800 dark:text-slate-300 shadow-md flex gap-2 lg:gap-4 items-center">
+                        <span className={`cursor-pointer text-xxxs lg:text-xs ${filterMode === 'all' ? ' p-2 rounded-lg bg-slate-900' : ''}`} onClick={() => handleFiltringOnOrders('all')}>همه</span>
+                        <span className={`cursor-pointer text-xxxs lg:text-xs ${filterMode === 'paid' ? ' p-2 rounded-lg bg-slate-900' : ''}`} onClick={() => handleFiltringOnOrders('paid')}>پرداخت شده</span>
+                        <span className={`cursor-pointer text-xxxs lg:text-xs ${filterMode === 'unsuccessful' ? ' p-2 rounded-lg bg-slate-900' : ''}`} onClick={() => handleFiltringOnOrders('unsuccessful')}>پرداخت ناموفق</span>
+                        <span className={`cursor-pointer text-xxxs lg:text-xs ${filterMode === 'still' ? ' p-2 rounded-lg bg-slate-900' : ''}`} onClick={() => handleFiltringOnOrders('still')}>در انتظار پرداخت</span>
+                        <span className={`cursor-pointer text-xxxs lg:text-xs ${filterMode === 'canceled' ? ' p-2 rounded-lg bg-slate-900' : ''}`} onClick={() => handleFiltringOnOrders('canceled')}>لغو شده</span>
+
+                    </div>
+                </div>
                 <div className="grid grid-cols-8 gap-2 mt-2 p-2 bg-slate-800 rounded-lg drop-shadow-lg">
 
                     <div className="col-span-6 md:col-span-7 grid grid-cols-8 bg-slate-700 rounded-lg">
 
                         <input type="text" onChange={event => handleSearchInp(event)}
                             className="h-full col-span-6 sm:col-span-7 bg-transparent text-sm md:text-lg px-2 focus:outline-none text-slate-300 placeholder:text-slate-500"
-                            placeholder="کدوم کاربر؟" />
+                            placeholder="کدوم کاربر؟ (نام)" />
                         <div className="flex justify-end items-center col-span-2 ml-2 md:ml-3 lg:ml-4 sm:col-span-1">
                             <i className="fa-duotone fa-magnifying-glass text-xl text-slate-500"></i>
                         </div>

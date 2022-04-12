@@ -20,8 +20,9 @@ const DashPayments = () => {
 
     const [searchInp, setSearchInp] = useState("");
     const [searchRes, setSearchRes] = useState([]);
-    const [isPaymentSearching, setIsPaymentSearching] = useState(false);
+    const [isUserSearching, setIsUserSearching] = useState(false);
     const [payment, setPayment] = useState({});
+    const [filterMode, setFilterMode] = useState("all");
 
     const [doUserNeedCreatePaymentWindow, setDoUserNeedCreatePaymentWindow] = useState(false);
     const [doUserNeedDetailsPaymentWindow, setDoUserNeedDetailsPaymentWindow] = useState(false);
@@ -44,7 +45,7 @@ const DashPayments = () => {
     }, [])
     useEffect(() => {
 
-        if (isPaymentSearching) {
+        if (isUserSearching) {
 
             handleSearch(searchInp)
             return
@@ -66,7 +67,7 @@ const DashPayments = () => {
     var iteration = pagination.startIndex + 1;
 
     const handleSearchInp = event => {
-        setIsPaymentSearching(true)
+        setIsUserSearching(true)
         setSearchInp(event.target.value)
         handleSearch(event.target.value)
     }
@@ -78,12 +79,36 @@ const DashPayments = () => {
         setShowArr(results)
 
         if (searchFor === "") {
-            setIsPaymentSearching(false)
+            setIsUserSearching(false)
             setShowArr(payments)
         }
 
     }
 
+    const handleFiltringOnPayments = (filter) => {
+
+        let ordersInstance;
+
+        switch (filter) {
+            case "all":
+                setFilterMode('all')
+                isUserSearching ? setShowArr(searchRes) : setShowArr(payments)
+                break;
+
+            case "successful":
+                ordersInstance = isUserSearching ? structuredClone(searchRes) : structuredClone(payments)
+                let successfulPayments = ordersInstance.filter(pair => pair.status == 1)
+                setFilterMode('successful')
+                setShowArr(successfulPayments)
+                break;
+            case "unsuccessful":
+                ordersInstance = isUserSearching ? structuredClone(searchRes) : structuredClone(payments)
+                let unsuccessfulPayments = ordersInstance.filter(pair => pair.status == 0)
+                setFilterMode('unsuccessful')
+                setShowArr(unsuccessfulPayments)
+                break;
+        }
+    }
 
     const handleDelPayment = (payment_id) => {
         confirm('حذف پرداخت', 'آیا می خواهید پرداخت مورد نظر را حذف کنید؟.',
@@ -112,8 +137,19 @@ const DashPayments = () => {
         <Fragment>
             <section className="mt-4 mx-2">
 
-                <h2 className="text-base pb-1 text-gray-600">پرداخت ها</h2>
+                <div className="flex justify-between items-center">
+                    <h2 className="text-base pb-1 text-gray-600">پرداخت ها</h2>
 
+
+                    <div
+                        className="p-2 rounded-lg bg-white dark:bg-slate-800 dark:text-slate-300 shadow-md flex gap-2 lg:gap-4 items-center">
+                        <span className={`cursor-pointer text-xxxs lg:text-xs ${filterMode === 'all' ? ' p-2 rounded-lg bg-slate-900' : ''}`} onClick={() => handleFiltringOnPayments('all')}>همه</span>
+                        <span className={`cursor-pointer text-xxxs lg:text-xs ${filterMode === 'successful' ? ' p-2 rounded-lg bg-slate-900' : ''}`} onClick={() => handleFiltringOnPayments('successful')}>پرداخت موفق</span>
+                        <span className={`cursor-pointer text-xxxs lg:text-xs ${filterMode === 'unsuccessful' ? ' p-2 rounded-lg bg-slate-900' : ''}`} onClick={() => handleFiltringOnPayments('unsuccessful')}>پرداخت ناموفق</span>
+                      
+
+                    </div>
+                </div>
                 <div className="grid grid-cols-8 gap-2 mt-2 p-2 bg-slate-800 rounded-lg drop-shadow-lg">
 
                     <div className="col-span-6 md:col-span-7 grid grid-cols-8 bg-slate-700 rounded-lg">
