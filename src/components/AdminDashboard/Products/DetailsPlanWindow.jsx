@@ -8,7 +8,8 @@ const DetailsPlanWindow = ({ setDoUserNeedDetailsPlanWindow, plan, handleDelPlan
     const [name, setName] = useState("")
     const [validFor, setValidFor] = useState("")
     const [price, setPrice] = useState("")
-    const [, forceUpdate] = useState("");
+    
+
 
 
     useEffect(() => {

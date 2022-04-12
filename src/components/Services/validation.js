@@ -125,7 +125,6 @@ export const profileValidation = formData => {
     const errors = {};
     let isFormValid = true;
 
-
     let payload = {};
 
     for (const [key, value] of formData) {

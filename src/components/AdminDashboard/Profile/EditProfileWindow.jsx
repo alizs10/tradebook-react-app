@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 
-const EditProfileWindow = ({name, email, mobile, handleUpdateProfile, setProfilePath, setName, setMobile, setEmail, setDoUserNeedEditProfileWindow}) => {
+const EditProfileWindow = ({ errors ,name, email, mobile, handleUpdateProfile, setProfilePath, setName, setMobile, setEmail, setDoUserNeedEditProfileWindow}) => {
 
     
 
@@ -23,18 +23,26 @@ const EditProfileWindow = ({name, email, mobile, handleUpdateProfile, setProfile
                         <div className="clo-span-1 flex flex-col gap-y-1">
                             <label htmlFor="">نام و نام خانوادگی</label>
                             <input type="text" className="form-input" value={name} onChange={event => setName(event.target.value)} />
+                            {errors.name && (<span className='text-xxs text-red-400'>{errors.name}</span>)}
+
                         </div>
                         <div className="clo-span-1 flex flex-col gap-y-1">
                             <label htmlFor="">ایمیل</label>
                             <input type="email" className="form-input" value={email} onChange={event => setEmail(event.target.value)} />
+                            {errors.email && (<span className='text-xxs text-red-400'>{errors.email}</span>)}
+
                         </div>
                         <div className="clo-span-1 flex flex-col gap-y-1">
                             <label htmlFor="">شماره موبایل</label>
                             <input type="text" className="form-input" value={mobile} onChange={event => setMobile(event.target.value)} />
+                            {errors.mobile && (<span className='text-xxs text-red-400'>{errors.mobile}</span>)}
+
                         </div>
                         <div className="clo-span-1 flex flex-col gap-y-1">
                             <label htmlFor="">آواتار</label>
                             <input type="file" className="form-input" onChange={event => setProfilePath(event.target.files[0])} />
+                            {errors.profile_photo_path && (<span className='text-xxs text-red-400'>{errors.profile_photo_path}</span>)}
+
                         </div>
                     </div>
 

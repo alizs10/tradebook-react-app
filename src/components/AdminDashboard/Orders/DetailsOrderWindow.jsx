@@ -82,7 +82,7 @@ const DetailsOrderWindow = ({ setDoUserNeedDetailsOrderWindow, order, handleDelO
                 <div className="col-span-1 rounded-lg bg-slate-700 mx-2 flex flex-col gap-y-1 p-2">
                     <span className="text-xs pb-2 border-b-2 border-slate-800">وضعیت</span>
                     <span className="text-base">
-                        {status === 0 ? "لغو شده" : "پرداخت شده"}
+                    {status}
                     </span>
                 </div>
                 

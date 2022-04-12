@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { EditAdminPair } from '../../Redux/Action/Admin/AdminPairs';
 import { notify } from '../../Services/alerts';
 import { UpdateAdminPair } from '../../Services/Admin/AdminPairsServices';
+import { pairValidation } from '../../Services/Admin/adminValidation';
 
 const EditAdminPairWindow = ({ setDoUserNeedEditAdminPairWindow, adminPair }) => {
 
@@ -11,8 +12,9 @@ const EditAdminPairWindow = ({ setDoUserNeedEditAdminPairWindow, adminPair }) =>
     const [pairId, setPairId] = useState("")
     const [type, setType] = useState("")
     const [status, setStatus] = useState("")
-    const [, forceUpdate] = useState("");
-   
+    const [errors, setErrors] = useState({})
+
+
 
     useEffect(() => {
         if (isEmpty(adminPair)) return
@@ -25,10 +27,13 @@ const EditAdminPairWindow = ({ setDoUserNeedEditAdminPairWindow, adminPair }) =>
     const dispatch = useDispatch()
 
     const handleEditAdminPair = async () => {
-            let editedAdminPair = {
-                id: pairId, name, type, status, _method: "PUT"
-            }
+        let editedAdminPair = {
+            id: pairId, name, type, status, _method: "PUT"
+        }
+        const { success, errors } = pairValidation(editedAdminPair);
 
+        if (success) {
+            setErrors({})
             try {
                 const { data, status } = await UpdateAdminPair(editedAdminPair);
 
@@ -42,8 +47,10 @@ const EditAdminPairWindow = ({ setDoUserNeedEditAdminPairWindow, adminPair }) =>
             catch (error) {
                 notify('مشکلی پیش آمده است', 'error')
             }
+        } else {
+            setErrors(errors)
+        }
 
-        
     }
 
     return (
@@ -67,6 +74,7 @@ const EditAdminPairWindow = ({ setDoUserNeedEditAdminPairWindow, adminPair }) =>
                         <input type="text" className="form-input" value={name} onChange={event => {
                             setName(event.target.value);
                         }} id="name" />
+                        {errors.name && (<span className='text-xxs text-red-400'>{errors.name}</span>)}
 
                     </div>
 
@@ -78,6 +86,7 @@ const EditAdminPairWindow = ({ setDoUserNeedEditAdminPairWindow, adminPair }) =>
                             <option value="0">crypto</option>
                             <option value="1" >forex</option>
                         </select>
+                        {errors.type && (<span className='text-xxs text-red-400'>{errors.type}</span>)}
                     </div>
 
                     <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
@@ -88,10 +97,8 @@ const EditAdminPairWindow = ({ setDoUserNeedEditAdminPairWindow, adminPair }) =>
                             <option value="0">غیرفعال</option>
                             <option value="1" >فعال</option>
                         </select>
+                        {errors.value && (<span className='text-xxs text-red-400'>{errors.value}</span>)}
                     </div>
-
-
-
                 </div>
 
 

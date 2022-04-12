@@ -11,7 +11,6 @@ const EditUserWindow = ({ setDoUserNeedEditUserWindow, user }) => {
     const [email, setEmail] = useState("")
     const [mobile, setMobile] = useState("")
     const [isAdmin, setIsAdmin] = useState("")
-    const [, forceUpdate] = useState("");
   
 
     useEffect(() => {

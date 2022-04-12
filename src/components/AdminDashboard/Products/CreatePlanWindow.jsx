@@ -3,23 +3,28 @@ import { useDispatch } from 'react-redux';
 import { AddPlan } from '../../Redux/Action/Admin/Plans';
 import { notify } from '../../Services/alerts';
 import { CreatePlan } from '../../Services/Admin/PlansServices';
+import { planValidation } from '../../Services/Admin/adminValidation';
 
 const CreatePlanWindow = ({ setDoUserNeedCreatePlanWindow }) => {
 
     const [name, setName] = useState("")
     const [validFor, setValidFor] = useState("")
     const [price, setPrice] = useState("")
-    const [, forceUpdate] = useState("");
-   
+    const [errors, setErrors] = useState({})
+
+
 
     const dispatch = useDispatch()
 
     const handleCreatePlan = async () => {
-  
-            let newPlan = {
-                name, valid_for: validFor, price
-            }
 
+        let newPlan = {
+            name, valid_for: validFor, price
+        }
+        const { success, errors } = planValidation(newPlan);
+
+        if (success) {
+            setErrors({})
             try {
                 const { data, status } = await CreatePlan(newPlan);
 
@@ -33,7 +38,9 @@ const CreatePlanWindow = ({ setDoUserNeedCreatePlanWindow }) => {
             catch (error) {
                 notify('مشکلی پیش آمده است', 'error')
             }
-
+        } else {
+            setErrors(errors)
+        }
 
     }
 
@@ -58,21 +65,21 @@ const CreatePlanWindow = ({ setDoUserNeedCreatePlanWindow }) => {
                         <input type="text" className="form-input" value={name} onChange={event => {
                             setName(event.target.value);
                         }} id="name" />
-
+                        {errors.name && (<span className='text-xxs text-red-400'>{errors.name}</span>)}
                     </div>
                     <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
                         <label className="text-xs h-fit">مدت اشتراک (روز):</label>
                         <input type="text" className="form-input" value={validFor} onChange={event => {
                             setValidFor(event.target.value);
                         }} id="valid_for" />
-
+                        {errors.valid_for && (<span className='text-xxs text-red-400'>{errors.valid_for}</span>)}
                     </div>
                     <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
                         <label className="text-xs h-fit">قیمت:</label>
                         <input type="text" className="form-input" value={price} onChange={event => {
                             setPrice(event.target.value);
                         }} id="price" />
-
+                        {errors.price && (<span className='text-xxs text-red-400'>{errors.price}</span>)}
                     </div>
 
 

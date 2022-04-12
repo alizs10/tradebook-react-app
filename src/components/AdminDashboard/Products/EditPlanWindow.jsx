@@ -4,14 +4,15 @@ import { useDispatch } from 'react-redux';
 import { EditPlan } from '../../Redux/Action/Admin/Plans';
 import { notify } from '../../Services/alerts';
 import { UpdatePlan } from '../../Services/Admin/PlansServices';
+import { planValidation } from '../../Services/Admin/adminValidation';
 
 const EditPlanWindow = ({ setDoUserNeedEditPlanWindow, plan }) => {
 
     const [name, setName] = useState("")
     const [validFor, setValidFor] = useState("")
     const [price, setPrice] = useState("")
-    const [, forceUpdate] = useState("");
-   
+    const [errors, setErrors] = useState({})
+
 
     useEffect(() => {
         if (isEmpty(plan)) return
@@ -24,11 +25,14 @@ const EditPlanWindow = ({ setDoUserNeedEditPlanWindow, plan }) => {
     const dispatch = useDispatch()
 
     const handleEditPlan = async () => {
-       
-            let editedPlan = {
-                name, valid_for: validFor, price, _method: "PUT", id:plan.id
-            }
 
+        let editedPlan = {
+            name, valid_for: validFor, price, _method: "PUT", id: plan.id
+        }
+        const { success, errors } = planValidation(editedPlan);
+
+        if (success) {
+            setErrors({})
             try {
                 const { data, status } = await UpdatePlan(editedPlan);
 
@@ -42,8 +46,10 @@ const EditPlanWindow = ({ setDoUserNeedEditPlanWindow, plan }) => {
             catch (error) {
                 notify('مشکلی پیش آمده است', 'error')
             }
+        } else {
+            setErrors(errors)
+        }
 
-       
     }
 
     return (
@@ -67,6 +73,7 @@ const EditPlanWindow = ({ setDoUserNeedEditPlanWindow, plan }) => {
                         <input type="text" className="form-input" value={name} onChange={event => {
                             setName(event.target.value);
                         }} id="name" />
+                        {errors.name && (<span className='text-xxs text-red-400'>{errors.name}</span>)}
 
                     </div>
                     <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
@@ -74,6 +81,7 @@ const EditPlanWindow = ({ setDoUserNeedEditPlanWindow, plan }) => {
                         <input type="text" className="form-input" value={validFor} onChange={event => {
                             setValidFor(event.target.value);
                         }} id="valid_for" />
+                        {errors.valid_for && (<span className='text-xxs text-red-400'>{errors.valid_for}</span>)}
 
                     </div>
                     <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
@@ -81,6 +89,7 @@ const EditPlanWindow = ({ setDoUserNeedEditPlanWindow, plan }) => {
                         <input type="text" className="form-input" value={price} onChange={event => {
                             setPrice(event.target.value);
                         }} id="price" />
+                        {errors.price && (<span className='text-xxs text-red-400'>{errors.price}</span>)}
 
                     </div>
 

@@ -3,23 +3,27 @@ import { useDispatch } from 'react-redux';
 import { AddAdminPair } from '../../Redux/Action/Admin/AdminPairs';
 import { notify } from '../../Services/alerts';
 import { CreateAdminPair } from '../../Services/Admin/AdminPairsServices';
+import {pairValidation} from '../../Services/Admin/adminValidation.js';
 
 const CreateAdminPairWindow = ({ setDoUserNeedCreateAdminPairWindow }) => {
 
     const [name, setName] = useState("")
     const [type, setType] = useState("0")
     const [status, setStatus] = useState("1")
-    const [, forceUpdate] = useState("");
-   
+    const [errors, setErrors] = useState({})
+
 
     const dispatch = useDispatch()
 
     const handleCreateAdminPair = async () => {
-        
-            let newAdminPair = {
-                name, type, status
-            }
 
+        let newAdminPair = {
+            name, type, status
+        }
+        const { success, errors } = pairValidation(newAdminPair);
+
+        if (success) {
+            setErrors({})
             try {
                 const { data, status } = await CreateAdminPair(newAdminPair);
 
@@ -33,7 +37,9 @@ const CreateAdminPairWindow = ({ setDoUserNeedCreateAdminPairWindow }) => {
             catch (error) {
                 notify('مشکلی پیش آمده است', 'error')
             }
-
+        } else {
+            setErrors(errors)
+        }
 
     }
 
@@ -58,7 +64,7 @@ const CreateAdminPairWindow = ({ setDoUserNeedCreateAdminPairWindow }) => {
                         <input type="text" className="form-input" value={name} onChange={event => {
                             setName(event.target.value);
                         }} id="name" />
-
+                        {errors.name && (<span className='text-xxs text-red-400'>{errors.name}</span>)}
                     </div>
 
                     <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
@@ -69,6 +75,7 @@ const CreateAdminPairWindow = ({ setDoUserNeedCreateAdminPairWindow }) => {
                             <option value="0">crypto</option>
                             <option value="1" >forex</option>
                         </select>
+                        {errors.type && (<span className='text-xxs text-red-400'>{errors.type}</span>)}
                     </div>
 
                     <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
@@ -79,6 +86,7 @@ const CreateAdminPairWindow = ({ setDoUserNeedCreateAdminPairWindow }) => {
                             <option value="0">غیرفعال</option>
                             <option value="1" >فعال</option>
                         </select>
+                        {errors.value && (<span className='text-xxs text-red-400'>{errors.value}</span>)}
                     </div>
 
 

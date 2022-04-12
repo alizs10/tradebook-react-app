@@ -5,6 +5,7 @@ import { notify } from '../../Services/alerts';
 import { CreateOrder } from '../../Services/Admin/OrdersServices';
 import { getAllUsers } from '../../Redux/Action/Admin/Users';
 import { getAllPlans } from '../../Redux/Action/Admin/Plans';
+import { orderValidation } from '../../Services/Admin/adminValidation';
 
 const CreateOrderWindow = ({ setDoUserNeedCreateOrderWindow }) => {
 
@@ -12,14 +13,14 @@ const CreateOrderWindow = ({ setDoUserNeedCreateOrderWindow }) => {
     const [planId, setPlanId] = useState("")
     const [discountCode, setDiscountCode] = useState("")
     const [orderDate, setOrderDate] = useState("")
-    
-    const [, forceUpdate] = useState("");
+    const [errors, setErrors] = useState({})
+
 
 
     const users = useSelector(state => state.Users)
     const plans = useSelector(state => state.Plans)
 
-  
+
 
     const dispatch = useDispatch()
 
@@ -31,10 +32,13 @@ const CreateOrderWindow = ({ setDoUserNeedCreateOrderWindow }) => {
 
 
     const handleCreateOrder = async () => {
-            let newOrder = {
-                user_id: userId, plan_id: planId, order_date: orderDate, discount_code: discountCode
-            }
+        let newOrder = {
+            user_id: userId, plan_id: planId, order_date: orderDate, discount_code: discountCode
+        }
+        const { success, errors } = orderValidation(newOrder);
 
+        if (success) {
+            setErrors({})
             try {
                 const { data, status } = await CreateOrder(newOrder);
 
@@ -48,7 +52,9 @@ const CreateOrderWindow = ({ setDoUserNeedCreateOrderWindow }) => {
             catch (error) {
                 notify('مشکلی پیش آمده است', 'error')
             }
-
+        } else {
+            setErrors(errors)
+        }
 
     }
 
@@ -73,38 +79,46 @@ const CreateOrderWindow = ({ setDoUserNeedCreateOrderWindow }) => {
                         <select className='form-input' id="userId" value={userId} onChange={event => {
                             setUserId(event.target.value);
                         }}>
-                        <option value="">کاربر را انتخاب کنید</option>
+                            <option value="">کاربر را انتخاب کنید</option>
                             {users.map(user => (
                                 <option key={user.id} value={user.id}>{`${user.name} - ${user.email}`}</option>
                             ))}
 
                         </select>
+                        {errors.user_id && (<span className='text-xxs text-red-400'>{errors.user_id}</span>)}
+
                     </div>
                     <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
                         <label htmlFor="planId">محصول</label>
                         <select className='form-input' id="planId" value={planId} onChange={event => {
                             setPlanId(event.target.value);
                         }}>
-                        <option value="">محصول را انتخاب کنید</option>
+                            <option value="">محصول را انتخاب کنید</option>
                             {plans.map(plan => (
                                 <option key={plan.id} value={plan.id}>{plan.name}</option>
                             ))}
 
                         </select>
+                        {errors.plan_id && (<span className='text-xxs text-red-400'>{errors.plan_id}</span>)}
+
                     </div>
                     <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
                         <label className="text-xs h-fit">کد تخفیف</label>
                         <input type="text" className="form-input" value={discountCode} onChange={event => {
                             setDiscountCode(event.target.value);
                         }} id="discountCode" />
+                        {errors.discount_code && (<span className='text-xxs text-red-400'>{errors.discount_code}</span>)}
+
 
                     </div>
-                   
+
                     <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
                         <label className="text-xs h-fit">تاریخ سفارش</label>
                         <input type="date" className="form-input" value={orderDate} onChange={event => {
                             setOrderDate(event.target.value);
                         }} id="orderDate" />
+                        {errors.order_date && (<span className='text-xxs text-red-400'>{errors.order_date}</span>)}
+
 
                     </div>
 

@@ -54,6 +54,7 @@ const PanelProfile = () => {
     }, [user])
 
     const handleUpdateProfile = async () => {
+        
         var formData = new FormData();
 
         formData.append('name', name);

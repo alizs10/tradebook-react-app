@@ -6,7 +6,7 @@ import { paginate } from '../../Services/Pagination';
 import CreateAdminPairWindow from './CreateAdminPairWindow';
 import Pagination from './Pagination';
 import AdminPair from './AdminPair';
-import {DestroyAdminPair} from '../../Services/Admin/AdminPairsServices'
+import { DestroyAdminPair } from '../../Services/Admin/AdminPairsServices'
 import EditAdminPairWindow from './EditAdminPairWindow';
 import DetailsAdminPairWindow from './DetailsAdminPairWindow';
 
@@ -17,12 +17,12 @@ const DashAdminPairs = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [perPage, setPerPage] = useState(5);
     const [pagination, setPagination] = useState(paginate(showArr, perPage, currentPage));
-    
+
     const [searchInp, setSearchInp] = useState("");
     const [searchRes, setSearchRes] = useState([]);
     const [isUserSearching, setIsUserSearching] = useState(false);
     const [adminPair, setAdminPair] = useState({});
-
+    const [filterMode, setFilterMode] = useState("all");
     const [doUserNeedDetailsAdminPairWindow, setDoUserNeedDetailsAdminPairWindow] = useState(false);
     const [doUserNeedEditAdminPairWindow, setDoUserNeedEditAdminPairWindow] = useState(false);
     const [doUserNeedCreateAdminPairWindow, setDoUserNeedCreateAdminPairWindow] = useState(false);
@@ -91,6 +91,42 @@ const DashAdminPairs = () => {
 
     }
 
+    const handleFiltringOnPairs = (filter) => {
+
+        let pairsInstance;
+
+        switch (filter) {
+            case "all":
+                setFilterMode('all')
+                isUserSearching ? setShowArr(searchRes) : setShowArr(adminPairs)
+                break;
+
+            case "available":
+                pairsInstance = isUserSearching ? structuredClone(searchRes) : structuredClone(adminPairs)
+                let availablePairs = pairsInstance.filter(pair => pair.status == 1)
+                setFilterMode('available')
+                setShowArr(availablePairs)
+                break;
+            case "unavailable":
+                pairsInstance = isUserSearching ? structuredClone(searchRes) : structuredClone(adminPairs)
+                let unavailablePairs = pairsInstance.filter(pair => pair.status == 0)
+                setFilterMode('unavailable')
+                setShowArr(unavailablePairs)
+                break;
+            case "crypto":
+                pairsInstance = isUserSearching ? structuredClone(searchRes) : structuredClone(adminPairs)
+                let cryptoPairs = pairsInstance.filter(pair => pair.type == 0)
+                setFilterMode('crypto')
+                setShowArr(cryptoPairs)
+                break;
+            case "forex":
+                pairsInstance = isUserSearching ? structuredClone(searchRes) : structuredClone(adminPairs)
+                let forexPairs = pairsInstance.filter(pair => pair.type == 1)
+                setFilterMode('forex')
+                setShowArr(forexPairs)
+                break;
+        }
+    }
 
     const handleDelAdminPair = (adminPair_id) => {
         confirm('حذف محصول', 'آیا می خواهید محصول مورد نظر را حذف کنید؟.',
@@ -100,7 +136,7 @@ const DashAdminPairs = () => {
 
                     if (status === 200) {
                         dispatch(DeleteAdminPair(adminPair_id))
-                        if(doUserNeedDetailsAdminPairWindow) setDoUserNeedDetailsAdminPairWindow(false)
+                        if (doUserNeedDetailsAdminPairWindow) setDoUserNeedDetailsAdminPairWindow(false)
                         notify('جفت ارز شما با موفقیت حذف شد', 'success');
 
                     } else {
@@ -120,15 +156,27 @@ const DashAdminPairs = () => {
         <Fragment>
             <section className="mt-4 mx-2">
 
-                <h2 className="text-base pb-1 text-gray-600">جفت ارزها</h2>
 
+                <div className="flex justify-between items-center">
+                    <h2 className="text-base pb-1 text-gray-600">جفت ارزها</h2>
+
+
+                    <div
+                        className="p-2 rounded-lg bg-white dark:bg-slate-800 dark:text-slate-300 shadow-md flex gap-2 lg:gap-4 items-center">
+                        <span className={`cursor-pointer text-xxxs lg:text-xs ${filterMode === 'all' ? ' p-2 rounded-lg bg-slate-900' : ''}`} onClick={() => handleFiltringOnPairs('all')}>همه</span>
+                        <span className={`cursor-pointer text-xxxs lg:text-xs ${filterMode === 'available' ? ' p-2 rounded-lg bg-slate-900' : ''}`} onClick={() => handleFiltringOnPairs('available')}>فعال</span>
+                        <span className={`cursor-pointer text-xxxs lg:text-xs ${filterMode === 'unavailable' ? ' p-2 rounded-lg bg-slate-900' : ''}`} onClick={() => handleFiltringOnPairs('unavailable')}>غیرفعال</span>
+                        <span className={`cursor-pointer text-xxxs lg:text-xs ${filterMode === 'crypto' ? ' p-2 rounded-lg bg-slate-900' : ''}`} onClick={() => handleFiltringOnPairs('crypto')}>کریپتو</span>
+                        <span className={`cursor-pointer text-xxxs lg:text-xs ${filterMode === 'forex' ? ' p-2 rounded-lg bg-slate-900' : ''}`} onClick={() => handleFiltringOnPairs('forex')}>فارکس</span>
+                    </div>
+                </div>
                 <div className="grid grid-cols-8 gap-2 mt-2 p-2 bg-slate-800 rounded-lg drop-shadow-lg">
 
                     <div className="col-span-6 md:col-span-7 grid grid-cols-8 bg-slate-700 rounded-lg">
 
                         <input type="text" onChange={event => handleSearchInp(event)}
                             className="h-full col-span-6 sm:col-span-7 bg-transparent text-sm md:text-lg px-2 focus:outline-none text-slate-300 placeholder:text-slate-500"
-                            placeholder="کدوم محصول؟ (نام)" />
+                            placeholder="کدوم جفت ارز؟ (نام)" />
                         <div className="flex justify-end items-center col-span-2 ml-2 md:ml-3 lg:ml-4 sm:col-span-1">
                             <i className="fa-duotone fa-magnifying-glass text-xl text-slate-500"></i>
                         </div>

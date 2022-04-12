@@ -6,6 +6,7 @@ import { notify } from '../../Services/alerts';
 import { UpdateDiscount } from '../../Services/Admin/DiscountsServices';
 import { getAllUsers } from '../../Redux/Action/Admin/Users';
 import { getAllPlans } from '../../Redux/Action/Admin/Plans';
+import { discountValidation } from '../../Services/Admin/adminValidation';
 
 const EditDiscountWindow = ({ setDoUserNeedEditDiscountWindow, discount }) => {
 
@@ -13,9 +14,8 @@ const EditDiscountWindow = ({ setDoUserNeedEditDiscountWindow, discount }) => {
     const [planId, setPlanId] = useState("")
     const [code, setCode] = useState("")
     const [value, setValue] = useState("")
-    const [status, setStatus] = useState("")
-    const [, forceUpdate] = useState("");
-
+    const [status, setStatus] = useState("0")
+    const [errors, setErrors] = useState({})
 
 
     const users = useSelector(state => state.Users)
@@ -24,10 +24,11 @@ const EditDiscountWindow = ({ setDoUserNeedEditDiscountWindow, discount }) => {
     useEffect(() => {
         if (isEmpty(discount)) return
 
-        setUserId(discount.user_id)
-        setPlanId(discount.plan_id)
+        console.log('here ', discount);
+        discount.user_id !== null && setUserId(`${discount.user_id}`)
+        discount.plan_id !== null && setPlanId(`${discount.plan_id}`)
         setCode(discount.code)
-        setValue(discount.value)
+        setValue(`${discount.value}`)
         setStatus(`${discount.status}`)
     }, [discount])
 
@@ -40,11 +41,14 @@ const EditDiscountWindow = ({ setDoUserNeedEditDiscountWindow, discount }) => {
     }, [])
 
     const handleEditDiscount = async () => {
-  
-            let editedDiscount = {
-                id: discount.id, user_id: userId, plan_id: planId, code, status, value, _method: "PUT"
-            }
 
+        let editedDiscount = {
+            id: discount.id, user_id: userId, plan_id: planId, code, status, value, _method: "PUT"
+        }
+        const { success, errors } = discountValidation(editedDiscount);
+
+        if (success) {
+            setErrors({})
             try {
                 const { data, status } = await UpdateDiscount(editedDiscount);
 
@@ -59,7 +63,9 @@ const EditDiscountWindow = ({ setDoUserNeedEditDiscountWindow, discount }) => {
             catch (error) {
                 notify('مشکلی پیش آمده است', 'error')
             }
-
+        } else {
+            setErrors(errors)
+        }
     }
 
     return (
@@ -86,8 +92,8 @@ const EditDiscountWindow = ({ setDoUserNeedEditDiscountWindow, discount }) => {
                             {users.map(user => (
                                 <option key={user.id} value={user.id}>{`${user.name} - ${user.email}`}</option>
                             ))}
-
                         </select>
+                        {errors.user_id && (<span className='text-xxs text-red-400'>{errors.user_id}</span>)}
                     </div>
                     <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
                         <label htmlFor="planId">محصول</label>
@@ -98,24 +104,23 @@ const EditDiscountWindow = ({ setDoUserNeedEditDiscountWindow, discount }) => {
                             {plans.map(plan => (
                                 <option key={plan.id} value={plan.id}>{plan.name}</option>
                             ))}
-
                         </select>
+                        {errors.plan_id && (<span className='text-xxs text-red-400'>{errors.plan_id}</span>)}
                     </div>
                     <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
                         <label className="text-xs h-fit">کد تخفیف</label>
                         <input type="text" className="form-input" value={code} onChange={event => {
                             setCode(event.target.value);
                         }} id="code" />
-
+                        {errors.code && (<span className='text-xxs text-red-400'>{errors.code}</span>)}
                     </div>
                     <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
                         <label className="text-xs h-fit">مقدار</label>
                         <input type="text" className="form-input" value={value} onChange={event => {
                             setValue(event.target.value);
                         }} id="value" />
-
+                        {errors.value && (<span className='text-xxs text-red-400'>{errors.value}</span>)}
                     </div>
-
                     <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
                         <label htmlFor="status">وضعیت</label>
                         <select className='form-input' id="status" value={status} onChange={event => {
@@ -124,9 +129,8 @@ const EditDiscountWindow = ({ setDoUserNeedEditDiscountWindow, discount }) => {
                             <option value="0">معتبر</option>
                             <option value="1" >منقضی</option>
                         </select>
+                        {errors.status && (<span className='text-xxs text-red-400'>{errors.status}</span>)}
                     </div>
-
-
 
                 </div>
 

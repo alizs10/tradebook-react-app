@@ -5,6 +5,7 @@ import { notify } from '../../Services/alerts';
 import { CreatePayment } from '../../Services/Admin/PaymentsServices';
 import { getAllOrders } from '../../Redux/Action/Admin/Orders';
 import { isEmpty } from 'lodash';
+import { paymentValidation } from '../../Services/Admin/adminValidation';
 
 const CreatePaymentWindow = ({ setDoUserNeedCreatePaymentWindow }) => {
 
@@ -13,14 +14,15 @@ const CreatePaymentWindow = ({ setDoUserNeedCreatePaymentWindow }) => {
     const [paymentDate, setPaymentDate] = useState("")
     const [status, setStatus] = useState("0")
     const [type, setType] = useState("0")
-    const [, forceUpdate] = useState("")
+    const [errors, setErrors] = useState({})
+
 
     const [unpaidOrders, setUnpaidOrders] = useState([])
 
 
     const orders = useSelector(state => state.Orders)
 
-    
+
 
     const dispatch = useDispatch()
 
@@ -30,7 +32,7 @@ const CreatePaymentWindow = ({ setDoUserNeedCreatePaymentWindow }) => {
     }, [])
 
     useEffect(() => {
-        if(isEmpty(orders)) return
+        if (isEmpty(orders)) return
 
         let unpaids = orders.filter(order => order.status !== 1)
 
@@ -39,10 +41,13 @@ const CreatePaymentWindow = ({ setDoUserNeedCreatePaymentWindow }) => {
 
 
     const handleCreatePayment = async () => {
-            let newPayment = {
-                order_id: orderId, transaction_id: transactionId, status, type, payment_date: paymentDate
-            }
+        let newPayment = {
+            order_id: orderId, transaction_id: transactionId, status, type, payment_date: paymentDate
+        }
+        const { success, errors } = paymentValidation(newPayment);
 
+        if (success) {
+            setErrors({})
             try {
                 const { data, status } = await CreatePayment(newPayment);
 
@@ -57,7 +62,9 @@ const CreatePaymentWindow = ({ setDoUserNeedCreatePaymentWindow }) => {
                 notify('مشکلی پیش آمده است', 'error')
             }
 
-
+        } else {
+            setErrors(errors)
+        }
     }
 
     return (
@@ -81,26 +88,31 @@ const CreatePaymentWindow = ({ setDoUserNeedCreatePaymentWindow }) => {
                         <select className='form-input' id="orderId" value={orderId} onChange={event => {
                             setOrderId(event.target.value);
                         }}>
-                        <option value="">سفارش را انتخاب کنید</option>
+                            <option value="">سفارش را انتخاب کنید</option>
                             {unpaidOrders.map(order => (
                                 <option key={order.id} value={order.id}>{`${order.id} - ${order.user_name} - ${order.plan_name} - ${order.total_amount}`}</option>
                             ))}
 
                         </select>
+                        {errors.order_id && (<span className='text-xxs text-red-400'>{errors.order_id}</span>)}
+
                     </div>
                     <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
                         <label className="text-xs h-fit">کد پرداخت</label>
                         <input type="text" className="form-input" value={transactionId} onChange={event => {
                             setTransactionId(event.target.value);
                         }} id="transaction_id" />
+                        {errors.transaction_id && (<span className='text-xxs text-red-400'>{errors.transaction_id}</span>)}
 
                     </div>
-                    
+
                     <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
                         <label className="text-xs h-fit">تاریخ پرداخت</label>
                         <input type="date" className="form-input" value={paymentDate} onChange={event => {
                             setPaymentDate(event.target.value);
                         }} id="paymentDate" />
+                        {errors.payment_date && (<span className='text-xxs text-red-400'>{errors.payment_date}</span>)}
+
 
                     </div>
 
@@ -112,6 +124,8 @@ const CreatePaymentWindow = ({ setDoUserNeedCreatePaymentWindow }) => {
                             <option value="0">پرداخت نشده</option>
                             <option value="1" >پرداخت شده</option>
                         </select>
+                        {errors.status && (<span className='text-xxs text-red-400'>{errors.status}</span>)}
+
                     </div>
 
                     <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
@@ -122,6 +136,8 @@ const CreatePaymentWindow = ({ setDoUserNeedCreatePaymentWindow }) => {
                             <option value="0">پرداخت آنلاین</option>
                             <option value="1" >کارت به کارت</option>
                         </select>
+                        {errors.type && (<span className='text-xxs text-red-400'>{errors.type}</span>)}
+
                     </div>
 
 

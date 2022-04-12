@@ -5,6 +5,7 @@ import ResetPasswordWindow from '../../Panel/ResetPasswordWindow';
 import { AddUser } from '../../Redux/Action/User';
 import { notify } from '../../Services/alerts';
 import { UpdateProfile } from '../../Services/UserServices';
+import { profileValidation } from '../../Services/validation';
 import EditProfileWindow from './EditProfileWindow';
 
 const DashProfile = () => {
@@ -16,6 +17,7 @@ const DashProfile = () => {
     const [avatar, setAvatar] = useState("");
     const [profile_photo_path, setProfilePath] = useState("");
     const [userVerification, setUserVerification] = useState("");
+    const [errors, setErrors] = useState({})
 
     const [doUserNeedResetPasswordWindow, setDoUserNeedResetPasswordWindow] = useState(false);
     const [doUserNeedEditProfileWindow, setDoUserNeedEditProfileWindow] = useState(false);
@@ -34,6 +36,7 @@ const DashProfile = () => {
     useEffect(() => {
         if (isEmpty(user)) return;
 
+        console.log(user);
         setUserId(user.id)
         setName(user.name)
         setEmail(user.email)
@@ -43,6 +46,7 @@ const DashProfile = () => {
     }, [user])
 
     const handleUpdateProfile = async () => {
+
         var formData = new FormData();
 
         formData.append('name', name);
@@ -50,25 +54,31 @@ const DashProfile = () => {
         formData.append('mobile', mobile);
         formData.append('profile_photo_path', profile_photo_path);
         formData.append('_method', "PUT");
+        const { success, errors } = profileValidation(formData);
+        console.log(success);
 
-        try {
-            const { data, status } = await UpdateProfile(formData);
+        if (success) {
+            setErrors({})
+            try {
+                const { data, status } = await UpdateProfile(formData);
 
-            if (status === 200) {
-                dispatch(AddUser(data.user))
-                setDoUserNeedEditProfileWindow(false)
-                notify('پروفایل کاربری شما با موفقیت بروزرسانی شد', 'success')
+                if (status === 200) {
+                    dispatch(AddUser(data.user))
+                    setDoUserNeedEditProfileWindow(false)
+                    notify('پروفایل کاربری شما با موفقیت بروزرسانی شد', 'success')
+                }
+            } catch (e) {
+
+                var error = Object.assign({}, e);
+                if (error.response.status === 422) {
+                    notify('اطلاعات وارد شده صحیح نمی باشد', 'warning')
+                } else {
+                    notify('خطای سرور', 'error')
+                }
             }
-        } catch (e) {
-
-            var error = Object.assign({}, e);
-            if (error.response.status === 422) {
-                notify('اطلاعات وارد شده صحیح نمی باشد', 'warning')
-            } else {
-                notify('خطای سرور', 'error')
-            }
+        } else {
+            setErrors(errors)
         }
-
     }
 
 
@@ -117,7 +127,7 @@ const DashProfile = () => {
             </section>
 
             {doUserNeedResetPasswordWindow && (<ResetPasswordWindow setDoUserNeedResetPasswordWindow={setDoUserNeedResetPasswordWindow} />)}
-            {doUserNeedEditProfileWindow && (<EditProfileWindow name={name} email={email} mobile={mobile} setName={setName} setEmail={setEmail} setMobile={setMobile} setProfilePath={setProfilePath} handleUpdateProfile={handleUpdateProfile} setDoUserNeedEditProfileWindow={setDoUserNeedEditProfileWindow} />)}
+            {doUserNeedEditProfileWindow && (<EditProfileWindow errors={errors} name={name} email={email} mobile={mobile} setName={setName} setEmail={setEmail} setMobile={setMobile} setProfilePath={setProfilePath} handleUpdateProfile={handleUpdateProfile} setDoUserNeedEditProfileWindow={setDoUserNeedEditProfileWindow} />)}
             {blurConditions && (<div className="fixed top-16 left-0 w-full h-screen md:w-full backdrop-blur-lg bg-slate-800/70 z-30" onClick={() => handleCloseOpenWindow()}></div>)}
         </Fragment>
     );
