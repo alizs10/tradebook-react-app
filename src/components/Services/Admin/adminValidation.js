@@ -207,17 +207,11 @@ export const planValidation = payload => {
     };
 };
 
-export const userValidation = formData => {
+export const userValidation = payload => {
     const errors = {};
     let isFormValid = true;
+    let attribute = "کاربر";
 
-
-    let payload = {};
-
-    for (const [key, value] of formData) {
-
-        payload[key] = value;
-    }
 
     if (validator.isEmpty(payload.name)) {
         isFormValid = false;
@@ -246,24 +240,12 @@ export const userValidation = formData => {
         errors.mobile = "شماره موبایل صحیح نمی باشد";
     }
 
-    if (payload.profile_photo_path) {
-        let type = payload.profile_photo_path.type;
-        let size = payload.profile_photo_path.size;
-        let typeOfFile = type.split("/")[0]
-        let format = type.split("/")[1]
-
-        if (typeOfFile != "image") {
-            isFormValid = false;
-            errors.profile_photo_path = "فایل انتخابی باید از نوع عکس باشد";
-        } else if (format != "jpg" && format != "png" && format != "jpeg") {
-            isFormValid = false;
-            errors.profile_photo_path = "فقط فرمت های jpg, jpeg, png مورد قبول است";
-        } else if (size > 2000000) {
-            size /= 1000000;
-            size = size.toFixed(2)
-            isFormValid = false;
-            errors.profile_photo_path = `حجم آواتار شما باید کمتر از 2 مگابایت باشد. حجم عکس شما: ${size + " مگابایت"}`
-        }
+    if (validator.isEmpty(payload.is_admin)) {
+        isFormValid = false;
+        errors.is_admin = `نقش ${attribute} الزامی می باشد`;
+    } else if (!validator.isIn(payload.is_admin, [0, 1])) {
+        isFormValid = false;
+        errors.is_admin = `نقش ${attribute} باید از بین عادی و ادمین انتخاب شود`;
     }
 
     return {

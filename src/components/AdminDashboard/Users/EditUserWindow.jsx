@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { EditUser } from '../../Redux/Action/Admin/Users';
 import { notify } from '../../Services/alerts';
 import { UpdateUser } from '../../Services/Admin/UsersServices';
+import { userValidation } from '../../Services/Admin/adminValidation';
 
 const EditUserWindow = ({ setDoUserNeedEditUserWindow, user }) => {
 
@@ -11,7 +12,8 @@ const EditUserWindow = ({ setDoUserNeedEditUserWindow, user }) => {
     const [email, setEmail] = useState("")
     const [mobile, setMobile] = useState("")
     const [isAdmin, setIsAdmin] = useState("")
-  
+    const [errors, setErrors] = useState({})
+
 
     useEffect(() => {
         if (isEmpty(user)) return
@@ -25,11 +27,14 @@ const EditUserWindow = ({ setDoUserNeedEditUserWindow, user }) => {
     const dispatch = useDispatch()
 
     const handleEditUser = async () => {
-       
-            let editedUser = {
-                id: user.id, name, email, mobile, is_admin: isAdmin, _method: "PUT"
-            }
 
+        let editedUser = {
+            id: user.id, name, email, mobile, is_admin: isAdmin, _method: "PUT"
+        }
+        const { success, errors } = userValidation(editedUser);
+
+        if (success) {
+            setErrors({})
             try {
                 const { data, status } = await UpdateUser(editedUser);
 
@@ -44,7 +49,9 @@ const EditUserWindow = ({ setDoUserNeedEditUserWindow, user }) => {
             catch (error) {
                 notify('مشکلی پیش آمده است', 'error')
             }
-
+        } else {
+            setErrors(errors)
+        }
     }
 
     return (
@@ -68,13 +75,17 @@ const EditUserWindow = ({ setDoUserNeedEditUserWindow, user }) => {
                         <input type="text" className="form-input" value={name} onChange={event => {
                             setName(event.target.value);
                         }} id="name" />
+                        {errors.name && (<span className='text-xxs text-red-400'>{errors.name}</span>)}
+
 
                     </div>
                     <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
                         <label className="text-xs h-fit">ایمیل:</label>
                         <input type="text" className="form-input" value={email} onChange={event => {
                             setEmail(event.target.value);
-                        }} id="valid_for" />
+                        }} id="email" />
+                        {errors.email && (<span className='text-xxs text-red-400'>{errors.email}</span>)}
+
 
                     </div>
                     <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
@@ -82,6 +93,8 @@ const EditUserWindow = ({ setDoUserNeedEditUserWindow, user }) => {
                         <input type="text" className="form-input" value={mobile} onChange={event => {
                             setMobile(event.target.value);
                         }} id="mobile" />
+                        {errors.mobile && (<span className='text-xxs text-red-400'>{errors.mobile}</span>)}
+
 
                     </div>
 
@@ -93,6 +106,8 @@ const EditUserWindow = ({ setDoUserNeedEditUserWindow, user }) => {
                             <option value="0">کاربر عادی</option>
                             <option value="1" >ادمین</option>
                         </select>
+                        {errors.is_admin && (<span className='text-xxs text-red-400'>{errors.is_admin}</span>)}
+
                     </div>
 
 
