@@ -1,21 +1,26 @@
-import { isEmpty, isNull } from 'lodash';
+import { isEmpty } from 'lodash';
 import React, { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ClipLoader } from 'react-spinners';
 import { setHomeData } from '../Redux/Action/HomeData';
+import { getAllNotifications } from '../Redux/Action/Notifications';
+import Alert from '../Alerts/Alert';
 
 const PanelHome = () => {
 
     const [loading, setLoading] = useState(true)
     const [homeStat, setHomeStat] = useState({ accountsCount: 0, tradesCount: 0, notesCount: 0, validFor: 0, planName: "..." })
+    const [homeNotifs, setHomeNotifs] = useState({})
 
     const dispatch = useDispatch()
     const data = useSelector(state => state.HomeData)
+    const notifications = useSelector(state => state.Notifications)
     const user = useSelector(state => state.User)
 
     useEffect(() => {
 
         dispatch(setHomeData())
+        dispatch(getAllNotifications())
 
     }, [])
 
@@ -26,6 +31,13 @@ const PanelHome = () => {
 
         setHomeStat(data.data)
     }, [data])
+
+    useEffect(() => {
+        if (isEmpty(notifications)) return
+
+        let showNotifs = notifications.filter(notif => notif.section === "home" && notif.seen == 0);
+        setHomeNotifs(showNotifs)
+    }, [notifications])
 
     return (
         <Fragment>
@@ -93,9 +105,9 @@ const PanelHome = () => {
 
                     <span className="col-span-3 grid grid-rows-2 text-left ml-2">
                         <span className="text-base lg:text-xl font-bold text-blue-600">
-                        {loading ? (
-                            <ClipLoader color={'#fff'} size={15} />
-                        ) : (homeStat.planName)}
+                            {loading ? (
+                                <ClipLoader color={'#fff'} size={15} />
+                            ) : (homeStat.planName)}
                         </span>
                         <span className="text-xs lg:text-base font-light text-slate-300">اشتراک</span>
                     </span>
@@ -138,35 +150,11 @@ const PanelHome = () => {
 
                 <h2 className="text-slate-300 text-lg">پیغام های سیستم</h2>
 
-                {user.status ? null : (
-                    <div className="bg-red-600 rounded-lg drop-shadow-lg p-2 flex flex-col gap-y-2">
-                        <p className="font-semibold text-black text-base">
-                            اشتراک شما به پایان رسیده است. برای استفاده از امکانات تریدبوک، باید اشتراک خریداری کنید
-                        </p>
-                    </div>
+                {homeNotifs.length > 0 ? homeNotifs.map(notif => (
+                    <Alert key={notif.id} notification_id={notif.id} message={notif.message} type={notif.type} />
+                )) : (
+                    <p className='text-right text-sm text-slate-300'>پیغامی برای نمایش وجود ندارد</p>
                 )}
-
-                <div className="bg-green-500 rounded-lg drop-shadow-lg p-2 flex flex-col gap-y-2">
-                    <p className="font-semibold text-black text-base">
-                        اشتراک آزمایشی یک ماهه برای شما فعال شد
-                    </p>
-                </div>
-                <div className="bg-yellow-500 rounded-lg drop-shadow-lg p-2 flex flex-col gap-y-2">
-                    <p className="font-semibold text-black text-base">
-                        <span className="font-bold">توجه:</span>
-                        اشتراک آزمایشی یک ماهه برای ارزیابی اپلیکیشن تریدبوک به شما هدیه داده شده است. پس خواهشمندیم
-                        نظرات، پیشنهادات و مشکلات این اپلیکیشن را از طریق راه های ارتباطی برای ما ارسال کنید. با سپاس از
-                        همراهی شما
-                    </p>
-                </div>
-                <div className="bg-yellow-500 rounded-lg drop-shadow-lg p-2 flex flex-col gap-y-2">
-                    <p className="font-semibold text-black text-base">
-                        <span className="font-bold">توجه:</span>
-                        پس از پایان فاز آزمایشی و منتشر شدن نسخه پایدار اپلیکیشن تریدبوک، لازم است برای استفاده از
-                        امکانات آن، اشتراک تهیه کنید.
-                    </p>
-                </div>
-
             </div>
         </Fragment>
     );
