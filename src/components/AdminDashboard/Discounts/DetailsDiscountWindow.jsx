@@ -10,6 +10,7 @@ const DetailsDiscountWindow = ({ setDoUserNeedDetailsDiscountWindow, discount, h
     const [code, setCode] = useState("")
     const [value, setValue] = useState("")
     const [status, setStatus] = useState("")
+    const [expDate, setExpDate] = useState("")
     const [, forceUpdate] = useState("");
     
 
@@ -22,6 +23,8 @@ const DetailsDiscountWindow = ({ setDoUserNeedDetailsDiscountWindow, discount, h
         setCode(discount.code)
         setValue(discount.value)
         setStatus(discount.status)
+        discount.exp_date ? setExpDate(discount.exp_date) : setExpDate("بدون تاریخ انقضا")
+        
     }, [discount])
 
 
@@ -65,7 +68,13 @@ const DetailsDiscountWindow = ({ setDoUserNeedDetailsDiscountWindow, discount, h
                 <div className="col-span-1 rounded-lg bg-slate-700 mx-2 flex flex-col gap-y-1 p-2">
                     <span className="text-xs pb-2 border-b-2 border-slate-800">وضعیت</span>
                     <span className="text-base">
-                        {status === 0 ? "معتبر" : "منقضی"}
+                        {status == 0 ? "استفاده نشده" : "استفاده شده"}
+                    </span>
+                </div>
+                <div className="col-span-1 rounded-lg bg-slate-700 mx-2 flex flex-col gap-y-1 p-2">
+                    <span className="text-xs pb-2 border-b-2 border-slate-800">تاریخ انقضا</span>
+                    <span className="text-base">
+                        {expDate}
                     </span>
                 </div>
                 

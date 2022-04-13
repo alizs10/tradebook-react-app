@@ -15,6 +15,7 @@ const EditDiscountWindow = ({ setDoUserNeedEditDiscountWindow, discount }) => {
     const [code, setCode] = useState("")
     const [value, setValue] = useState("")
     const [status, setStatus] = useState("0")
+    const [expDate, setExpDate] = useState("")
     const [errors, setErrors] = useState({})
 
 
@@ -25,11 +26,12 @@ const EditDiscountWindow = ({ setDoUserNeedEditDiscountWindow, discount }) => {
         if (isEmpty(discount)) return
 
         console.log('here ', discount);
-        discount.user_id !== null && setUserId(`${discount.user_id}`)
-        discount.plan_id !== null && setPlanId(`${discount.plan_id}`)
+        discount.user_id && setUserId(`${discount.user_id}`)
+        discount.plan_id && setPlanId(`${discount.plan_id}`)
         setCode(discount.code)
         setValue(`${discount.value}`)
         setStatus(`${discount.status}`)
+        discount.exp_Date && setExpDate(discount.exp_Date)
     }, [discount])
 
     const dispatch = useDispatch()
@@ -43,7 +45,7 @@ const EditDiscountWindow = ({ setDoUserNeedEditDiscountWindow, discount }) => {
     const handleEditDiscount = async () => {
 
         let editedDiscount = {
-            id: discount.id, user_id: userId, plan_id: planId, code, status, value, _method: "PUT"
+            id: discount.id, user_id: userId, plan_id: planId, code, status, value, exp_date: expDate, _method: "PUT"
         }
         const { success, errors } = discountValidation(editedDiscount);
 

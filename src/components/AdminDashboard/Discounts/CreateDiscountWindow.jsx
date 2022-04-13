@@ -14,6 +14,7 @@ const CreateDiscountWindow = ({ setDoUserNeedCreateDiscountWindow }) => {
     const [code, setCode] = useState("")
     const [value, setValue] = useState("")
     const [status, setStatus] = useState("0")
+    const [expDate, setExpDate] = useState("")
     const [errors, setErrors] = useState({})
 
 
@@ -33,7 +34,7 @@ const CreateDiscountWindow = ({ setDoUserNeedCreateDiscountWindow }) => {
     const handleCreateDiscount = async () => {
 
         let newDiscount = {
-            user_id: userId, plan_id: planId, status, code, value
+            user_id: userId, plan_id: planId, status, code, value, exp_date: expDate
         }
         const { success, errors } = discountValidation(newDiscount);
 
@@ -125,10 +126,19 @@ const CreateDiscountWindow = ({ setDoUserNeedCreateDiscountWindow }) => {
                         <select className='form-input' id="status" value={status} onChange={event => {
                             setStatus(event.target.value);
                         }}>
-                            <option value="0">معتبر</option>
-                            <option value="1" >منقضی</option>
+                            <option value="0">استفاده نشده</option>
+                            <option value="1" >استفاده شده</option>
                         </select>
                         {errors.status && (<span className='text-xxs text-red-400'>{errors.status}</span>)}
+
+                    </div>
+
+                    <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
+                        <label className="text-xs h-fit">تاریخ انقضا</label>
+                        <input type="date" className="form-input" value={expDate} onChange={event => {
+                            setExpDate(event.target.value);
+                        }} id="exp_date" />
+                        {errors.exp_date && (<span className='text-xxs text-red-400'>{errors.exp_date}</span>)}
 
                     </div>
 

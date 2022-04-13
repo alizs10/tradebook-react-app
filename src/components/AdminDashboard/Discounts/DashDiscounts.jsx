@@ -88,6 +88,9 @@ const DashDiscounts = () => {
     const handleFiltringOnDiscounts = (filter) => {
 
         let discountsInstance;
+        const dateInstance = new Date();
+        const now = dateInstance.getFullYear() + "-" + ("0" + (dateInstance.getMonth() + 1)).slice(-2) + "-" +
+            ("0" + dateInstance.getDate()).slice(-2) + "-" + ("0" + dateInstance.getHours()).slice(-2) + "-" + ("0" + dateInstance.getMinutes()).slice(-2) + "-" + ("0" + dateInstance.getSeconds()).slice(-2);
 
         switch (filter) {
             case "all":
@@ -97,15 +100,27 @@ const DashDiscounts = () => {
 
             case "valid":
                 discountsInstance = isUserSearching ? structuredClone(searchRes) : structuredClone(discounts)
-                let validDiscounts = discountsInstance.filter(pair => pair.status == 0)
+                let validDiscounts = discountsInstance.filter(discount => discount.exp_date > now || !discount.exp_date)
                 setFilterMode('valid')
                 setShowArr(validDiscounts)
                 break;
             case "unvalid":
                 discountsInstance = isUserSearching ? structuredClone(searchRes) : structuredClone(discounts)
-                let unvalidDiscounts = discountsInstance.filter(pair => pair.status == 1)
+                let unvalidDiscounts = discountsInstance.filter(discount => discount.exp_date && discount.exp_date < now)
                 setFilterMode('unvalid')
                 setShowArr(unvalidDiscounts)
+                break;
+            case "used":
+                discountsInstance = isUserSearching ? structuredClone(searchRes) : structuredClone(discounts)
+                let usedDiscounts = discountsInstance.filter(discount => discount.status == 1)
+                setFilterMode('used')
+                setShowArr(usedDiscounts)
+                break;
+            case "unused":
+                discountsInstance = isUserSearching ? structuredClone(searchRes) : structuredClone(discounts)
+                let unusedDiscounts = discountsInstance.filter(discount => discount.status == 0)
+                setFilterMode('unused')
+                setShowArr(unusedDiscounts)
                 break;
 
         }
@@ -146,6 +161,8 @@ const DashDiscounts = () => {
                         <span className={`cursor-pointer text-xxxs lg:text-xs ${filterMode === 'all' ? ' p-2 rounded-lg bg-slate-900' : ''}`} onClick={() => handleFiltringOnDiscounts('all')}>همه</span>
                         <span className={`cursor-pointer text-xxxs lg:text-xs ${filterMode === 'valid' ? ' p-2 rounded-lg bg-slate-900' : ''}`} onClick={() => handleFiltringOnDiscounts('valid')}>معتبر</span>
                         <span className={`cursor-pointer text-xxxs lg:text-xs ${filterMode === 'unvalid' ? ' p-2 rounded-lg bg-slate-900' : ''}`} onClick={() => handleFiltringOnDiscounts('unvalid')}>منقضی</span>
+                        <span className={`cursor-pointer text-xxxs lg:text-xs ${filterMode === 'used' ? ' p-2 rounded-lg bg-slate-900' : ''}`} onClick={() => handleFiltringOnDiscounts('used')}>استفاده شده</span>
+                        <span className={`cursor-pointer text-xxxs lg:text-xs ${filterMode === 'unused' ? ' p-2 rounded-lg bg-slate-900' : ''}`} onClick={() => handleFiltringOnDiscounts('unused')}>استفاده نشده</span>
 
                     </div>
                 </div>

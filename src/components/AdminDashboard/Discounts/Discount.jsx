@@ -32,7 +32,7 @@ const Discount = ({ discount, iteration, setDiscount, handleDelDiscount, setDoUs
             <td className="py-4">{discount.plan_name}</td>
             <td className="py-4 hidden sm:block">{discount.value}</td>
             <td className="py-4">
-                {parseInt(discount.status) === 0 ? "معتبر" : "منقضی"}
+                {discount.status == 0 ? "استفاده نشده" : "استفاده شده"}
             </td>
             <td className="relative" ref={dropdownBtnRef}>
                 <button onClick={toggleDropDownBtn}

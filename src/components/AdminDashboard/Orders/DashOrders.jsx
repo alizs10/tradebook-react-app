@@ -131,6 +131,7 @@ const DashOrders = () => {
 
                     if (status === 200) {
                         dispatch(DeleteOrder(order_id))
+                        doUserNeedDetailsOrderWindow && setDoUserNeedDetailsOrderWindow(false)
                         notify('سفارش موردنظر با موفقیت حذف شد', 'success');
 
                     } else {

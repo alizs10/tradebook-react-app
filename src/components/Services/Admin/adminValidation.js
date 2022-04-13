@@ -73,6 +73,11 @@ export const discountValidation = payload => {
         errors.plan_id = "اشتراک انتخاب شده، صحیح نمی باشد";
     }
 
+    if (!validator.isEmpty(payload.exp_date) && !validator.isDate(payload.exp_date)) {
+        isFormValid = false;
+        errors.exp_date = "تاریخ انقضا صحیح نمی باشد";
+    }
+
 
     return {
         success: isFormValid,
