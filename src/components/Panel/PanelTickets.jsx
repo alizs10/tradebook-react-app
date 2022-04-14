@@ -6,7 +6,7 @@ import CreateTicketWindow from './CreateTicketWindow';
 import Ticket from './Ticket';
 
 
-const PanelTicketbook = () => {
+const PanelTickets = () => {
 
     const [doUserWantCreateTicketWindow, setDoUserWantCreateTicketWindow] = useState(false);
 
@@ -32,7 +32,7 @@ const PanelTicketbook = () => {
             <div className="mx-2 mt-4 flex justify-between border-b-2 pb-2">
                 <h2 className="text-slate-300 text-lg">تیکت ها</h2>
 
-                <button className="rounded-lg px-3 py-2 text-sm bg-slate-300 flex gap-x-2 items-center">
+                <button className="rounded-lg px-3 py-2 text-sm bg-slate-300 flex gap-x-2 items-center" onClick={() => setDoUserWantCreateTicketWindow(true)}>
                     <i className="fa-solid fa-plus text-xl text-blue-500"></i>
                     <span className="text-slate-800">ایجاد تیکت جدید</span>
                 </button>
@@ -53,4 +53,4 @@ const PanelTicketbook = () => {
     );
 }
 
-export default PanelTicketbook;
+export default PanelTickets;

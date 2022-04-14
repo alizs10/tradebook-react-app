@@ -54,6 +54,13 @@ const Sidebar = ({ handleLogout, toggleSideBar }) => {
                             </NavLink>
                         </li>
                         <li>
+                            <NavLink to="/panel/tickets" onClick={(e) => handleProtectedNavLink(e)}
+                                className={(navData) => navData.isActive ? "bg-slate-700 flex items-center  py-4 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300 border-l-8 border-emerald-400" : "bg-slate-700 flex items-center  py-4 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300"}>
+                                <i className="fa-regular fa-ticket-simple text-2xl text-slate-400 mx-2"></i>
+                                <span className="text-base text-slate-300">تیکت ها</span>
+                            </NavLink>
+                        </li>
+                        <li>
                             <NavLink to="/panel/about" onClick={() => toggleSideBar()}
                                 className={(navData) => navData.isActive ? "bg-slate-700 flex items-center  py-4 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300 border-l-8 border-emerald-400" : "bg-slate-700 flex items-center  py-4 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300"}
                             >

@@ -4,7 +4,7 @@ const Ticket = ({ ticket }) => {
 
     let type = "";
 
-    switch (ticket.type) {
+    switch (`${ticket.type}`) {
         case "0":
             type = "گزارش مشکل";
             break;

@@ -29,6 +29,7 @@ import PanelHome from '../Panel/PanelHome';
 import PanelNotebook from '../Panel/PanelNotebook';
 import PanelPlans from '../Panel/PanelPlans';
 import PanelProfile from '../Panel/PanelProfile';
+import PanelTickets from '../Panel/PanelTickets';
 
 
 
@@ -79,6 +80,11 @@ const Tradebook = () => {
                 <Route path='notebook' element={
                     <ActivationCheck>
                         <PanelNotebook />
+                    </ActivationCheck>
+                } />
+                <Route path='tickets' element={
+                    <ActivationCheck>
+                        <PanelTickets />
                     </ActivationCheck>
                 } />
                 <Route path='about' element={<PanelAbout />} />
