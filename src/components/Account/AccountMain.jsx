@@ -12,16 +12,30 @@ import { notify } from '../Services/alerts';
 import { getAccounts } from '../Services/DataLoader';
 import { setCryptoPairs, setForexPairs } from '../Redux/Action/Pairs';
 import SnapshotWindow from './SnapshotWindow';
+import StopLossAndTakeProfitSection from './StopLossAndTakeProfitSection';
+import { isEmpty } from 'lodash';
+import { ClipLoader } from 'react-spinners';
 
 const AccountMain = () => {
 
     const [didUserTakeSnapshot, setDidUserTakeSnapshot] = useState(false);
-
-
-
+    const [loading, setLoading] = useState(true);
 
     const trades = useSelector(state => state.Trades);
     const [statistics, setStatistics] = useState({});
+    const [stopLossesAverage, setStopLossesAverage] = useState({
+        value: "...",
+        ideal_value: "1",
+        status: "...",
+        hint: "..."
+    })
+    const [takeProfitsAverage, setTakeProfitsAverage] = useState({
+        value: "...",
+        ideal_value: "1",
+        status: "...",
+        hint: "..."
+    })
+    const [updatedAt, setUpdatedAt] = useState("...")
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
@@ -50,7 +64,12 @@ const AccountMain = () => {
 
     const prepareStatistics = (statisticsObj) => {
         let preparedValuesObj = {};
-
+        let notCalculated = {
+            value: "محاسبه نشده",
+            ideal_value: "1",
+            status: "محاسبه نشده",
+            hint: "محاسبه نشده"
+        }
         statisticsObj.forEach(statisticObj => {
             switch (statisticObj.statistic_name) {
                 case 'all_trades':
@@ -71,15 +90,28 @@ const AccountMain = () => {
                 case 'worst_pnl':
                     preparedValuesObj = { ...preparedValuesObj, worstPnl: JSON.parse(statisticObj.value) }
                     break;
+                case 'stop_losses_average':
+                    setUpdatedAt(moment(statisticObj.updated_at).locale('fa').startOf('day').fromNow())
+                    statisticObj.value == 0 ? setStopLossesAverage(notCalculated) : setStopLossesAverage(JSON.parse(statisticObj.value))
+                    break;
+                case 'take_profits_average':
+                    statisticObj.value == 0 ? setTakeProfitsAverage(notCalculated) : setTakeProfitsAverage(JSON.parse(statisticObj.value))
+                    break;
             }
         });
 
         setStatistics(preparedValuesObj);
+        setLoading(false)
     }
+    const [showArr, setShowArr] = useState(paginate([], 5, 1));
 
-    const pagination = paginate(trades, 5, 1);
+    useEffect(() => {
 
+        if (!isEmpty(trades)) {
+            setShowArr(paginate(trades, 5, 1))
+        }
 
+    }, [trades])
 
 
 
@@ -111,22 +143,46 @@ const AccountMain = () => {
 
                     <div className="col-span-1 grid grid-rows-4 gap-y-2 h-52">
                         <span
-                            className="row-span-3 bg-slate-300 rounded-lg text-3xl drop-shadow-lg text-slate-900 flex justify-center items-center">{Math.floor(statistics.winRatio)}</span>
+                            className="row-span-3 bg-slate-300 rounded-lg text-3xl drop-shadow-lg text-slate-900 flex justify-center items-center">
+                            {loading ? (
+                                <ClipLoader color={'#000'} size={25} />
+                            ) : (
+                                Math.floor(statistics.winRatio)
+                            )}
+                        </span>
                         <span className="row-span-1 text-sm text-center">درصد برد شما</span>
                     </div>
                     <div className="col-span-1 grid grid-rows-4 gap-y-2 h-52">
                         <span
-                            className="row-span-3 bg-slate-300 rounded-lg text-3xl drop-shadow-lg text-slate-900 flex justify-center items-center">{Math.floor(statistics.averagePnl)}</span>
+                            className="row-span-3 bg-slate-300 rounded-lg text-3xl drop-shadow-lg text-slate-900 flex justify-center items-center">
+                            {loading ? (
+                                <ClipLoader color={'#000'} size={25} />
+                            ) : (
+                                Math.floor(statistics.averagePnl)
+                            )}
+                        </span>
                         <span className="row-span-1 text-sm text-center">میانگین سود های شما</span>
                     </div>
                     <div className="col-span-1 grid grid-rows-4 gap-y-2 h-52">
                         <span
-                            className="row-span-3 bg-slate-300 rounded-lg text-3xl drop-shadow-lg text-slate-900 flex justify-center items-center">{Math.floor(statistics.updatedBalance)}</span>
+                            className="row-span-3 bg-slate-300 rounded-lg text-3xl drop-shadow-lg text-slate-900 flex justify-center items-center">
+                            {loading ? (
+                                <ClipLoader color={'#000'} size={25} />
+                            ) : (
+                                Math.floor(statistics.updatedBalance)
+                            )}
+                        </span>
                         <span className="row-span-1 text-sm text-center">بالانس حساب شما</span>
                     </div>
                     <div className="col-span-1 grid grid-rows-4 gap-y-2 h-52">
                         <span
-                            className="row-span-3 bg-slate-300 rounded-lg text-3xl drop-shadow-lg text-slate-900 flex justify-center items-center">{statistics.allTrades}</span>
+                            className="row-span-3 bg-slate-300 rounded-lg text-3xl drop-shadow-lg text-slate-900 flex justify-center items-center">
+                            {loading ? (
+                                <ClipLoader color={'#000'} size={25} />
+                            ) : (
+                                statistics.allTrades
+                            )}
+                        </span>
                         <span className="row-span-1 text-sm text-center">تعداد کل معاملات شما</span>
                     </div>
                     <div className="col-span-2 md:col-span-4 flex justify-end">
@@ -139,6 +195,8 @@ const AccountMain = () => {
 
 
             </section>
+
+            <StopLossAndTakeProfitSection updatedAt={updatedAt} stopLossesAverage={stopLossesAverage} takeProfitsAverage={takeProfitsAverage} />
 
             <section className="mt-8 flex flex-col gap-y-4">
 
@@ -172,7 +230,7 @@ const AccountMain = () => {
                             </thead>
 
                             <tbody>
-                                {pagination.sliced_array.map((trade, index) => (
+                                {showArr.sliced_array.map((trade, index) => (
                                     <tr key={trade.id} className="text-xxs lg:text-base font-light mt-2 py-2 dark:text-slate-300">
                                         <td className="py-4 pr-1">{index + 1}</td>
                                         <td className="py-4">{moment(trade.trade_date, "YYYY-MM-DD").format('ll')}</td>

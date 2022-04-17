@@ -11,11 +11,7 @@ import { tradeValidation } from '../../Services/validation';
 
 const CreateTradeInputWindow = ({ setDoUserNeedCreateTradeWindow, acc_id, accType }) => {
 
-    const dateInstance = new Date();
-    const today = dateInstance.getFullYear() + "-" + ("0" + (dateInstance.getMonth() + 1)).slice(-2) + "-" +
-        ("0" + dateInstance.getDate()).slice(-2);
-
-    const [date, setDate] = useState(today);
+    const [date, setDate] = useState("");
     const [pairName, setPairName] = useState("");
     const [pairId, setPairId] = useState("");
     const [selectedOption, setSelectedOption] = useState(null);
@@ -121,7 +117,7 @@ const CreateTradeInputWindow = ({ setDoUserNeedCreateTradeWindow, acc_id, accTyp
                         <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-2">
                             <div className="clo-span-1 flex flex-col gap-y-1">
                                 <label htmlFor="date">تاریخ</label>
-                                <input type="date" className="form-input" value={date} onChange={event => {
+                                <input type="datetime-local" className="form-input" value={date} onChange={event => {
                                     setDate(event.target.value);
                                 }} />
                                 {errors.trade_date && (<span className='text-xxs text-red-400'>{errors.trade_date}</span>)}

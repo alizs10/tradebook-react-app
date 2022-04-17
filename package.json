@@ -12,6 +12,7 @@
     "dom-to-image": "^2.6.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
+    "moment-jalaali": "^0.9.6",
     "react": "^17.0.2",
     "react-countdown-hook": "^1.1.1",
     "react-csv": "^2.2.2",

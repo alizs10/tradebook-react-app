@@ -226,7 +226,7 @@ export const tradeValidation = payload => {
     if (validator.isEmpty(payload.trade_date)) {
         isFormValid = false;
         errors.trade_date = "تاریخ معامله الزامی می باشد";
-    } else if (!validator.isDate(payload.trade_date)) {
+    } else if (!validator.isISO8601(payload.trade_date)) {
         isFormValid = false;
         errors.trade_date = "تاریخ معامله صحیح نمی باشد";
     }

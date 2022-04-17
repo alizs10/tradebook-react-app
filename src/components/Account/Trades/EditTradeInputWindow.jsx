@@ -121,7 +121,7 @@ console.log(errors);
                         <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-2">
                             <div className="clo-span-1 flex flex-col gap-y-1">
                                 <label htmlFor="date">تاریخ</label>
-                                <input type="date" className="form-input" value={date} onChange={event => {
+                                <input type="datetime-local" className="form-input" value={date} onChange={event => {
                                     setDate(event.target.value);
 
                                 }} />
