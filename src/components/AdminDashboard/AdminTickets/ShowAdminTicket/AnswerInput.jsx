@@ -1,36 +1,43 @@
 import React, { useState } from 'react';
 import { answerTicket } from '../../../Services/Admin/AdminTicketsService';
 import { notify } from '../../../Services/alerts';
+import { asnwerTicketValidation } from '../../../Services/validation';
 
 const AnswerInput = ({ parent_id, setReplays, replays, toggleReplayInput }) => {
 
     const [body, setBody] = useState("")
+    const [errors, setErrors] = useState({})
 
     const handleSendAnswer = async () => {
 
         let answer = {
             parent_id, body
         }
+        const { success, errors } = asnwerTicketValidation(answer);
+        if (success) {
+            setErrors({})
+            try {
 
-        try {
+                const { status, data } = await answerTicket(answer, parent_id)
 
-            const { status, data } = await answerTicket(answer, parent_id)
+                if (status == 200) {
+                    setReplays([...replays, data.answer])
+                    toggleReplayInput()
+                    notify("پاسخ شما ارسال شد", "success")
+                }
 
-            if (status == 200) {
-                setReplays([...replays, data.answer])
-                toggleReplayInput()
-                notify("پاسخ شما ارسال شد", "success")
+            } catch (error) {
+
             }
-
-        } catch (error) {
-
+        } else {
+            setErrors(errors)
         }
-
     }
 
     return (
         <div className='flex flex-col gap-y-2'>
             <textarea className='form-input' rows={5} value={body} onChange={event => setBody(event.target.value)} />
+            {errors.body && (<span className='text-xxs text-red-400'>{errors.body}</span>)}
             <div className='flex justify-between'>
                 <div className='fix'></div>
                 <div className='flex gap-x-1'>

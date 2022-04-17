@@ -298,3 +298,57 @@ export const tradeValidation = payload => {
     };
 };
 
+export const ticketValidation = payload => {
+    const errors = {};
+    let isFormValid = true;
+    let attribute = "تیکت";
+
+    if (validator.isEmpty(payload.subject)) {
+        isFormValid = false;
+        errors.subject = `عنوان ${attribute} الزامی می باشد`;
+    } else if (!validator.isLength(payload.subject, { min: 3, max: 180 })) {
+        isFormValid = false;
+        errors.subject = `عنوان ${attribute} نمی تواند کمتر از 3 و بیشتر از 180 حرف باشد`;
+    }
+
+    if (validator.isEmpty(payload.type)) {
+        isFormValid = false;
+        errors.type = "نوع حساب الزامی می باشد";
+    } else if (!validator.isIn(payload.type, [0, 1, 2, 3, 4])) {
+        isFormValid = false;
+        errors.type = `نوع ${attribute} باید از بین گزینه های موجود انتخاب شود`;
+    }
+    
+    if (validator.isEmpty(payload.body)) {
+        isFormValid = false;
+        errors.body = `توضیحات ${attribute} الزامی می باشد`;
+    } else if (!validator.isLength(payload.body, { min: 3, max: 700 })) {
+        isFormValid = false;
+        errors.body = `توضیحات ${attribute} نمی تواند کمتر از 3 و بیشتر از 700 حرف باشد`;
+    }
+    
+
+    return {
+        success: isFormValid,
+        errors
+    };
+};
+export const asnwerTicketValidation = payload => {
+    const errors = {};
+    let isFormValid = true;
+    let attribute = "تیکت";
+    
+    if (validator.isEmpty(payload.body)) {
+        isFormValid = false;
+        errors.body = `پاسخ ${attribute} الزامی می باشد`;
+    } else if (!validator.isLength(payload.body, { min: 3, max: 700 })) {
+        isFormValid = false;
+        errors.body = `پاسخ ${attribute} نمی تواند کمتر از 3 و بیشتر از 700 حرف باشد`;
+    }
+    
+
+    return {
+        success: isFormValid,
+        errors
+    };
+};

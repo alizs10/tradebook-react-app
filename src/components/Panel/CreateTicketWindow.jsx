@@ -3,12 +3,14 @@ import { useDispatch } from 'react-redux';
 import { createTicket } from '../Redux/Action/Tickets';
 import { notify } from '../Services/alerts';
 import { storeTicket } from '../Services/TicketsService';
+import { ticketValidation } from '../Services/validation';
 
 const CreateTicketWindow = ({ setDoUserWantCreateTicketWindow, parent_id = null }) => {
 
     const [subject, setSubject] = useState("")
     const [type, setType] = useState("")
     const [body, setBody] = useState("")
+    const [errors, setErrors] = useState({})
 
     const dispatch = useDispatch()
 
@@ -17,20 +19,23 @@ const CreateTicketWindow = ({ setDoUserWantCreateTicketWindow, parent_id = null 
         let newTicket = {
             subject, type, body, parent_id
         }
+        const { success, errors } = ticketValidation(newTicket);
+        if (success) {
+            setErrors({})
+            try {
+                const { data, status } = await storeTicket(newTicket)
 
-        try {
-            const { data, status } = await storeTicket(newTicket)
-
-            if (status == 200) {
-                dispatch(createTicket(data.ticket))
-                setDoUserWantCreateTicketWindow(false)
-                notify("تیکت شما با موفقیت ارسال شد", "success")
+                if (status == 200) {
+                    dispatch(createTicket(data.ticket))
+                    setDoUserWantCreateTicketWindow(false)
+                    notify("تیکت شما با موفقیت ارسال شد", "success")
+                }
+            } catch (error) {
+                console.log(error);
             }
-        } catch (error) {
-            console.log(error);
+        } else {
+            setErrors(errors)
         }
-
-
 
 
     }
@@ -54,6 +59,7 @@ const CreateTicketWindow = ({ setDoUserWantCreateTicketWindow, parent_id = null 
                     <div className="clo-span-1 flex flex-col gap-y-1">
                         <label for="subject">عنوان تیکت</label>
                         <input type="text" className="form-input" id='subject' value={subject} onChange={(event) => setSubject(event.target.value)} />
+                        {errors.subject && (<span className='text-xxs text-red-400'>{errors.subject}</span>)}
                     </div>
                     <div className="clo-span-1 flex flex-col gap-y-1">
                         <label for="">نوع تیکت</label>
@@ -65,11 +71,13 @@ const CreateTicketWindow = ({ setDoUserWantCreateTicketWindow, parent_id = null 
                             <option value="3">سوال</option>
                             <option value="4">دیگر موارد</option>
                         </select>
+                        {errors.type && (<span className='text-xxs text-red-400'>{errors.type}</span>)}
 
                     </div>
                     <div className="col-span-2 flex flex-col gap-y-1">
                         <label for="">متن تیکت</label>
                         <textarea className="form-input w-full" rows="5" value={body} onChange={(event) => setBody(event.target.value)}></textarea>
+                        {errors.body && (<span className='text-xxs text-red-400'>{errors.body}</span>)}
                     </div>
 
                 </div>
