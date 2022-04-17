@@ -5,6 +5,8 @@ import AccountMain from '../Account/AccountMain';
 import Statistics from '../Account/Statistics/Statistics';
 import Trades from '../Account/Trades/Trades';
 import DashAdminPairs from '../AdminDashboard/AdminPairs/DashAdminPairs';
+import DashAdminTickets from '../AdminDashboard/AdminTickets/DashAdminTickets';
+import ShowAdminTicket from '../AdminDashboard/AdminTickets/ShowAdminTicket/ShowAdminTicket';
 import DashHome from '../AdminDashboard/DashHome';
 import DashDiscounts from '../AdminDashboard/Discounts/DashDiscounts';
 import DashOrders from '../AdminDashboard/Orders/DashOrders';
@@ -30,6 +32,7 @@ import PanelNotebook from '../Panel/PanelNotebook';
 import PanelPlans from '../Panel/PanelPlans';
 import PanelProfile from '../Panel/PanelProfile';
 import PanelTickets from '../Panel/PanelTickets';
+import ShowTicket from '../Panel/ShowTicket/ShowTicket';
 
 
 
@@ -87,6 +90,10 @@ const Tradebook = () => {
                         <PanelTickets />
                     </ActivationCheck>
                 } />
+
+                
+                <Route path='tickets/:ticket_id/show' element={<ShowTicket />} />
+
                 <Route path='about' element={<PanelAbout />} />
 
             </Route>
@@ -150,6 +157,8 @@ const Tradebook = () => {
                 <Route path='profile' element={
                     <DashProfile />
                 } />
+                <Route path='tickets' element={<DashAdminTickets />} />
+                <Route path='tickets/:ticket_id/show' element={<ShowAdminTicket />} />
 
 
             </Route>

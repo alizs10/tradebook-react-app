@@ -83,6 +83,14 @@ const AdminDashSidebar = () => {
                             </NavLink>
                         </li>
                         <li>
+                        <NavLink to="tickets"
+                                className={(navData) => navData.isActive ? "py-4 px-2 navLinkActive rounded-md shadow-md flex items-center bg-white dark:bg-slate-800 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition-all ease-out duration-300" : "py-4 px-2 rounded-md shadow-md flex items-center bg-white dark:bg-slate-800 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition-all ease-out duration-300"}
+                            >
+                                <i className="fa-light fa-ticket-simple text-xl text-gray-500 dark:text-slate-400"></i>
+                                <span className="text-xs mr-2 text-gray-700 dark:text-slate-500">تیکت ها</span>
+                            </NavLink>
+                        </li>
+                        <li>
                             <NavLink to="pairs"
                                 className={(navData) => navData.isActive ? "py-4 px-2 navLinkActive rounded-md shadow-md flex items-center bg-white dark:bg-slate-800 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition-all ease-out duration-300" : "py-4 px-2 rounded-md shadow-md flex items-center bg-white dark:bg-slate-800 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition-all ease-out duration-300"}
                             >
@@ -114,7 +122,6 @@ const AdminDashSidebar = () => {
                                 <span className="text-xs mr-2 text-gray-700 dark:text-slate-500">سایت</span>
                             </NavLink>
                         </li>
-
                         <li className="mt-2 flex gap-2 items-center">
                             <span className="text-xs dark:text-slate-500">حالت شب</span>
                             <div className="w-12 rounded-full p-1 bg-gray-300 flex items-center justify-start"

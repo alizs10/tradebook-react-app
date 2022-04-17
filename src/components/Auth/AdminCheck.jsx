@@ -9,7 +9,7 @@ const AdminCheck = ({ children }) => {
     console.log('checked ', user);
     return (
         <Fragment>
-            {user.is_admin === 0 ? <Navigate to="/panel/" /> : children}
+            {user.is_admin == 0 ? <Navigate to="/panel/" /> : children}
         </Fragment>
     );
 }
