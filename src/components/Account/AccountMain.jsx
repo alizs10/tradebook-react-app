@@ -26,12 +26,14 @@ const AccountMain = () => {
     const [stopLossesAverage, setStopLossesAverage] = useState({
         value: "...",
         ideal_value: "1",
+        cv: "...",
         status: "...",
         hint: "..."
     })
     const [takeProfitsAverage, setTakeProfitsAverage] = useState({
         value: "...",
         ideal_value: "1",
+        cv: "...",
         status: "...",
         hint: "..."
     })
@@ -91,7 +93,7 @@ const AccountMain = () => {
                     preparedValuesObj = { ...preparedValuesObj, worstPnl: JSON.parse(statisticObj.value) }
                     break;
                 case 'stop_losses_average':
-                    setUpdatedAt(moment(statisticObj.updated_at).locale('fa').startOf('day').fromNow())
+                    setUpdatedAt(moment(statisticObj.updated_at).locale('fa').fromNow())
                     statisticObj.value == 0 ? setStopLossesAverage(notCalculated) : setStopLossesAverage(JSON.parse(statisticObj.value))
                     break;
                 case 'take_profits_average':
@@ -196,7 +198,7 @@ const AccountMain = () => {
 
             </section>
 
-            <StopLossAndTakeProfitSection updatedAt={updatedAt} stopLossesAverage={stopLossesAverage} takeProfitsAverage={takeProfitsAverage} />
+            <StopLossAndTakeProfitSection setUpdatedAt={setUpdatedAt} setStopLossesAverage={setStopLossesAverage} setTakeProfitsAverage={setTakeProfitsAverage} account_id={account_id} updatedAt={updatedAt} stopLossesAverage={stopLossesAverage} takeProfitsAverage={takeProfitsAverage} />
 
             <section className="mt-8 flex flex-col gap-y-4">
 
@@ -233,7 +235,7 @@ const AccountMain = () => {
                                 {showArr.sliced_array.map((trade, index) => (
                                     <tr key={trade.id} className="text-xxs lg:text-base font-light mt-2 py-2 dark:text-slate-300">
                                         <td className="py-4 pr-1">{index + 1}</td>
-                                        <td className="py-4">{moment(trade.trade_date, "YYYY-MM-DD").format('ll')}</td>
+                                        <td className="py-4">{moment(trade.trade_date, 'YYYY-jM-jD').format('YYYY/MM/DD') }</td>                               
                                         <td className="py-4">{trade.pair_name}</td>
                                         <td className="py-4">{trade.contract_type === 0 ? 'Long' : 'Short'}</td>
                                         <td className="py-4" style={{ "direction": "ltr" }}>

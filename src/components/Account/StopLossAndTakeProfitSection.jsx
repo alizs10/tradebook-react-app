@@ -1,13 +1,33 @@
+import { isNumber } from 'lodash';
 import React, { useState } from 'react';
+import { updateSlAndTpStats } from '../Services/AccSevices';
+import { notify } from '../Services/alerts';
 var moment = require('moment-jalaali')
-moment.loadPersian({dialect: 'persian-modern'})
+moment.loadPersian({ dialect: 'persian-modern' })
 
-const StopLossAndTakeProfitSection = ({stopLossesAverage, takeProfitsAverage, updatedAt}) => {
+const StopLossAndTakeProfitSection = ({ setUpdatedAt, setTakeProfitsAverage, setStopLossesAverage, stopLossesAverage, takeProfitsAverage, updatedAt, account_id }) => {
 
     const [doUserWantInformation, setDoUserWantInformation] = useState(false)
 
     const toggleInformation = () => {
         doUserWantInformation ? setDoUserWantInformation(false) : setDoUserWantInformation(true)
+    }
+
+    const updateStopLossAndTakeProfitStats = async () => {
+
+        try {
+            const { status, data } = await updateSlAndTpStats(account_id)
+            if (status == 200) {
+                setStopLossesAverage(data.stopLoss)
+                setTakeProfitsAverage(data.takeProfit)
+                setUpdatedAt(moment(data.updated_at).locale('fa').fromNow())
+                notify("با موفقیت بروزرسانی شد", "success")
+            }
+
+        } catch (error) {
+            notify("مشکلی رخ داده است، دوباره امتحان کنید", "error")
+
+        }
     }
 
 
@@ -26,7 +46,7 @@ const StopLossAndTakeProfitSection = ({stopLossesAverage, takeProfitsAverage, up
                     <span className="flex gap-x-2 items-center text-sm">
                         <i className="fa-regular fa-hand"></i>
                         <span>میانگین حد ضرر های شما:</span>
-                        <span>{stopLossesAverage.value} %</span>
+                        <span>{isNumber(stopLossesAverage.value) ? stopLossesAverage.value.toFixed(2) : stopLossesAverage.value} % <span className='text-xxs text-slate-800'>(پراکندگی: {stopLossesAverage.cv})</span></span>
 
                     </span>
                     <span className="flex gap-x-2 items-center text-xs text-slate-800">
@@ -54,13 +74,13 @@ const StopLossAndTakeProfitSection = ({stopLossesAverage, takeProfitsAverage, up
                     <span className="flex gap-x-2 text-sm items-center">
                         <i className="fa-regular fa-bullseye-arrow"></i>
                         <span>میانگین حد سود های شما:</span>
-                        <span>{takeProfitsAverage.value} %</span>
+                        <span>{isNumber(takeProfitsAverage.value) ? takeProfitsAverage.value.toFixed(2) : takeProfitsAverage.value} % <span className='text-xxs text-slate-800'>(پراکندگی: {takeProfitsAverage.cv})</span></span>
 
                     </span>
 
                     <span className="flex gap-x-2 items-center text-xs text-slate-800">
                         <i className="fa-regular fa-circle-exclamation-check text-sm"></i>
-                        <span>حد ضرر ایده آل:</span>
+                        <span>حد سود ایده آل:</span>
                         <span>{takeProfitsAverage.ideal_value} درصد از بالانس</span>
 
                     </span>
@@ -85,7 +105,7 @@ const StopLossAndTakeProfitSection = ({stopLossesAverage, takeProfitsAverage, up
                             <i className="fa-regular fa-circle-info text-gray-500"></i>
                         </button>
                         <button
-                            className="px-4 py-2 text-xs md:text-sm backdrop-blur-lg bg-slate-700 text-slate-300 rounded-lg flex gap-x-1 items-center">
+                            className="px-4 py-2 text-xs md:text-sm backdrop-blur-lg bg-slate-700 text-slate-300 rounded-lg flex gap-x-1 items-center" onClick={() => updateStopLossAndTakeProfitStats()}>
                             <i className="fa-duotone fa-arrows-retweet text-blue-500"></i>
                             بروزرسانی
                         </button>
@@ -103,6 +123,7 @@ const StopLossAndTakeProfitSection = ({stopLossesAverage, takeProfitsAverage, up
                             معاملاتی اش منفی باشد و یا بلعکس. اما این اطلاعات به شما کمک خواهد کرد که اصول معاملاتی را رعایت
                             کنید و احساسات خود را کنترل کنید. مشخصاً اگر اطلاعات نادقیق و یا اشتباهی وارد کرده
                             باشید، این محاسبات نیز اشتباه خواهند بود.
+                            مقدار پراکندگی در جلوی حد ضرر و سود شما، میزان پراکندگی حد سود ها و حد ضرر های شماست. هرچه این مقدار بیشتر باشد، نقاط حدی شما، دور تر از میانگین شما بوده است وبالعکس.
                         </p>
                     </div>
                 )}

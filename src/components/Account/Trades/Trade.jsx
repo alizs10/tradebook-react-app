@@ -29,7 +29,7 @@ const Trade = ({ setDoUserWantTradeDetails, setDoUserNeedEditTradeWindow, trade,
         <Fragment>
             <tr className="text-xxs lg:text-base font-light mt-2 py-2 dark:text-slate-300">
                 <td className="py-4 pr-1">{index}</td>
-                <td className="py-4">{moment(trade.trade_date, "YYYY-MM-DD").format('ll')}</td>
+                <td className="py-4">{moment(trade.trade_date, 'YYYY-jM-jD').format('YYYY/MM/DD')}</td>
                 <td className="py-4">{trade.pair_name}</td>
                 <td className={`py-4 hidden sm:block ${trade.contract_type == 0 ? "text-emerald-400" : "text-red-400"}`}>{trade.contract_type === 0 ? 'Long' : 'Short'}</td>
                 <td className="py-4" style={{ direction: "ltr" }}>

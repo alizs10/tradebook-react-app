@@ -17,3 +17,7 @@ export const DeleteAcc = async (acc_id) => {
 export const ShowAcc = async acc_id => {
     return await http.get(`${config["base_url"]}/api/panel/accounts/${acc_id}/show`)
 }
+
+export const updateSlAndTpStats = async acc_id => {
+    return await http.get(`${config["base_url"]}/api/panel/accounts/${acc_id}/update-stop-loss-and-take-profit`)
+}
