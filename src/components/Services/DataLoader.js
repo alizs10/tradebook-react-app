@@ -25,3 +25,7 @@ export const getHomeData = () => {
     return http.get(`${config['base_url']}/api/panel/home`);
 }
 
+export const getPlans = async () => {
+    return await http.get(`${config['base_url']}/api/panel/plans`)
+}
+

@@ -88,8 +88,33 @@ const Sidebar = ({ handleLogout, toggleSideBar }) => {
                         </li>
                     </ul>
 
-                    <footer className="text-center mt-8">
-                        <span className="text-xxs text-gray-800">Copyright <i className="fa-regular fa-copyright"></i> 2022
+                    <footer className="text-center mt-32 flex flex-col gap-y-8">
+
+                        <div className="flex justify-evenly">
+                            <div className="w-12">
+                                <script src="https://www.zarinpal.com/webservice/TrustCode" type="text/javascript"></script>
+                            </div>
+                            <div className="flex flex-col gap-y-6">
+                                <span className="text-xs text-slate-300">ما را در شبکه های اجتماعی دنبال کنید</span>
+                                <div className="grid grid-cols-4 text-right">
+                                    <a href="https://t.me/alizs10" target="_blank"
+                                        className="col-span-1   text-blue-400 text-lg">
+                                        <i className="fa-brands fa-telegram text-2xl mr-1"></i>
+                                    </a>
+                                    <a href="https://instagram.com/alizs10" target="_blank"
+                                        className="col-span-1 text-pink-600 text-lg">
+                                        <i className="fa-brands fa-instagram text-2xl mr-1"></i>
+                                    </a>
+                                    <a href="https://wa.me/09392983010" target="_blank"
+                                        className="col-span-1 text-green-400 text-lg">
+                                        <i className="fa-brands fa-whatsapp text-2xl mr-1"></i></a>
+                                    <a href="mailto:alizswork@gmail.com" target="_blank"
+                                        className="col-span-1 text-red-600 text-lg">
+                                        <i className="fa-brands fa-google text-2xl mr-1"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <span className="text-xxs text-gray-500">Copyright <i className="fa-regular fa-copyright"></i> 2022
                         </span>
                     </footer>
                 </div>

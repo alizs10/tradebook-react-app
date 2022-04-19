@@ -18,6 +18,7 @@ import { TicketsReducer } from "./TicketsReducer";
 import { TradesReducer } from "./TradesReducer";
 import { UserReducer } from "./UserReducer";
 
+
 export const Reducers = combineReducers({
     User: UserReducer,
     Accounts: AccountsReducer,

@@ -1,7 +1,32 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
+import { useSelector } from 'react-redux';
+import { getPlans } from '../Services/DataLoader';
+import Plan from './Plan';
 
 const PanelPlans = () => {
+
+    const [plans, setPlans] = useState([])
+
+    useEffect(async () => {
+
+        try {
+            const { status, data } = await getPlans()
+
+            if (status == 200) {
+                let unsortedPlans = data.plans;
+                let sortedPlans = unsortedPlans.sort(function(a,b){
+                    return (a.price - b.price);
+                });
+                setPlans(sortedPlans)
+            }
+        } catch (error) {
+
+        }
+
+
+    }, [])
+
     return (
         <Fragment>
 
@@ -23,51 +48,11 @@ const PanelPlans = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mx-2 mt-4">
 
-                <div
-                    className="col-span-1 py-4 rounded-lg drop-shadow-lg bg-slate-700 text-white flex flex-col gap-y-4 justify-center items-center">
 
+                {plans.map(plan => (
+                    <Plan key={plan.id} plan={plan} />
+                ))}
 
-                    <div className="pb-4 border-b-2 flex flex-col gap-y-1">
-                        <span className="text-4xl  font-bold mr-2">1 ماهه</span>
-                    </div>
-                    <div className="flex flex-col gap-y-1">
-                        <span className="text-3xl ">30,000</span>
-                        <span className="text-sm  text-center">تومان</span>
-                    </div>
-                    <button
-                        className="rounded-lg w-3/4 bg-violet-500 px-4 py-2">خرید</button>
-
-                </div>
-                <div
-                    className="col-span-1 py-4 rounded-lg drop-shadow-lg bg-slate-700 text-white flex flex-col gap-y-4 justify-center items-center">
-
-
-                    <div className="pb-4 border-b-2 flex flex-col gap-y-1">
-                        <span className="text-4xl  font-bold mr-2">3 ماهه</span>
-                    </div>
-                    <div className="flex flex-col gap-y-1">
-                        <span className="text-3xl ">80,000</span>
-                        <span className="text-sm  text-center">تومان</span>
-                    </div>
-                    <button
-                        className="rounded-lg w-3/4 bg-violet-500 px-4 py-2">خرید</button>
-
-                </div>
-                <div
-                    className="col-span-1 py-4 rounded-lg drop-shadow-lg bg-slate-700 text-white flex flex-col gap-y-4 justify-center items-center">
-
-
-                    <div className="pb-4 border-b-2 flex flex-col gap-y-1">
-                        <span className="text-4xl  font-bold mr-2">6 ماهه</span>
-                    </div>
-                    <div className="flex flex-col gap-y-1">
-                        <span className="text-3xl ">140,000</span>
-                        <span className="text-sm  text-center">تومان</span>
-                    </div>
-                    <button
-                        className="rounded-lg w-3/4 bg-violet-500 px-4 py-2">خرید</button>
-
-                </div>
                 <div
                     className="col-span-1 py-4 rounded-lg drop-shadow-lg bg-violet-500  text-white flex flex-col gap-y-4 justify-center items-center relative overflow-hidden">
 

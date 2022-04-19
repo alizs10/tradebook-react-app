@@ -1,5 +1,6 @@
 import { isNumber } from 'lodash';
 import React, { useState } from 'react';
+import { BeatLoader } from 'react-spinners';
 import { updateSlAndTpStats } from '../Services/AccSevices';
 import { notify } from '../Services/alerts';
 var moment = require('moment-jalaali')
@@ -12,19 +13,25 @@ const StopLossAndTakeProfitSection = ({ setUpdatedAt, setTakeProfitsAverage, set
     const toggleInformation = () => {
         doUserWantInformation ? setDoUserWantInformation(false) : setDoUserWantInformation(true)
     }
-
+    const [loading, setLoading] = useState(false)
     const updateStopLossAndTakeProfitStats = async () => {
-
+        if (loading) {
+            notify('سیستم در حال انجام درخواست شما می باشد، صبر کنید', 'warning')
+            return
+        }
+        setLoading(true)
         try {
             const { status, data } = await updateSlAndTpStats(account_id)
             if (status == 200) {
                 setStopLossesAverage(data.stopLoss)
                 setTakeProfitsAverage(data.takeProfit)
                 setUpdatedAt(moment(data.updated_at).locale('fa').fromNow())
+                setLoading(false)
                 notify("با موفقیت بروزرسانی شد", "success")
             }
 
         } catch (error) {
+            setLoading(false)
             notify("مشکلی رخ داده است، دوباره امتحان کنید", "error")
 
         }
@@ -105,9 +112,15 @@ const StopLossAndTakeProfitSection = ({ setUpdatedAt, setTakeProfitsAverage, set
                             <i className="fa-regular fa-circle-info text-gray-500"></i>
                         </button>
                         <button
-                            className="px-4 py-2 text-xs md:text-sm backdrop-blur-lg bg-slate-700 text-slate-300 rounded-lg flex gap-x-1 items-center" onClick={() => updateStopLossAndTakeProfitStats()}>
-                            <i className="fa-duotone fa-arrows-retweet text-blue-500"></i>
-                            بروزرسانی
+                            className="px-4 py-2 text-xs md:text-sm backdrop-blur-lg bg-slate-700 text-slate-300 rounded-lg" onClick={() => updateStopLossAndTakeProfitStats()}>
+                            {loading ? (
+                                <BeatLoader color={'#fff'} loading={loading} size={5} />
+                            ) : (
+                                <span className='flex gap-x-1 items-center'>
+                                    <i className="fa-duotone fa-arrows-retweet text-blue-500"></i>
+                                    بروزرسانی
+                                </span>
+                            )}
                         </button>
                     </div>
                 </div>
@@ -123,7 +136,7 @@ const StopLossAndTakeProfitSection = ({ setUpdatedAt, setTakeProfitsAverage, set
                             معاملاتی اش منفی باشد و یا بلعکس. اما این اطلاعات به شما کمک خواهد کرد که اصول معاملاتی را رعایت
                             کنید و احساسات خود را کنترل کنید. مشخصاً اگر اطلاعات نادقیق و یا اشتباهی وارد کرده
                             باشید، این محاسبات نیز اشتباه خواهند بود.
-                            مقدار پراکندگی در جلوی حد ضرر و سود شما، میزان پراکندگی حد سود ها و حد ضرر های شماست. هرچه این مقدار بیشتر باشد، نقاط حدی شما، دور تر از میانگین شما بوده است وبالعکس.
+                            مقدار پراکندگی در جلوی حد ضرر و سود شما، میزان پراکندگی حد سود ها و حد ضرر های شماست. هرچه این مقدار بیشتر باشد، نقاط حدی شما، دور تر از میانگین شما بوده است وبالعکس. مقادیر کمتر از 100، نشان دهنده پراکندگی کمتر است.
                         </p>
                     </div>
                 )}
