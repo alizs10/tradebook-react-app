@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { Link, NavLink } from 'react-router-dom';
 
 const Sidebar = ({ handleLogout, toggleSideBar }) => {
-
+    let zarinpal_logo = require("./Zarinpal.svg");
     const user = useSelector(state => state.User)
 
     const handleProtectedNavLink = (e) => {
@@ -88,11 +88,11 @@ const Sidebar = ({ handleLogout, toggleSideBar }) => {
                         </li>
                     </ul>
 
-                    <footer className="text-center mt-32 flex flex-col gap-y-8">
+                    <footer className="text-center mt-8 flex flex-col gap-y-8">
 
                         <div className="flex justify-evenly">
                             <div className="w-12">
-                                <script src="https://www.zarinpal.com/webservice/TrustCode" type="text/javascript"></script>
+                                <img src={zarinpal_logo.default} alt='zarinpal-logo' />
                             </div>
                             <div className="flex flex-col gap-y-6">
                                 <span className="text-xs text-slate-300">ما را در شبکه های اجتماعی دنبال کنید</span>

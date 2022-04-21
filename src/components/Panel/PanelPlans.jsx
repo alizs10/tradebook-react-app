@@ -49,33 +49,9 @@ const PanelPlans = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mx-2 mt-4">
 
 
-                {plans.map(plan => (
-                    <Plan key={plan.id} plan={plan} />
+                {plans.map((plan, index) => (
+                    <Plan key={plan.id} plan={plan} index={index} length={plans.length} />
                 ))}
-
-                <div
-                    className="col-span-1 py-4 rounded-lg drop-shadow-lg bg-violet-500  text-white flex flex-col gap-y-4 justify-center items-center relative overflow-hidden">
-
-                    <span className="absolute top-3 -left-12 w-36 h-8 bg-white -rotate-45 text-base flex justify-center items-center text-slate-900 drop-shadow-lg">ویژه</span>
-
-
-                    <div className="pb-4 border-b-2 flex flex-col gap-y-1">
-                        <span className="text-4xl  font-bold mr-2">12 ماهه</span>
-                    </div>
-                    <div className="flex flex-col gap-y-1">
-                        <span className="text-3xl ">200,000</span>
-                        <span className="text-sm  text-center">تومان</span>
-                    </div>
-                    <button
-                        className="rounded-lg w-3/4 bg-white text-violet-500 bg px-4 py-2">خرید</button>
-
-                </div>
-
-
-
-
-
-
 
             </div>
 

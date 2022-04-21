@@ -4,11 +4,11 @@ import { useNavigate, useParams } from 'react-router';
 import { NavLink } from 'react-router-dom';
 import { BeatLoader } from 'react-spinners';
 import { notify } from '../../Services/alerts';
-import { cancelOrder, checkAndApplyDiscountCode, showOrder } from '../../Services/BuyProduct';
+import { cancelOrder, checkAndApplyDiscountCode, showOrder, storePayment } from '../../Services/BuyProduct';
 
 const BuyProduct = () => {
 
-    const [checking, setChecking] = useState({discount: false, cancel: false})
+    const [checking, setChecking] = useState({ discount: false, cancel: false, payment: false })
     const [order, setOrder] = useState([])
     const [haveDiscount, setHaveDiscount] = useState(false)
     const [planName, setPlanName] = useState("...")
@@ -47,16 +47,16 @@ const BuyProduct = () => {
             notify('سیستم در حال انجام درخواست شما می باشد، صبر کنید', 'warning')
             return
         }
-        setChecking({...checking, discount: true})
+        setChecking({ ...checking, discount: true })
 
         if (isEmpty(discountCode)) {
             notify("کد تخفیف وارد نشده است", "warning")
-            setChecking({...checking, discount: false})
+            setChecking({ ...checking, discount: false })
             return
         }
 
         try {
-            let discount = {discount_code: discountCode, _method: "PUT"}
+            let discount = { discount_code: discountCode, _method: "PUT" }
             const { status, data } = await checkAndApplyDiscountCode(order.id, discount)
 
             if (status == 200) {
@@ -70,10 +70,10 @@ const BuyProduct = () => {
                     notify(data.response_message, "warning")
 
                 }
-                setChecking({...checking, discount: false})
+                setChecking({ ...checking, discount: false })
             }
         } catch (error) {
-            setChecking({...checking, discount: false})
+            setChecking({ ...checking, discount: false })
 
         }
 
@@ -85,21 +85,43 @@ const BuyProduct = () => {
             notify('سیستم در حال انجام درخواست شما می باشد، صبر کنید', 'warning')
             return
         }
-        setChecking({...checking, cancel: true})
+        setChecking({ ...checking, cancel: true })
         try {
 
-            const {status, data} = await cancelOrder(order.id)
+            const { status, data } = await cancelOrder(order.id)
 
             if (status == 200) {
                 navigate("/panel/plans")
                 notify("سفارش شما با موفقیت لغو شد", "success")
             }
-            setChecking({...checking, cancel: false})
-            
+            setChecking({ ...checking, cancel: false })
+
         } catch (error) {
-            setChecking({...checking, cancel: false})
+            setChecking({ ...checking, cancel: false })
 
         }
+    }
+
+    const handlePaymentAndRedirectToGateway = async () => {
+
+        if (checking.payment) {
+            notify('سیستم در حال انجام درخواست شما می باشد، صبر کنید', 'warning')
+            return
+        }
+        setChecking({ ...checking, payment: true })
+
+        try {
+
+            const {status, data} = await storePayment(order.id)
+            let redirectTo = data.action;
+            
+            window.location.href = redirectTo;
+            
+        } catch (error) {
+            
+        }
+
+
     }
 
     return (
@@ -156,7 +178,7 @@ const BuyProduct = () => {
                             {checking.discount ? (
                                 <BeatLoader color={'#fff'} loading={checking.discount} size={5} />
                             ) : "اعمال تخفیف"}
-                            </button>
+                        </button>
                     </div>
                     {responseMessage.status && (
                         <span className="text-xxs text-justify">{responseMessage.message}</span>
@@ -175,16 +197,18 @@ const BuyProduct = () => {
                     <div className="grid grid-cols-6 gap-2">
 
                         <button
-                            className="col-span-6 md:col-span-5 py-3 h-full bg-emerald-400 text-slate-900 rounded-lg text-xs md:text-base font-bold sm:text-xs">تایید
-                            و
-                            پرداخت</button>
+                            className="col-span-6 md:col-span-5 py-3 h-full bg-emerald-400 text-slate-900 rounded-lg text-xs md:text-base font-bold sm:text-xs" onClick={() => handlePaymentAndRedirectToGateway()}>
+                            {checking.payment ? (
+                                "در حال انتقال به درگاه پرداخت ..."
+                            ) : "تایید و پرداخت"}
+                        </button>
                         <button
                             className="col-span-6 md:col-span-1 md:order-first py-3 h-full bg-gray-400 text-slate-900 rounded-lg text-xs md:text-sm sm:text-xs" onClick={() => handleCancelOrder()}>
                             {checking.cancel ? (
                                 <BeatLoader color={'#000'} loading={checking.cancel} size={5} />
                             ) : "انصراف"}
-                            
-                            </button>
+
+                        </button>
 
 
                     </div>

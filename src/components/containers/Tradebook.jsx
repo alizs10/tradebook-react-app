@@ -26,6 +26,7 @@ import AdmminDashLayout from '../layouts/AdminDashboard/AdminDashLayout';
 import AuthLayout from '../layouts/AuthLayout';
 import PanelLayout from '../layouts/PanelLayout';
 import BuyProduct from '../Panel/BuyProduct/BuyProduct';
+import PaymentResult from '../Panel/BuyProduct/PaymentResult';
 import PanelAbout from '../Panel/PanelAbout';
 import PanelAccounts from '../Panel/PanelAccounts';
 import PanelHome from '../Panel/PanelHome';
@@ -83,6 +84,7 @@ const Tradebook = () => {
                 <Route path='plans' element={<PanelPlans />} />
 
                 <Route path='orders/:order_id' element={<BuyProduct />} />
+                <Route path='payment/' element={<PaymentResult />} />
 
 
 

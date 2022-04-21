@@ -16,3 +16,11 @@ export const checkAndApplyDiscountCode = async (order_id, discount) => {
 export const cancelOrder = async (order_id) => {
     return await http.get(`${config['base_url']}/api/panel/orders/${order_id}/cancel`)
 }
+
+export const storePayment = async (order_id) => {
+    return await http.get(`${config['base_url']}/api/panel/payments/${order_id}/store`)
+}
+
+export const updatePayment = async (payment) => {
+    return await http.get(`${config['base_url']}/api/panel/payments/verify-payment?Authority=${payment.Authority}&Status=${payment.Status}`)
+}
