@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useParams } from 'react-router';
 import { getTicket } from '../../Services/TicketsService';
 
@@ -61,10 +61,10 @@ const ShowTicket = () => {
 
                 <div className="mx-2 mt-4 flex justify-between border-b-2 pb-2">
                     <h2 className="text-slate-300 text-lg">{`مشاهده تیکت - "${showTicket.subject}" (${status == 0 ? "باز" : "بسته"})`}</h2>
-                    <NavLink to={'/panel/tickets'} className="rounded-lg px-3 py-2 text-sm bg-slate-800 flex gap-x-2 items-center">
+                    <Link to={'/panel/tickets'} className="rounded-lg px-3 py-2 text-sm bg-slate-800 flex gap-x-2 items-center">
                         <i className="fa-light fa-turn-down-right text-xl text-blue-500"></i>
                         <span className="text-slate-300">بازگشت</span>
-                    </NavLink>
+                    </Link>
                 </div>
 
                 <div className="flex flex-col gap-y-2 mx-2 mt-2">

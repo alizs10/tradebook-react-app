@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Ticket = ({ ticket }) => {
 
@@ -26,7 +26,7 @@ const Ticket = ({ ticket }) => {
             break;
     }
     return (
-        <NavLink to={`${ticket.id}/show`} className={`ticket ${ticket.status == 1 && "border-emerald-400"}`}>
+        <Link to={`${ticket.id}/show`} className={`ticket ${ticket.status == 1 && "border-emerald-400"}`}>
 
             <div className="flex justify-between">
                 <h3 className="font-bold text-slate-300">{ticket.subject}</h3>
@@ -42,7 +42,7 @@ const Ticket = ({ ticket }) => {
                 </span>
                 <span className="text-xxxs md:text-xxs text-blue-500">{ticket.seen == 1 ? "خوانده شده" : "خوانده نشده"}</span>
             </div>
-        </NavLink>
+        </Link>
     );
 }
 

@@ -1,6 +1,12 @@
 import http from "./http";
 import config from "./config.json";
 
+
+
+export const getUserOrders = async () => {
+    return await http.get(`${config['base_url']}/api/panel/orders`)
+}
+
 export const showOrder = async (order_id) => {
     return await http.get(`${config['base_url']}/api/panel/orders/${order_id}/show`)
 }

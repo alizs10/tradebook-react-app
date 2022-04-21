@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { NavLink, useSearchParams } from 'react-router-dom';
 import { ClipLoader } from 'react-spinners';
 import { updatePayment } from '../../Services/BuyProduct';
 
@@ -53,7 +53,7 @@ const PaymentResult = () => {
                     <span className=' font-bold text-emerald-400 text-xl'>پرداخت موفق</span>
                     <span className=' text-slate-300 text-sm'>از خرید شما متشکریم، حساب شما با موفقیت شارژ شد :)</span>
                     <span className=' text-slate-300 text-sm'>شناسه پرداخت: {Authority}</span>
-                    <button className="px-4 py-2 text-xs text-slate-300 border-2 border-emerald-400 rounded-lg block m-auto">برو به خانه</button>
+                    <NavLink to={"/panel/"} className="px-4 py-2 text-xs text-emerald-400 border-2 border-emerald-400 rounded-lg block m-auto">برو به خانه</NavLink>
                 </div>) : (
                 <div className='flex justify-center text-center mt-8 flex-col gap-y-4 bg-slate-700 rounded-lg mx-2 py-8'>
                     <span>
@@ -62,7 +62,7 @@ const PaymentResult = () => {
                     <span className=' font-bold text-red-400 text-xl'>پرداخت ناموفق</span>
                     <span className=' text-slate-300 text-sm'>عملیات پرداخت با خطا مواجه شد :(</span>
                     <span className=' text-slate-300 text-sm'>شناسه پرداخت: {Authority}</span>
-                    <button className="px-4 py-2 text-xs text-slate-300 border-2 border-red-400 rounded-lg block m-auto">برو به خانه</button>
+                    <NavLink to={"/panel/"} className="px-4 py-2 text-xs text-red-400 border-2 border-red-400 rounded-lg block m-auto">برو به خانه</NavLink>
                 </div>
 
             )

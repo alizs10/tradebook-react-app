@@ -31,6 +31,7 @@ import PanelAbout from '../Panel/PanelAbout';
 import PanelAccounts from '../Panel/PanelAccounts';
 import PanelHome from '../Panel/PanelHome';
 import PanelNotebook from '../Panel/PanelNotebook';
+import PanelOrders from '../Panel/PanelOrders';
 import PanelPlans from '../Panel/PanelPlans';
 import PanelProfile from '../Panel/PanelProfile';
 import PanelTickets from '../Panel/PanelTickets';
@@ -82,6 +83,7 @@ const Tradebook = () => {
                 } />
                 <Route path='profile' element={<PanelProfile />} />
                 <Route path='plans' element={<PanelPlans />} />
+                <Route path='orders' element={<PanelOrders />} />
 
                 <Route path='orders/:order_id' element={<BuyProduct />} />
                 <Route path='payment/' element={<PaymentResult />} />

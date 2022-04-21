@@ -53,7 +53,7 @@ const StopLossAndTakeProfitSection = ({ setUpdatedAt, setTakeProfitsAverage, set
                     <span className="flex gap-x-2 items-center text-sm">
                         <i className="fa-regular fa-hand"></i>
                         <span>میانگین حد ضرر های شما:</span>
-                        <span>{isNumber(stopLossesAverage.value) ? stopLossesAverage.value.toFixed(2) : stopLossesAverage.value} % <span className='text-xxs text-slate-800'>(پراکندگی: {stopLossesAverage.cv})</span></span>
+                        <span>{isNumber(stopLossesAverage.value) ? stopLossesAverage.value.toFixed(2) : stopLossesAverage.value} % <span className='text-xxs text-slate-800'>(پراکندگی: {isNumber(stopLossesAverage.cv) ? stopLossesAverage.cv.toFixed(0) : stopLossesAverage.cv})</span></span>
 
                     </span>
                     <span className="flex gap-x-2 items-center text-xs text-slate-800">
@@ -81,7 +81,7 @@ const StopLossAndTakeProfitSection = ({ setUpdatedAt, setTakeProfitsAverage, set
                     <span className="flex gap-x-2 text-sm items-center">
                         <i className="fa-regular fa-bullseye-arrow"></i>
                         <span>میانگین حد سود های شما:</span>
-                        <span>{isNumber(takeProfitsAverage.value) ? takeProfitsAverage.value.toFixed(2) : takeProfitsAverage.value} % <span className='text-xxs text-slate-800'>(پراکندگی: {takeProfitsAverage.cv})</span></span>
+                        <span>{isNumber(takeProfitsAverage.value) ? takeProfitsAverage.value.toFixed(2) : takeProfitsAverage.value} % <span className='text-xxs text-slate-800'>(پراکندگی: {isNumber(takeProfitsAverage.cv) ? takeProfitsAverage.cv.toFixed(0) : takeProfitsAverage.cv})</span></span>
 
                     </span>
 

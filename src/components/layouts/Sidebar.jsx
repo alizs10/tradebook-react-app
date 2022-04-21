@@ -43,7 +43,14 @@ const Sidebar = ({ handleLogout, toggleSideBar }) => {
                             <NavLink to="/panel/plans" onClick={() => toggleSideBar()}
                                 className={(navData) => navData.isActive ? "bg-slate-700 flex items-center  py-4 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300 border-l-8 border-emerald-400" : "bg-slate-700 flex items-center  py-4 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300"}>
                                 <i className="fa-regular fa-rectangle-pro text-2xl text-slate-400 mx-2"></i>
-                                <span className="text-base text-slate-300">اشتراک (رایگان)</span>
+                                <span className="text-base text-slate-300">اشتراک ها</span>
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink to="/panel/orders" onClick={() => toggleSideBar()}
+                                className={(navData) => navData.isActive ? "bg-slate-700 flex items-center  py-4 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300 border-l-8 border-emerald-400" : "bg-slate-700 flex items-center  py-4 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300"}>
+                                <i className="fa-regular fa-clipboard-list-check text-2xl text-slate-400 mx-2"></i>
+                                <span className="text-base text-slate-300">سفارشات</span>
                             </NavLink>
                         </li>
                         <li>
@@ -68,12 +75,12 @@ const Sidebar = ({ handleLogout, toggleSideBar }) => {
                                 <span className="text-base text-slate-300">درباره ما</span>
                             </NavLink>
                         </li>
-                        {parseInt(user.is_admin) === 1 && (
+                        {user.is_admin == 1 && (
                             <li>
                                 <Link to="/admin/index" onClick={() => toggleSideBar()}
                                     className="bg-slate-700 flex items-center  py-4 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300 border-l-8"
                                 >
-                                    <i className="fa-regular fa-circle-info text-2xl text-slate-400 mx-2"></i>
+                                    <i className="fa-regular fa-user-gear text-2xl text-slate-400 mx-2"></i>
                                     <span className="text-base text-slate-300">پنل ادمین</span>
                                 </Link>
                             </li>

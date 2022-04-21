@@ -12,6 +12,7 @@ import { UsersReducer } from "./Admin/UsersReducer";
 import { HomeReducer } from "./HomeReducer";
 import { NotesReducer } from "./NotesReducer";
 import { NotificationsReducer } from "./NotificationsReducer";
+import { UserOrdersReducer } from "./OrdersReducer";
 import { PairsReducer } from "./PairsReducer";
 import { StatisticsReducer } from "./StatisticsReducer";
 import { TicketsReducer } from "./TicketsReducer";
@@ -34,6 +35,7 @@ export const Reducers = combineReducers({
     Payments: PaymentsReducer,
     AdminPairs: AdminPairsReducer,
     Orders: OrdersReducer,
+    UserOrders: UserOrdersReducer,
     Discounts: DiscountsReducer,
     AdminHomeData: AdminHomeReducer,
     Tickets: TicketsReducer,

@@ -91,7 +91,7 @@ const BuyProduct = () => {
             const { status, data } = await cancelOrder(order.id)
 
             if (status == 200) {
-                navigate("/panel/plans")
+                navigate("/panel/orders")
                 notify("سفارش شما با موفقیت لغو شد", "success")
             }
             setChecking({ ...checking, cancel: false })
