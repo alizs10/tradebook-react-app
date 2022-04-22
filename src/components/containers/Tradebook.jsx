@@ -31,11 +31,11 @@ import PanelAbout from '../Panel/PanelAbout';
 import PanelAccounts from '../Panel/PanelAccounts';
 import PanelHome from '../Panel/PanelHome';
 import PanelNotebook from '../Panel/PanelNotebook';
-import PanelOrders from '../Panel/PanelOrders';
 import PanelPlans from '../Panel/PanelPlans';
 import PanelProfile from '../Panel/PanelProfile';
-import PanelTickets from '../Panel/PanelTickets';
 import ShowTicket from '../Panel/ShowTicket/ShowTicket';
+import PanelOrders from '../Panel/Orders/PanelOrders';
+import PanelTickets from '../Panel/Tickets/PanelTickets';
 
 
 

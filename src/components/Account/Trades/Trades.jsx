@@ -77,7 +77,7 @@ const Trades = () => {
     useEffect(() => {
         if (isEmpty(account)) return;
 
-        if (account.type === 0) {
+        if (account.type == 0) {
             dispatch(setCryptoPairs())
             setAccType('crypto')
         } else {

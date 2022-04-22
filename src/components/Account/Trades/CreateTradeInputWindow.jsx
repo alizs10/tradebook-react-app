@@ -70,7 +70,7 @@ const CreateTradeInputWindow = ({ setDoUserNeedCreateTradeWindow, acc_id, accTyp
 
     }
 
-
+console.log(accType);
 
     const handlePairSelect = (event) => {
         setSelectedOption(event.value);
@@ -150,7 +150,7 @@ const CreateTradeInputWindow = ({ setDoUserNeedCreateTradeWindow, acc_id, accTyp
                                 </select>
                                 {errors.status && (<span className='text-xxs text-red-400'>{errors.status}</span>)}
                             </div>
-                            {(contractStatus == 1 && accType == "forex") ? (
+                            {(accType == "forex") ? (
                                 <div className="clo-span-1 flex flex-col gap-y-1">
                                     <label htmlFor="profit">سود/زیان (دلار)</label>
                                     <input type="text" className="form-input" value={profit} onChange={event => {

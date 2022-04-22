@@ -11,7 +11,7 @@ export const getAllTickets = () => {
 export const createTicket = (ticket) => {
     return async (dispatch, getState) => {
         const tickets = getState().Tickets;
-        const ticketsInstance = [...tickets, ticket]
+        const ticketsInstance = [ticket,...tickets]
 
         await dispatch({ type: "ADD_TICKET", payload: ticketsInstance })
     }
