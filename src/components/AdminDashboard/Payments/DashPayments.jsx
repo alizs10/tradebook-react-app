@@ -9,6 +9,7 @@ import EditPaymentWindow from './EditPaymentWindow';
 import DetailsPaymentWindow from './DetailsPaymentWindow';
 import Payment from './Payment';
 import CreatePaymentWindow from './CreatePaymentWindow';
+import Helmet from 'react-helmet';
 
 const DashPayments = () => {
 
@@ -135,6 +136,9 @@ const DashPayments = () => {
 
     return (
         <Fragment>
+            <Helmet>
+                <title>پرداخت ها - تریدبوک</title>
+            </Helmet>
             <section className="mt-4 mx-2">
 
                 <div className="flex justify-between items-center">
@@ -146,7 +150,7 @@ const DashPayments = () => {
                         <span className={`cursor-pointer text-xxxs lg:text-xs ${filterMode === 'all' ? ' p-2 rounded-lg bg-slate-900' : ''}`} onClick={() => handleFiltringOnPayments('all')}>همه</span>
                         <span className={`cursor-pointer text-xxxs lg:text-xs ${filterMode === 'successful' ? ' p-2 rounded-lg bg-slate-900' : ''}`} onClick={() => handleFiltringOnPayments('successful')}>پرداخت موفق</span>
                         <span className={`cursor-pointer text-xxxs lg:text-xs ${filterMode === 'unsuccessful' ? ' p-2 rounded-lg bg-slate-900' : ''}`} onClick={() => handleFiltringOnPayments('unsuccessful')}>پرداخت ناموفق</span>
-                      
+
 
                     </div>
                 </div>

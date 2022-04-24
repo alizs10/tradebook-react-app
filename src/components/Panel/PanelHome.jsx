@@ -5,6 +5,7 @@ import { ClipLoader } from 'react-spinners';
 import { setHomeData } from '../Redux/Action/HomeData';
 import { getAllNotifications } from '../Redux/Action/Notifications';
 import Alert from '../Alerts/Alert';
+import Helmet from 'react-helmet';
 
 const PanelHome = () => {
 
@@ -41,6 +42,10 @@ const PanelHome = () => {
 
     return (
         <Fragment>
+
+            <Helmet>
+                <title>خانه - تریدبوک</title>
+            </Helmet>
             <div className="mr-2 mt-4">
                 <h2 className="text-slate-300 text-lg">نمای کلی</h2>
             </div>

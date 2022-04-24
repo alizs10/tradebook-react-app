@@ -9,6 +9,7 @@ import AdminPair from './AdminPair';
 import { DestroyAdminPair } from '../../Services/Admin/AdminPairsServices'
 import EditAdminPairWindow from './EditAdminPairWindow';
 import DetailsAdminPairWindow from './DetailsAdminPairWindow';
+import Helmet from 'react-helmet';
 
 const DashAdminPairs = () => {
 
@@ -154,6 +155,9 @@ const DashAdminPairs = () => {
 
     return (
         <Fragment>
+            <Helmet>
+                <title>جفت ارزها - تریدبوک</title>
+            </Helmet>
             <section className="mt-4 mx-2">
 
 

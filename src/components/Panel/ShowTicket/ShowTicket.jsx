@@ -4,6 +4,7 @@ import { useParams } from 'react-router';
 import { getTicket } from '../../Services/TicketsService';
 
 import AnswerInput from './AnswerInput';
+import Helmet from 'react-helmet';
 
 const ShowTicket = () => {
 
@@ -58,7 +59,9 @@ const ShowTicket = () => {
     return (
         !loading && (
             <Fragment>
-
+                <Helmet>
+                    <title>مشاهده تیکت - تریدبوک</title>
+                </Helmet>
                 <div className="mx-2 mt-4 flex justify-between border-b-2 pb-2">
                     <h2 className="text-slate-300 text-lg">{`مشاهده تیکت - "${showTicket.subject}" (${status == 0 ? "باز" : "بسته"})`}</h2>
                     <Link to={'/panel/tickets'} className="rounded-lg px-3 py-2 text-sm bg-slate-800 flex gap-x-2 items-center">

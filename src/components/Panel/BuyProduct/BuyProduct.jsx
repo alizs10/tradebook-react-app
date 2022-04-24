@@ -1,5 +1,6 @@
 import { isEmpty } from 'lodash';
 import React, { Fragment, useEffect, useState } from 'react';
+import Helmet from 'react-helmet';
 import { useNavigate, useParams } from 'react-router';
 import { NavLink } from 'react-router-dom';
 import { BeatLoader } from 'react-spinners';
@@ -112,13 +113,13 @@ const BuyProduct = () => {
 
         try {
 
-            const {status, data} = await storePayment(order.id)
+            const { status, data } = await storePayment(order.id)
             let redirectTo = data.action;
-            
+
             window.location.href = redirectTo;
-            
+
         } catch (error) {
-            
+
         }
 
 
@@ -126,7 +127,9 @@ const BuyProduct = () => {
 
     return (
         <Fragment>
-
+            <Helmet>
+                <title>ثبت سفارش - تریدبوک</title>
+            </Helmet>
             <section className="py-2 mt-3">
 
                 <div className="bg-slate-800 text-slate-400 text-xs md:text-sm flex gap-x-2">

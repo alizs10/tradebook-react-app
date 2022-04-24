@@ -9,6 +9,7 @@ import EditDiscountWindow from './EditDiscountWindow';
 import DetailsDiscountWindow from './DetailsDiscountWindow';
 import Discount from './Discount';
 import CreateDiscountWindow from './CreateDiscountWindow';
+import Helmet from 'react-helmet';
 
 const DashDiscounts = () => {
 
@@ -150,6 +151,9 @@ const DashDiscounts = () => {
 
     return (
         <Fragment>
+            <Helmet>
+                <title>کدهای تخفیف - تریدبوک</title>
+            </Helmet>
             <section className="mt-4 mx-2">
 
                 <div className="flex justify-between items-center">

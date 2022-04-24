@@ -8,7 +8,7 @@ import { DestroyUser } from '../../Services/Admin/UsersServices'
 import EditUserWindow from './EditUserWindow';
 import DetailsUserWindow from './DetailsUserWindow';
 import User from './User';
-
+import Helmet from 'react-helmet';
 const DashUsers = () => {
 
     const users = useSelector(state => state.Users)
@@ -131,6 +131,10 @@ const DashUsers = () => {
 
     return (
         <Fragment>
+
+            <Helmet>
+                <title>کاربران - تریدبوک</title>
+            </Helmet>
             <section className="mt-4 mx-2">
 
                 <div className="flex justify-between items-center">

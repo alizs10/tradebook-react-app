@@ -8,9 +8,20 @@ const SnapshotWindow = ({ statistics, setDidUserTakeSnapshot }) => {
     const ref = useRef(null)
     const [image, setImage] = useState(null)
     const [date, setDate] = useState("")
-
+    
     useEffect(() => {
-        domtoimage.toPng(ref.current).then(function (dataUrl) {
+        const node = ref.current;
+        const scale = 750 / node.offsetWidth;
+        domtoimage.toPng(node, {
+            height: node.offsetHeight * scale,
+            width: node.offsetWidth * scale,
+            style: {
+            transform: "scale(" + scale + ")",
+            transformOrigin: "top left",
+            width: node.offsetWidth + "px",
+            height: node.offsetHeight + "px"
+            }
+        }).then(function (dataUrl) {
             const dateInstance = new Date();
             const now = dateInstance.getFullYear() + "-" + ("0" + (dateInstance.getMonth() + 1)).slice(-2) + "-" +
                 ("0" + dateInstance.getDate()).slice(-2) + "-" + ("0" + dateInstance.getHours()).slice(-2) + "-" + ("0" + dateInstance.getMinutes()).slice(-2) + "-" + ("0" + dateInstance.getSeconds()).slice(-2);

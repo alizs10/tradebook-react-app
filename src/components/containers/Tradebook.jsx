@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { Outlet, Route, Routes } from 'react-router';
+import { Navigate, Outlet, Route, Routes } from 'react-router';
 import AccountMain from '../Account/AccountMain';
 import Statistics from '../Account/Statistics/Statistics';
 import Trades from '../Account/Trades/Trades';
@@ -36,6 +36,8 @@ import PanelProfile from '../Panel/PanelProfile';
 import ShowTicket from '../Panel/ShowTicket/ShowTicket';
 import PanelOrders from '../Panel/Orders/PanelOrders';
 import PanelTickets from '../Panel/Tickets/PanelTickets';
+import NotFound404 from '../Other/404';
+import LogoLayout from '../layouts/LogoLayout';
 
 
 
@@ -105,6 +107,7 @@ const Tradebook = () => {
                 <Route path='tickets/:ticket_id/show' element={<ShowTicket />} />
 
                 <Route path='about' element={<PanelAbout />} />
+                <Route path='*' exact={true} element={<Navigate to={"/404"} />} />
 
             </Route>
 
@@ -132,7 +135,7 @@ const Tradebook = () => {
                 }></Route>
             </Route>
 
-            <Route path='admin' element={
+            <Route path='/admin' element={
                 <AuthCkeck>
                     <AdminCheck>
                         <AdmminDashLayout>
@@ -143,7 +146,7 @@ const Tradebook = () => {
             }>
 
 
-                <Route path='index' element={
+                <Route path='/admin' element={
                     <DashHome />
                 } />
                 <Route path='products' element={
@@ -170,8 +173,12 @@ const Tradebook = () => {
                 <Route path='tickets' element={<DashAdminTickets />} />
                 <Route path='tickets/:ticket_id/show' element={<ShowAdminTicket />} />
 
+                <Route path='*' exact={true} element={<Navigate to={"/404"} />} />
 
             </Route>
+            <Route path='*' exact={true} element={<Navigate to={"/404"} />} />
+
+            <Route path='404' exact={true} element={ <LogoLayout><NotFound404 /></LogoLayout>} />
 
         </Routes>
 

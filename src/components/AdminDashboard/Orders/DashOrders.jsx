@@ -9,6 +9,7 @@ import EditOrderWindow from './EditOrderWindow';
 import DetailsOrderWindow from './DetailsOrderWindow';
 import Order from './Order';
 import CreateOrderWindow from './CreateOrderWindow';
+import Helmet from 'react-helmet';
 
 const DashOrders = () => {
 
@@ -149,6 +150,9 @@ const DashOrders = () => {
 
     return (
         <Fragment>
+        <Helmet>
+        <title>سفارشات - تریدبوک</title>
+    </Helmet>
             <section className="mt-4 mx-2">
 
                 <div className="flex justify-between items-center">

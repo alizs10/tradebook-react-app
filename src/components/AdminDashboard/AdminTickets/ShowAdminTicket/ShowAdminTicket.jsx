@@ -4,6 +4,8 @@ import { changeTicketStatus, showAdminTicket } from '../../../Services/Admin/Adm
 import { useParams } from 'react-router';
 import AnswerInput from './AnswerInput';
 import { notify } from '../../../Services/alerts';
+import Helmet from 'react-helmet';
+
 const ShowAdminTicket = () => {
 
     const [showTicket, setShowTicket] = useState([]);
@@ -79,7 +81,9 @@ const ShowAdminTicket = () => {
     return (
         !loading && (
             <Fragment>
-
+                <Helmet>
+                    <title>مشاهده تیکت - تریدبوک</title>
+                </Helmet>
                 <div className="mx-2 mt-4 flex justify-between border-b-2 pb-2">
                     <h2 className="text-slate-300 text-lg">{`مشاهده تیکت - "${showTicket.subject}" (${status == 0 ? "باز" : "بسته"})`}</h2>
 

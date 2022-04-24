@@ -7,6 +7,7 @@ import { notify } from '../../Services/alerts';
 import { UpdateProfile } from '../../Services/UserServices';
 import { profileValidation } from '../../Services/validation';
 import EditProfileWindow from './EditProfileWindow';
+import Helmet from 'react-helmet';
 
 const DashProfile = () => {
 
@@ -84,6 +85,9 @@ const DashProfile = () => {
 
     return (
         <Fragment>
+            <Helmet>
+                <title>پروفایل کاربری - تریدبوک</title>
+            </Helmet>
             <section className="mt-4 mx-2">
 
                 <div className="flex justify-between items-center">
@@ -110,7 +114,7 @@ const DashProfile = () => {
 
                         </div>
 
-                        {user.profile_photo_path && (<img src={`http://localhost:8000/${user.profile_photo_path}`} alt="avatar" className="rounded-full w-12 h-12" />)}
+                        {user.profile_photo_path && (<img src={`http://localhost:8000/${user.profile_photo_path}`} alt="avatar" className="rounded-full w-36 h-36" />)}
                     </div>
 
                     <div className="flex gap-x-2 mt-4 mr-2">

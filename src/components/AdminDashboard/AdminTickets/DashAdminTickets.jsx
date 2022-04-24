@@ -6,6 +6,7 @@ import Pagination from './Pagination';
 import AdminTicket from './AdminTicket';
 import { DeleteAdminTicket, getAllAdminTickets } from '../../Redux/Action/Admin/AdminTickets';
 import { destroyAdminTicket } from '../../Services/Admin/AdminTicketsService';
+import Helmet from 'react-helmet';
 
 const DashAdminTickets = () => {
 
@@ -20,8 +21,8 @@ const DashAdminTickets = () => {
     const [isUserSearching, setIsUserSearching] = useState(false);
     const [adminTicket, setAdminTicket] = useState({});
     const [filterMode, setFilterMode] = useState("all");
-  
-  
+
+
 
     const dispatch = useDispatch()
 
@@ -114,7 +115,7 @@ const DashAdminTickets = () => {
         }
     }
 
-   
+
 
     const handleDelAdminTicket = (admin_ticket_id) => {
         confirm('حذف تیکت', 'آیا می خواهید تیکت مورد نظر را حذف کنید؟.',
@@ -141,6 +142,9 @@ const DashAdminTickets = () => {
 
     return (
         <Fragment>
+            <Helmet>
+                <title>تیکت ها - تریدبوک</title>
+            </Helmet>
             <section className="mt-4 mx-2">
 
 
@@ -210,7 +214,7 @@ const DashAdminTickets = () => {
 
                 </section>
             </section>
-            
+
         </Fragment>
     );
 }

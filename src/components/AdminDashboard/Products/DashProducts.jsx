@@ -9,6 +9,7 @@ import Plan from './Plan';
 import {DestroyPlan} from '../../Services/Admin/PlansServices'
 import EditPlanWindow from './EditPlanWindow';
 import DetailsPlanWindow from './DetailsPlanWindow';
+import Helmet from 'react-helmet';
 
 const DashProducts = () => {
 
@@ -111,6 +112,9 @@ const DashProducts = () => {
 
     return (
         <Fragment>
+        <Helmet>
+        <title>محصولات - تریدبوک</title>
+    </Helmet>
             <section className="mt-4 mx-2">
 
                 <h2 className="text-base pb-1 text-gray-600">محصولات</h2>

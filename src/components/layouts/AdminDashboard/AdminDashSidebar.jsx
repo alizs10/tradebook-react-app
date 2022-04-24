@@ -11,15 +11,15 @@ const AdminDashSidebar = () => {
                 <div className="mt-4 mx-2 pb-4">
                     <ul className="grid gap-y-2">
                         <li>
-                            <NavLink to="index"
+                            <NavLink to="/admin"
                                 className={(navData) => navData.isActive ? "py-4 px-2 navLinkActive rounded-md shadow-md flex items-center bg-white dark:bg-slate-800 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition-all ease-out duration-300" : "py-4 px-2 rounded-md shadow-md flex items-center bg-white dark:bg-slate-800 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition-all ease-out duration-300"}
-                            >
+                            end>
                                 <i className="fa-light fa-house text-xl text-gray-500 dark:text-slate-400"></i>
                                 <span className="text-sm mr-2 text-gray-700 dark:text-slate-500">خانه</span>
                             </NavLink>
                         </li>
                         <li>
-                            <NavLink to="statistics"
+                            <NavLink to="statistics/"
                                 className={(navData) => navData.isActive ? "py-4 px-2 navLinkActive rounded-md shadow-md flex items-center bg-white dark:bg-slate-800 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition-all ease-out duration-300" : "py-4 px-2 rounded-md shadow-md flex items-center bg-white dark:bg-slate-800 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition-all ease-out duration-300"}
                             >
                                 <i className="fa-light fa-chart-mixed text-xl text-gray-500 dark:text-slate-400"></i>

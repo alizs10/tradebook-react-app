@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { ClipLoader } from 'react-spinners';
 import { setAdminHomeData } from '../Redux/Action/Admin/AdminHomeData';
 import { getAllPayments } from '../Redux/Action/Admin/Payments';
+import Helmet from 'react-helmet';
 
 const DashHome = () => {
 
@@ -40,7 +41,9 @@ const DashHome = () => {
 
     return (
         <Fragment>
-
+            <Helmet>
+                <title>پنل ادمین - تریدبوک</title>
+            </Helmet>
             <section className="mx-2 mt-4 grid grid-cols-2 lg:grid-cols-3 gap-x-2 gap-y-4">
 
                 <div className="grid grid-cols-2 items-center rounded-lg shadow bg-white dark:bg-slate-800 p-1 lg:h-20">
