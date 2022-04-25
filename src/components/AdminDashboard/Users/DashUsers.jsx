@@ -210,7 +210,7 @@ const DashUsers = () => {
             {!doUserNeedDetailsUserWindow ? null : (<DetailsUserWindow setDoUserNeedDetailsUserWindow={setDoUserNeedDetailsUserWindow} user={user} handleDelUser={handleDelUser} setDoUserNeedEditUserWindow={setDoUserNeedEditUserWindow} />)}
             {!doUserNeedEditUserWindow ? null : (<EditUserWindow setDoUserNeedEditUserWindow={setDoUserNeedEditUserWindow} user={user} />)}
 
-            {!blurConditions ? null : (<div className="fixed top-16 left-0 w-full h-screen md:w-full backdrop-blur-lg bg-slate-800/70 z-30" onClick={() => handleCloseOpenWindow()}></div>
+            {!blurConditions ? null : (<div className="fixed top-16 left-0 w-full md:w-3/4 h-screen backdrop-blur-lg bg-slate-800/70 z-20" onClick={() => handleCloseOpenWindow()}></div>
             )}
         </Fragment>
     );

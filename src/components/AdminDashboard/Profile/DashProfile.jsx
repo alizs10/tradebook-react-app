@@ -132,7 +132,7 @@ const DashProfile = () => {
 
             {doUserNeedResetPasswordWindow && (<ResetPasswordWindow setDoUserNeedResetPasswordWindow={setDoUserNeedResetPasswordWindow} />)}
             {doUserNeedEditProfileWindow && (<EditProfileWindow errors={errors} name={name} email={email} mobile={mobile} setName={setName} setEmail={setEmail} setMobile={setMobile} setProfilePath={setProfilePath} handleUpdateProfile={handleUpdateProfile} setDoUserNeedEditProfileWindow={setDoUserNeedEditProfileWindow} />)}
-            {blurConditions && (<div className="fixed top-16 left-0 w-full h-screen md:w-full backdrop-blur-lg bg-slate-800/70 z-30" onClick={() => handleCloseOpenWindow()}></div>)}
+            {blurConditions && (<div className="fixed top-16 left-0 w-full md:w-3/4 h-screen backdrop-blur-lg bg-slate-800/70 z-20" onClick={() => handleCloseOpenWindow()}></div>)}
         </Fragment>
     );
 }

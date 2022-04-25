@@ -38,7 +38,7 @@ const PanelLayout = ({ children }) => {
             return;
         }
 
-        if (width < 600) {
+        if (width < 768) {
             setDoUserWantSidebar(!doUserWantSidebar)
         }
     }
@@ -51,9 +51,9 @@ const PanelLayout = ({ children }) => {
     }, [user])
 
     useEffect(() => {
-        if (width > 600 && !doUserWantSidebar) {
+        if (width > 768 && !doUserWantSidebar) {
             toggleSideBar(true)
-        } else if (width < 600 && doUserWantSidebar) {
+        } else if (width < 768 && doUserWantSidebar) {
             toggleSideBar(false)
         }
     }, [width])

@@ -14,7 +14,7 @@ const Sidebar = ({ handleLogout, toggleSideBar }) => {
 
     return (
         <Fragment>
-            <nav className=" md:block w-3/4 bg-slate-800 h-screen fixed right-0 md:w-1/4 z-50">
+            <nav className="md:block w-1/2 pb-4 bg-slate-800 h-screen fixed right-0 md:w-1/4 z-50 overflow-scroll no-scrollbar">
 
                 <div className="mx-2 py-2">
                     <ul className="flex flex-col gap-y-2">
@@ -98,25 +98,25 @@ const Sidebar = ({ handleLogout, toggleSideBar }) => {
                     <footer className="text-center mt-8 flex flex-col gap-y-8">
 
                         <div className="flex justify-evenly">
-                            <div className="w-12">
+                            <div className="w-10 md:w-12">
                                 <img src={zarinpal_logo.default} alt='zarinpal-logo' />
                             </div>
-                            <div className="flex flex-col gap-y-6">
-                                <span className="text-xs text-slate-300">ما را در شبکه های اجتماعی دنبال کنید</span>
+                            <div className="flex flex-col gap-y-4 md:gap-y-6">
+                                <span className="text-xxs md:text-xs text-slate-300">ما را در شبکه های اجتماعی دنبال کنید</span>
                                 <div className="grid grid-cols-4 text-right">
                                     <a href="https://t.me/alizs10" target="_blank"
-                                        className="col-span-1   text-blue-400 text-lg">
+                                        className="col-span-1 text-blue-400 text-sm md:text-lg">
                                         <i className="fa-brands fa-telegram text-2xl mr-1"></i>
                                     </a>
                                     <a href="https://instagram.com/alizs10" target="_blank"
-                                        className="col-span-1 text-pink-600 text-lg">
+                                        className="col-span-1 text-pink-600 text-sm md:text-lg">
                                         <i className="fa-brands fa-instagram text-2xl mr-1"></i>
                                     </a>
                                     <a href="https://wa.me/09392983010" target="_blank"
-                                        className="col-span-1 text-green-400 text-lg">
+                                        className="col-span-1 text-green-400 text-sm md:text-lg">
                                         <i className="fa-brands fa-whatsapp text-2xl mr-1"></i></a>
                                     <a href="mailto:alizswork@gmail.com" target="_blank"
-                                        className="col-span-1 text-red-600 text-lg">
+                                        className="col-span-1 text-red-600 text-sm md:text-lg">
                                         <i className="fa-brands fa-google text-2xl mr-1"></i></a>
                                 </div>
                             </div>

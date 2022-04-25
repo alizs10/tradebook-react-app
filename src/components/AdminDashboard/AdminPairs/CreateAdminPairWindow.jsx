@@ -44,7 +44,7 @@ const CreateAdminPairWindow = ({ setDoUserNeedCreateAdminPairWindow }) => {
     }
 
     return (
-        <section className="absolute top-4 z-40 p-2 w-full">
+        <section className="fixed top-20 z-30 p-2 w-full md:w-3/4">
 
             <div
                 className="flex flex-col gap-y-1 mx-2 rounded-lg shadow-lg bg-slate-100 dark:bg-slate-900 dark:text-white overflow-hidden">
