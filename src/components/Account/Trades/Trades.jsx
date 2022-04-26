@@ -24,6 +24,7 @@ import UpdatePriceWindow from './UpdatePriceWindow';
 import { CSVLink } from 'react-csv';
 import DateRangePickerWindow from './DateRangePickerWindow';
 
+import { AnimatePresence, motion } from 'framer-motion';
 
 const Trades = () => {
 
@@ -386,14 +387,15 @@ const Trades = () => {
                 </section>
             </section>
 
+            <AnimatePresence>
+                {doUserNeedUpdatePriceWindow && (<UpdatePriceWindow setDoUserNeedUpdatePriceWindow={setDoUserNeedUpdatePriceWindow} trades={trades} account_id={account_id} />)}
+                {doUserNeedCreateTradeWindow && (<CreateTradeInputWindow setDoUserNeedCreateTradeWindow={setDoUserNeedCreateTradeWindow} acc_id={account_id} accType={accType} />)}
+                {doUserNeedEditTradeWindow && (<EditTradeInputWindow setDoUserNeedEditTradeWindow={setDoUserNeedEditTradeWindow} trade={trade} acc_id={account_id} accType={accType} />)}
+                {doUserWantTradeDetails && (<TradeDetailsWindow setDoUserWantTradeDetails={setDoUserWantTradeDetails} trade={trade} handleDelTrade={handleDelTrade} handleEditTrade={handleEditTrade} />)}
 
-            {!doUserNeedUpdatePriceWindow ? null : (<UpdatePriceWindow setDoUserNeedUpdatePriceWindow={setDoUserNeedUpdatePriceWindow} trades={trades} account_id={account_id} />)}
-            {!doUserNeedCreateTradeWindow ? null : (<CreateTradeInputWindow setDoUserNeedCreateTradeWindow={setDoUserNeedCreateTradeWindow} acc_id={account_id} accType={accType} />)}
-            {!doUserNeedEditTradeWindow ? null : (<EditTradeInputWindow setDoUserNeedEditTradeWindow={setDoUserNeedEditTradeWindow} trade={trade} acc_id={account_id} accType={accType} />)}
-            {!doUserWantTradeDetails ? null : (<TradeDetailsWindow setDoUserWantTradeDetails={setDoUserWantTradeDetails} trade={trade} handleDelTrade={handleDelTrade} handleEditTrade={handleEditTrade} />)}
-
-            {!blurConditions ? null : (<div className="fixed top-0 left-0 w-full h-screen md:w-full backdrop-blur-lg bg-slate-800/70 z-30" onClick={() => handleCloseOpenWindow()}></div>
-            )}
+                {blurConditions && (<motion.div exit={{ opacity: 0 }} className="fixed top-0 left-0 w-full h-screen md:w-full backdrop-blur-lg bg-slate-800/70 z-30" onClick={() => handleCloseOpenWindow()}></motion.div>
+                )}
+            </AnimatePresence>
         </Fragment>
     );
 }

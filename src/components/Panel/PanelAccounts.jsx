@@ -5,8 +5,7 @@ import { getAllAccounts } from '../Redux/Action/Accounts';
 import Account from './Account';
 import CreateAccWin from './CreateAccWin';
 import EditAccWin from './EditAccWin';
-
-
+import { AnimatePresence, motion } from 'framer-motion';
 
 const PanelAccounts = () => {
 
@@ -69,10 +68,14 @@ const PanelAccounts = () => {
 
             </div>
 
-            {!doUserWantCreateAccWin ? null : (<CreateAccWin setDoUserWantCreateAccWin={setDoUserWantCreateAccWin} />)}
+            <AnimatePresence>
+                {doUserWantCreateAccWin && (
+                    <CreateAccWin setDoUserWantCreateAccWin={setDoUserWantCreateAccWin} />
+                )}
+            </AnimatePresence>
             {!doUserWantEditAccWin ? null : (<EditAccWin acc={acc} setDoUserWantEditAccWin={setDoUserWantEditAccWin} />)}
 
-            {!blurConditions ? null : (<div className="fixed top-0 left-0 w-3/4 h-screen md:w-full backdrop-blur-lg bg-slate-800/70 z-30" onClick={() => handleCloseOpenWindow()}></div>)}
+            {blurConditions && (<motion.div  initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed top-0 left-0 w-full md:w-3/4 h-screen md:w-full backdrop-blur-lg bg-slate-800/70 z-30" onClick={() => handleCloseOpenWindow()}></motion.div>)}
         </Fragment>
     );
 }

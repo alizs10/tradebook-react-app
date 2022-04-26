@@ -8,6 +8,7 @@ import CreateTicketWindow from './CreateTicketWindow';
 import Pagination from './Pagination';
 import Ticket from './Ticket';
 
+import { AnimatePresence, motion } from 'framer-motion';
 
 const PanelTickets = () => {
 
@@ -114,8 +115,10 @@ const PanelTickets = () => {
                 <Pagination currentPage={currentPage} pages={pagination.pages} setCurrentPage={setCurrentPage} total={pagination.total} startIndex={pagination.startIndex} endIndex={pagination.endIndex} />
             )}
 
+            <AnimatePresence>
             {doUserWantCreateTicketWindow && <CreateTicketWindow setDoUserWantCreateTicketWindow={setDoUserWantCreateTicketWindow} />}
-            {!doUserWantCreateTicketWindow ? null : (<div className="fixed top-0 left-0 w-3/4 h-screen md:w-full backdrop-blur-lg bg-slate-800/70 z-30" onClick={() => setDoUserWantCreateTicketWindow(false)}></div>)}
+            {doUserWantCreateTicketWindow && (<motion.div exit={{ opacity: 0 }} className="fixed top-0 left-0 w-full md:w-3/4 h-screen md:w-full backdrop-blur-lg bg-slate-800/70 z-30" onClick={() => setDoUserWantCreateTicketWindow(false)}></motion.div>)}
+            </AnimatePresence>
         </Fragment>
     );
 }

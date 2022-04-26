@@ -1,13 +1,14 @@
 import React from 'react';
 
-
+import { motion } from 'framer-motion';
 
 
 const DateRangePickerWindow = ({ setStartDate, setEndDate, handleDateFilter }) => {
 
 
     return (
-        <section className="absolute mt-4 top-4 left-0 rounded-lg overflow-hidden" >
+        <motion.div key="modal"
+            initial={{ opacity: 0 }} animate={{ y: [0, 25, 0], opacity: 1 }} exit={{ opacity: 0 }} className="absolute mt-16 top-4 left-0 z-30 rounded-lg overflow-hidden" >
 
 
             <div className="bg-slate-700 drop-shadow-lg text-slate-300 flex flex-col gap-y-2 p-2">
@@ -21,7 +22,7 @@ const DateRangePickerWindow = ({ setStartDate, setEndDate, handleDateFilter }) =
             </div>
 
 
-        </section>
+        </motion.div>
     );
 }
 

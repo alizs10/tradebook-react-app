@@ -3,6 +3,8 @@ import domtoimage from 'dom-to-image';
 import { BeatLoader } from 'react-spinners';
 import { notify } from '../Services/alerts';
 
+import { motion } from 'framer-motion';
+
 const SnapshotWindow = ({ statistics, setDidUserTakeSnapshot }) => {
     const [loading, setLoading] = useState(true);
     const ref = useRef(null)
@@ -39,7 +41,8 @@ const SnapshotWindow = ({ statistics, setDidUserTakeSnapshot }) => {
 
 
     return (
-        <section
+        <motion.div key="modal"
+        initial={{ opacity: 0 }} animate={{ y: 25, x: "-50%", opacity: 1 }} exit={{ opacity: 0 }}
             className="absolute top-0 left-1/2 w-4/5 transform -translate-x-1/2 mt-4 z-50 rounded-lg drop-shadow-lg bg-slate-600">
             <div className="w-full text-slate-100 p-2 flex flex-col gap-y-2">
 
@@ -115,7 +118,7 @@ const SnapshotWindow = ({ statistics, setDidUserTakeSnapshot }) => {
 
 
             </div>
-        </section >
+        </motion.div>
     );
 }
 

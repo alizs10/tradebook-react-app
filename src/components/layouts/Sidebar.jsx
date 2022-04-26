@@ -20,68 +20,68 @@ const Sidebar = ({ handleLogout, toggleSideBar }) => {
                     <ul className="flex flex-col gap-y-2">
                         <li>
                             <NavLink to="/panel/" onClick={() => toggleSideBar()}
-                                className={(navData) => navData.isActive ? "bg-slate-700 flex items-center  py-4 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300 border-l-8 border-emerald-400" : "bg-slate-700 flex items-center  py-4 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300"}>
-                                <i className="fa-regular fa-home text-2xl text-slate-400 mx-2"></i>
-                                <span className="text-base text-slate-300">خانه</span>
+                                className={(navData) => navData.isActive ? "bg-slate-700 flex items-center  py-3 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300 border-l-8 border-emerald-400" : "bg-slate-700 flex items-center  py-3 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300"}>
+                                <i className="fa-regular fa-home text-xl text-slate-400 mx-2"></i>
+                                <span className="text-sm text-slate-300">خانه</span>
                             </NavLink>
                         </li>
                         <li>
                             <NavLink to="/panel/accounts" onClick={(e) => handleProtectedNavLink(e)}
-                                className={(navData) => navData.isActive ? "bg-slate-700 flex items-center  py-4 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300 border-l-8 border-emerald-400" : "bg-slate-700 flex items-center  py-4 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300"}>
-                                <i className="fa-regular fa-rectangle-history text-2xl text-slate-400 mx-2"></i>
-                                <span className="text-base text-slate-300">حساب ها</span>
+                                className={(navData) => navData.isActive ? "bg-slate-700 flex items-center  py-3 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300 border-l-8 border-emerald-400" : "bg-slate-700 flex items-center  py-3 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300"}>
+                                <i className="fa-regular fa-rectangle-history text-xl text-slate-400 mx-2"></i>
+                                <span className="text-sm text-slate-300">حساب ها</span>
                             </NavLink>
                         </li>
                         <li>
                             <NavLink to="/panel/profile" onClick={() => toggleSideBar()}
-                                className={(navData) => navData.isActive ? "bg-slate-700 flex items-center  py-4 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300 border-l-8 border-emerald-400" : "bg-slate-700 flex items-center  py-4 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300"}>
-                                <i className="fa-regular fa-address-card text-2xl text-slate-400 mx-2"></i>
-                                <span className="text-base text-slate-300">پروفایل</span>
+                                className={(navData) => navData.isActive ? "bg-slate-700 flex items-center  py-3 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300 border-l-8 border-emerald-400" : "bg-slate-700 flex items-center  py-3 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300"}>
+                                <i className="fa-regular fa-address-card text-xl text-slate-400 mx-2"></i>
+                                <span className="text-sm text-slate-300">پروفایل</span>
                             </NavLink>
                         </li>
                         <li>
                             <NavLink to="/panel/plans" onClick={() => toggleSideBar()}
-                                className={(navData) => navData.isActive ? "bg-slate-700 flex items-center  py-4 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300 border-l-8 border-emerald-400" : "bg-slate-700 flex items-center  py-4 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300"}>
-                                <i className="fa-regular fa-rectangle-pro text-2xl text-slate-400 mx-2"></i>
-                                <span className="text-base text-slate-300">اشتراک ها</span>
+                                className={(navData) => navData.isActive ? "bg-slate-700 flex items-center  py-3 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300 border-l-8 border-emerald-400" : "bg-slate-700 flex items-center  py-3 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300"}>
+                                <i className="fa-regular fa-rectangle-pro text-xl text-slate-400 mx-2"></i>
+                                <span className="text-sm text-slate-300">اشتراک ها</span>
                             </NavLink>
                         </li>
                         <li>
                             <NavLink to="/panel/orders" onClick={() => toggleSideBar()}
-                                className={(navData) => navData.isActive ? "bg-slate-700 flex items-center  py-4 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300 border-l-8 border-emerald-400" : "bg-slate-700 flex items-center  py-4 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300"}>
-                                <i className="fa-regular fa-clipboard-list-check text-2xl text-slate-400 mx-2"></i>
-                                <span className="text-base text-slate-300">سفارشات</span>
+                                className={(navData) => navData.isActive ? "bg-slate-700 flex items-center  py-3 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300 border-l-8 border-emerald-400" : "bg-slate-700 flex items-center  py-3 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300"}>
+                                <i className="fa-regular fa-clipboard-list-check text-xl text-slate-400 mx-2"></i>
+                                <span className="text-sm text-slate-300">سفارشات</span>
                             </NavLink>
                         </li>
                         <li>
                             <NavLink to="/panel/notebook" onClick={(e) => handleProtectedNavLink(e)}
-                                className={(navData) => navData.isActive ? "bg-slate-700 flex items-center  py-4 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300 border-l-8 border-emerald-400" : "bg-slate-700 flex items-center  py-4 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300"}>
-                                <i className="fa-regular fa-notes text-2xl text-slate-400 mx-2"></i>
-                                <span className="text-base text-slate-300">یادداشت ها</span>
+                                className={(navData) => navData.isActive ? "bg-slate-700 flex items-center  py-3 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300 border-l-8 border-emerald-400" : "bg-slate-700 flex items-center  py-3 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300"}>
+                                <i className="fa-regular fa-notes text-xl text-slate-400 mx-2"></i>
+                                <span className="text-sm text-slate-300">یادداشت ها</span>
                             </NavLink>
                         </li>
                         <li>
                             <NavLink to="/panel/tickets" onClick={(e) => handleProtectedNavLink(e)}
-                                className={(navData) => navData.isActive ? "bg-slate-700 flex items-center  py-4 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300 border-l-8 border-emerald-400" : "bg-slate-700 flex items-center  py-4 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300"}>
-                                <i className="fa-regular fa-ticket-simple text-2xl text-slate-400 mx-2"></i>
-                                <span className="text-base text-slate-300">تیکت ها</span>
+                                className={(navData) => navData.isActive ? "bg-slate-700 flex items-center  py-3 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300 border-l-8 border-emerald-400" : "bg-slate-700 flex items-center  py-3 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300"}>
+                                <i className="fa-regular fa-ticket-simple text-xl text-slate-400 mx-2"></i>
+                                <span className="text-sm text-slate-300">تیکت ها</span>
                             </NavLink>
                         </li>
                         <li>
                             <NavLink to="/panel/about" onClick={() => toggleSideBar()}
-                                className={(navData) => navData.isActive ? "bg-slate-700 flex items-center  py-4 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300 border-l-8 border-emerald-400" : "bg-slate-700 flex items-center  py-4 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300"}
+                                className={(navData) => navData.isActive ? "bg-slate-700 flex items-center  py-3 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300 border-l-8 border-emerald-400" : "bg-slate-700 flex items-center  py-3 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300"}
                             >
-                                <i className="fa-regular fa-circle-info text-2xl text-slate-400 mx-2"></i>
-                                <span className="text-base text-slate-300">درباره ما</span>
+                                <i className="fa-regular fa-circle-info text-xl text-slate-400 mx-2"></i>
+                                <span className="text-sm text-slate-300">درباره ما</span>
                             </NavLink>
                         </li>
                         {user.is_admin == 1 && (
                             <li>
                                 <Link to="/admin" onClick={() => toggleSideBar()}
-                                    className="bg-slate-700 flex items-center  py-4 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300 border-l-8"
+                                    className="bg-slate-700 flex items-center  py-3 drop-shadow-lg rounded-lg hover:bg-slate-800 transition ease-out duration-300 border-l-8"
                                 >
-                                    <i className="fa-regular fa-user-gear text-2xl text-slate-400 mx-2"></i>
-                                    <span className="text-base text-slate-300">پنل ادمین</span>
+                                    <i className="fa-regular fa-user-gear text-xl text-slate-400 mx-2"></i>
+                                    <span className="text-sm text-slate-300">پنل ادمین</span>
                                 </Link>
                             </li>
                         )}
@@ -89,8 +89,8 @@ const Sidebar = ({ handleLogout, toggleSideBar }) => {
                         <li className="mt-4">
                             <button onClick={handleLogout}
                                 className="flex items-center text-slate-400 hover:text-red-400 transition ease-out duration-300">
-                                <i className="fa-light fa-right-from-bracket text-2xl mx-2"></i>
-                                <span className="text-base">خروج</span>
+                                <i className="fa-light fa-right-from-bracket text-xl mx-2"></i>
+                                <span className="text-sm">خروج</span>
                             </button>
                         </li>
                     </ul>

@@ -1,5 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+
+import { motion } from 'framer-motion';
 
 const Ticket = ({ ticket }) => {
 
@@ -25,8 +27,14 @@ const Ticket = ({ ticket }) => {
         default:
             break;
     }
+
+    const navigate = useNavigate()
+
+    const handleShowTicket = (to) => {
+        navigate(to)
+    }
     return (
-        <Link to={`${ticket.id}/show`} className={`ticket ${ticket.status == 1 && "border-emerald-400"}`}>
+        <motion.div animate={{ opacity: [0.7, 1], x: [25, 0] }} className={`ticket ${ticket.status == 1 && "border-emerald-400"}`} onClick={() => handleShowTicket(`${ticket.id}/show`)}>
 
             <div className="flex justify-between">
                 <h3 className="font-bold text-slate-300">{ticket.subject}</h3>
@@ -42,7 +50,7 @@ const Ticket = ({ ticket }) => {
                 </span>
                 <span className="text-xxxs md:text-xxs text-blue-500">{ticket.seen == 1 ? "خوانده شده" : "خوانده نشده"}</span>
             </div>
-        </Link>
+        </motion.div>
     );
 }
 

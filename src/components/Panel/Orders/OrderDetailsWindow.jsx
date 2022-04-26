@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import { motion } from 'framer-motion';
+
 const OrderDetailsWindow = ({ order, setDoUserWantOrderDetailsWindow }) => {
 
     const [status, setStatus] = useState("")
@@ -26,8 +28,9 @@ const OrderDetailsWindow = ({ order, setDoUserWantOrderDetailsWindow }) => {
     }, [])
     
     return (
-        <section
-            className="fixed top-0 left-1/2 w-4/5 transform -translate-x-1/2 mt-4 z-50 rounded-lg drop-shadow-lg bg-slate-600">
+        <motion.div  key="modal"
+        initial={{ opacity: 0 }} animate={{ y: 25, x: "-50%", opacity: 1 }} exit={{ opacity: 0 }}
+            className="absolute top-4 left-1/2 w-full md:w-3/4 transform -translate-x-1/2 mt-4 z-50 rounded-lg drop-shadow-lg bg-slate-600">
             <div className="w-full text-slate-100 p-2 flex flex-col gap-y-2">
 
                 <div className="flex justify-between items-center pb-2 border-b-2 border-slate-400">
@@ -73,7 +76,7 @@ const OrderDetailsWindow = ({ order, setDoUserWantOrderDetailsWindow }) => {
                 )}
 
             </div>
-        </section>
+        </motion.div>
     );
 }
 

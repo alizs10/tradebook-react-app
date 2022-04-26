@@ -5,6 +5,8 @@ import { notify } from '../Services/alerts';
 import { forgotPassowrd, resetPassowrd } from '../Services/UserServices';
 import { resetPasswordProfileValidation } from '../Services/validation';
 
+import { motion } from 'framer-motion';
+
 const ResetPasswordWindow = ({ setDoUserNeedResetPasswordWindow }) => {
 
     const [oldPass, setOldPass] = useState("")
@@ -114,9 +116,10 @@ const ResetPasswordWindow = ({ setDoUserNeedResetPasswordWindow }) => {
     }
 
     return (
-        <Fragment>
+    
 
-            <section
+            <motion.div key="modal"
+            initial={{ opacity: 0 }} animate={{ y: 25, x: "-50%", opacity: 1 }} exit={{ opacity: 0 }}
                 className="absolute top-0 left-1/2 w-4/5 transform -translate-x-1/2 mt-4 z-50 rounded-lg drop-shadow-lg bg-slate-600">
                 <div className="w-full text-slate-100 p-2 flex flex-col gap-y-2">
 
@@ -176,9 +179,8 @@ const ResetPasswordWindow = ({ setDoUserNeedResetPasswordWindow }) => {
                     </div>
 
                 </div>
-            </section>
+            </motion.div>
 
-        </Fragment>
     );
 }
 

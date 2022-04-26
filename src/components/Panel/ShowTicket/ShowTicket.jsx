@@ -6,6 +6,8 @@ import { getTicket } from '../../Services/TicketsService';
 import AnswerInput from './AnswerInput';
 import Helmet from 'react-helmet';
 
+import { AnimatePresence, motion } from 'framer-motion';
+
 const ShowTicket = () => {
 
     const [showTicket, setShowTicket] = useState([]);
@@ -20,6 +22,11 @@ const ShowTicket = () => {
 
     const toggleReplayInput = () => {
         doUserWantToReplay ? setDoUserWantToReplay(false) : setDoUserWantToReplay(true)
+    }
+
+    const repBtn = {
+        visible: { opacity: 1, x: 0 },
+        hidden: { opacity: 0, x: 100 },
     }
 
     useState(async () => {
@@ -73,7 +80,7 @@ const ShowTicket = () => {
                 <div className="flex flex-col gap-y-2 mx-2 mt-2">
 
 
-                    <div className="flex flex-col gap-y-2 p-2 bg-slate-300 rounded-lg relative">
+                    <motion.div animate={{ y: [-25, 0] }} className="flex flex-col gap-y-2 p-2 bg-slate-300 rounded-lg relative">
 
                         <div className="flex justify-between">
                             <h3 className="font-bold text-slate-600">{showTicket.user.name}</h3>
@@ -90,11 +97,11 @@ const ShowTicket = () => {
                             <span className="text-xxxs md:text-xxs text-blue-500">{showTicket.seen == 0 ? "خوانده نشده" : "خوانده شده"}</span>
                         </div>
 
-                    </div>
+                    </motion.div>
 
 
                     {replays.map(replay => (
-                        <div key={replay.id} className={`flex flex-col gap-y-2 p-2 ${replay.user_id === replay.admin_id ? "bg-emerald-300" : "bg-slate-300"} rounded-lg relative`}>
+                        <motion.div animate={{ y: [-25, 0] }} key={replay.id} className={`flex flex-col gap-y-2 p-2 ${replay.user_id === replay.admin_id ? "bg-emerald-300" : "bg-slate-300"} rounded-lg relative`}>
 
                             <div className="flex justify-between">
                                 <h3 className="font-bold text-slate-600">{replay.user_id == showTicket.user_id ? showTicket.user.name : "پاسخ تیکت (ادمین)"}</h3>
@@ -113,26 +120,30 @@ const ShowTicket = () => {
                                 )}
                             </div>
 
-                            {(status == 0 & !doUserWantToReplay) ? (
-                                <div className="absolute -bottom-10 left-0">
+                            <AnimatePresence>
+                                {(status == 0 & !doUserWantToReplay) && (
+                                    <motion.div initial="hidden"
+                                        animate="visible" variants={repBtn} className="absolute -bottom-10 left-0">
 
-                                    <button className="w-fit rounded-lg px-3 py-2 text-xs bg-slate-800 flex gap-x-2 items-center" onClick={() => toggleReplayInput()}>
-                                        <i className="fa-duotone fa-reply text-base text-blue-500"></i>
-                                        <span className="text-slate-300">پاسخ</span>
-                                    </button>
+                                        <button className="w-fit rounded-lg px-3 py-2 text-xs bg-slate-800 flex gap-x-2 items-center" onClick={() => toggleReplayInput()}>
+                                            <i className="fa-duotone fa-reply text-base text-blue-500"></i>
+                                            <span className="text-slate-300">پاسخ</span>
+                                        </button>
 
-                                </div>
+                                    </motion.div>
 
-                            ) : null}
+                                )}
+                            </AnimatePresence>
 
-                        </div>
+                        </motion.div>
                     ))}
 
+                    <AnimatePresence>
+                        {doUserWantToReplay && (
+                            <AnswerInput parent_id={showTicket.id} replays={replays} setReplays={setReplays} toggleReplayInput={toggleReplayInput} />
 
-                    {doUserWantToReplay && (
-                        <AnswerInput parent_id={showTicket.id} replays={replays} setReplays={setReplays} toggleReplayInput={toggleReplayInput} />
-
-                    )}
+                        )}
+                    </AnimatePresence>
 
                 </div>
 

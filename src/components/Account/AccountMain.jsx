@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from 'react';
 
 import moment from 'moment';
-
+import { AnimatePresence, motion } from 'framer-motion';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -235,7 +235,7 @@ const AccountMain = () => {
                                 {showArr.sliced_array.map((trade, index) => (
                                     <tr key={trade.id} className="text-xxs lg:text-base font-light mt-2 py-2 dark:text-slate-300">
                                         <td className="py-4 pr-1">{index + 1}</td>
-                                        <td className="py-4">{moment(trade.trade_date, 'YYYY-jM-jD').format('YYYY/MM/DD') }</td>                               
+                                        <td className="py-4">{moment(trade.trade_date, 'YYYY-jM-jD').format('YYYY/MM/DD')}</td>
                                         <td className="py-4">{trade.pair_name}</td>
                                         <td className="py-4">{trade.contract_type === 0 ? 'Long' : 'Short'}</td>
                                         <td className="py-4" style={{ "direction": "ltr" }}>
@@ -255,13 +255,15 @@ const AccountMain = () => {
 
             </section>
 
-            {!didUserTakeSnapshot ? null : (
-                <SnapshotWindow statistics={statistics} setDidUserTakeSnapshot={setDidUserTakeSnapshot} />
-            )}
+            <AnimatePresence>
+                {didUserTakeSnapshot && (
+                    <SnapshotWindow statistics={statistics} setDidUserTakeSnapshot={setDidUserTakeSnapshot} />
+                )}
 
-            {!didUserTakeSnapshot ? null : (<div className="fixed top-0 left-0 w-full h-screen md:w-full backdrop-blur-lg bg-slate-800/70 z-30" onClick={() => setDidUserTakeSnapshot(false)}></div>
-            )}
+                {didUserTakeSnapshot && (<motion.div exit={{ opacity: 0 }} className="fixed top-0 left-0 w-full h-screen md:w-full backdrop-blur-lg bg-slate-800/70 z-30" onClick={() => setDidUserTakeSnapshot(false)}></motion.div>
+                )}
 
+            </AnimatePresence>
         </Fragment>
     );
 }

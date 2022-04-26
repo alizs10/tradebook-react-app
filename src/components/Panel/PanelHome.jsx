@@ -1,21 +1,22 @@
 import { isEmpty } from 'lodash';
 import React, { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { ClipLoader } from 'react-spinners';
 import { setHomeData } from '../Redux/Action/HomeData';
 import { getAllNotifications } from '../Redux/Action/Notifications';
 import Alert from '../Alerts/Alert';
 import Helmet from 'react-helmet';
+import HomeStat from './HomeStat';
 
 const PanelHome = () => {
 
     const [loading, setLoading] = useState(true)
-    const [homeStat, setHomeStat] = useState({ accountsCount: 0, tradesCount: 0, notesCount: 0, validFor: 0, planName: "..." })
+    const [homeStats, setHomeStats] = useState([{ name: "حساب ها", value: 0 }, { name: "ترید ها", value: 0 }, { name: "یادداشت ها", value: 0 }, { name: "روزهای باقی مانده", value: 0 }, { name: "اشتراک", value: "..." }])
     const [homeNotifs, setHomeNotifs] = useState({})
 
     const dispatch = useDispatch()
     const data = useSelector(state => state.HomeData)
     const notifications = useSelector(state => state.Notifications)
+
     const user = useSelector(state => state.User)
 
     useEffect(() => {
@@ -26,11 +27,10 @@ const PanelHome = () => {
     }, [])
 
     useEffect(() => {
-        if (isEmpty(data))
-            return
-        setLoading(false)
-
-        setHomeStat(data.data)
+        if (!isEmpty(data)) {
+            setLoading(false)
+            setHomeStats(data.data)
+        }
     }, [data])
 
     useEffect(() => {
@@ -53,88 +53,10 @@ const PanelHome = () => {
 
             <section className="mx-2 mt-4 grid grid-cols-2 lg:grid-cols-3 gap-x-2 gap-y-4">
 
-                <div className="grid grid-cols-4 items-center rounded-lg shadow bg-slate-800 p-1 lg:h-20">
+                {homeStats.map((stat) => (
+                    <HomeStat key={Math.random() * 1000} stat={stat} loading={loading} />
+                ))}
 
-                    <span className="col-span-1">
-                        <i className="fa-light fa-rectangle-history text-2xl lg:text-4xl mr-2 text-gray-400"></i>
-                    </span>
-
-                    <span className="col-span-3 grid grid-rows-2 text-left ml-2">
-                        <span className="text-base lg:text-xl font-bold text-blue-600">
-                            {loading ? (
-                                <ClipLoader color={'#fff'} size={15} />
-                            ) : (homeStat.accountsCount)}
-                        </span>
-                        <span className="text-xs lg:text-base font-light text-slate-300">حساب ها</span>
-                    </span>
-
-                </div>
-                <div className="grid grid-cols-4 items-center rounded-lg shadow bg-slate-800 p-1 lg:h-20">
-
-                    <span className="col-span-1">
-                        <i className="fa-light fa-chart-candlestick text-2xl lg:text-4xl mr-2 text-gray-400"></i>
-                    </span>
-
-                    <span className="col-span-3 grid grid-rows-2 text-left ml-2">
-                        <span className="text-base lg:text-xl font-bold text-blue-600">
-                            {loading ? (
-                                <ClipLoader color={'#fff'} size={15} />
-                            ) : (homeStat.tradesCount)}
-                        </span>
-                        <span className="text-xs lg:text-base font-light text-slate-300">ترید ها</span>
-                    </span>
-
-                </div>
-                <div className="grid grid-cols-4 items-center rounded-lg shadow bg-slate-800 p-1 lg:h-20">
-
-                    <span className="col-span-1">
-                        <i className="fa-light fa-notes text-2xl lg:text-4xl mr-2 text-gray-400"></i>
-                    </span>
-
-                    <span className="col-span-3 grid grid-rows-2 text-left ml-2">
-                        <span className="text-base lg:text-xl font-bold text-blue-600">
-                            {loading ? (
-                                <ClipLoader color={'#fff'} size={15} />
-                            ) : (homeStat.notesCount)}
-                        </span>
-                        <span className="text-xs lg:text-base font-light text-slate-300">یادداشت
-                            ها</span>
-                    </span>
-
-                </div>
-                <div className="grid grid-cols-4 items-center rounded-lg shadow bg-slate-800 p-1 lg:h-20">
-
-                    <span className="col-span-1">
-                        <i className="fa-light fa-rectangle-pro  text-2xl lg:text-4xl mr-2 text-gray-400"></i>
-                    </span>
-
-                    <span className="col-span-3 grid grid-rows-2 text-left ml-2">
-                        <span className="text-base lg:text-xl font-bold text-blue-600">
-                            {loading ? (
-                                <ClipLoader color={'#fff'} size={15} />
-                            ) : (homeStat.planName)}
-                        </span>
-                        <span className="text-xs lg:text-base font-light text-slate-300">اشتراک</span>
-                    </span>
-
-                </div>
-                <div className="grid grid-cols-4 items-center rounded-lg shadow bg-slate-800 p-1 lg:h-20">
-
-                    <span className="col-span-1">
-                        <i className="fa-light fa-clock text-2xl lg:text-4xl mr-2 text-gray-400"></i>
-                    </span>
-
-                    <span className="col-span-3 grid grid-rows-2 text-left ml-2">
-                        <span className="text-base lg:text-xl font-bold text-blue-600">
-                            {loading ? (
-                                <ClipLoader color={'#fff'} size={15} />
-                            ) : (homeStat.validFor)}
-                        </span>
-                        <span className="text-xs lg:text-base font-light text-slate-300">روزهای باقی
-                            مانده</span>
-                    </span>
-
-                </div>
                 <div className="grid grid-cols-4 items-center rounded-lg shadow bg-slate-800 p-1 lg:h-20">
 
                     <span className="col-span-1">
@@ -142,7 +64,7 @@ const PanelHome = () => {
                     </span>
 
                     <span className="col-span-3 grid grid-rows-2 text-left ml-2">
-                        <span className="text-base lg:text-xl font-bold text-blue-600">عضو</span>
+                        <span className="text-base lg:text-xl font-bold text-blue-600">{user.is_admin == 1 ? "ادمین" : "عضو"}</span>
                         <span className="text-xs lg:text-base font-light text-slate-300">نقش</span>
                     </span>
 

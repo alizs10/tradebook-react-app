@@ -1,3 +1,4 @@
+import { AnimatePresence } from 'framer-motion';
 import { isEmpty } from 'lodash';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
@@ -9,6 +10,8 @@ import { profileValidation } from '../Services/validation';
 import EditProfileWindow from './EditProfileWindow';
 import EmailVerificationWindow from './EmailVerificationWindow';
 import ResetPasswordWindow from './ResetPasswordWindow';
+
+import { motion } from 'framer-motion';
 
 const PanelProfile = () => {
 
@@ -54,7 +57,7 @@ const PanelProfile = () => {
     }, [user])
 
     const handleUpdateProfile = async () => {
-        
+
         var formData = new FormData();
 
         formData.append('name', name);
@@ -63,7 +66,7 @@ const PanelProfile = () => {
         formData.append('profile_photo_path', profile_photo_path);
         formData.append('_method', "PUT");
         const { success, errors } = profileValidation(formData);
-        
+
         if (success) {
             setErrors({})
             try {
@@ -172,11 +175,12 @@ const PanelProfile = () => {
                 )}
             </div>
 
-
-            {!doUserNeedResetPasswordWindow ? null : (<ResetPasswordWindow setDoUserNeedResetPasswordWindow={setDoUserNeedResetPasswordWindow} />)}
-            {!doUserNeedActivationWindow ? null : (<EmailVerificationWindow userId={userId} setDoUserNeedActivationWindow={setDoUserNeedActivationWindow} />)}
-            {!doUserNeedEditProfileWindow ? null : (<EditProfileWindow errors={errors} name={name} email={email} mobile={mobile} setName={setName} setEmail={setEmail} setMobile={setMobile} setProfilePath={setProfilePath} handleUpdateProfile={handleUpdateProfile} setDoUserNeedEditProfileWindow={setDoUserNeedEditProfileWindow} />)}
-            {!blurConditions ? null : (<div className="fixed top-0 left-0 w-3/4 h-screen md:w-full backdrop-blur-lg bg-slate-800/70 z-30" onClick={() => handleCloseOpenWindow()}></div>)}
+            <AnimatePresence>
+                {doUserNeedResetPasswordWindow && (<ResetPasswordWindow setDoUserNeedResetPasswordWindow={setDoUserNeedResetPasswordWindow} />)}
+                {doUserNeedActivationWindow && (<EmailVerificationWindow userId={userId} setDoUserNeedActivationWindow={setDoUserNeedActivationWindow} />)}
+                {doUserNeedEditProfileWindow && (<EditProfileWindow errors={errors} name={name} email={email} mobile={mobile} setName={setName} setEmail={setEmail} setMobile={setMobile} setProfilePath={setProfilePath} handleUpdateProfile={handleUpdateProfile} setDoUserNeedEditProfileWindow={setDoUserNeedEditProfileWindow} />)}
+                {blurConditions && (<motion.div exit={{ opacity: 0 }} className="fixed top-0 left-0 w-full md:w-3/4 h-screen md:w-full backdrop-blur-lg bg-slate-800/70 z-30" onClick={() => handleCloseOpenWindow()}></motion.div>)}
+            </AnimatePresence>
 
         </Fragment>
     );

@@ -3,6 +3,7 @@ import { notify } from '../../Services/alerts';
 import { storeAnswerTicket } from '../../Services/TicketsService';
 import { asnwerTicketValidation } from '../../Services/validation';
 
+import { motion } from 'framer-motion';
 
 const AnswerInput = ({ parent_id, setReplays, replays, toggleReplayInput }) => {
 
@@ -35,8 +36,14 @@ const AnswerInput = ({ parent_id, setReplays, replays, toggleReplayInput }) => {
 
     }
 
+    const repTextArea = {
+        visible: { opacity: 1, y: 0 },
+        hidden: { opacity: 0, y: -100 },
+    }
+
     return (
-        <div className='flex flex-col gap-y-2'>
+        <motion.div initial="hidden"
+        animate="visible" variants={repTextArea} className='flex flex-col gap-y-2'>
             <textarea className='form-input' rows={5} value={body} onChange={event => setBody(event.target.value)} />
             {errors.body && (<span className='text-xxs text-red-400'>{errors.body}</span>)}
             <div className='flex justify-between'>
@@ -53,7 +60,7 @@ const AnswerInput = ({ parent_id, setReplays, replays, toggleReplayInput }) => {
                 </div>
             </div>
 
-        </div>
+        </motion.div>
     );
 }
 

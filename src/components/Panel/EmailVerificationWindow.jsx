@@ -6,6 +6,8 @@ import { AddUser } from '../Redux/Action/User';
 import { notify } from '../Services/alerts';
 import { CheckVerificationCode, SendVerificationCode } from '../Services/UserServices';
 
+import { motion } from 'framer-motion';
+
 const EmailVerificationWindow = ({ userId, setDoUserNeedActivationWindow }) => {
 
     const [code, setCode] = useState(false)
@@ -90,8 +92,9 @@ const EmailVerificationWindow = ({ userId, setDoUserNeedActivationWindow }) => {
 
 
     return (
-        <Fragment>
-            <section
+      
+            <motion.div  key="modal"
+            initial={{ opacity: 0 }} animate={{ y: 25, x: "-50%", opacity: 1 }} exit={{ opacity: 0 }}
                 className="absolute top-0 left-1/2 w-4/5 transform -translate-x-1/2 mt-4 z-50 rounded-lg drop-shadow-lg bg-slate-600">
                 <div className="w-full text-slate-100 p-2 flex flex-col gap-y-2">
 
@@ -135,8 +138,8 @@ const EmailVerificationWindow = ({ userId, setDoUserNeedActivationWindow }) => {
                     </div>
 
                 </div>
-            </section>
-        </Fragment>
+            </motion.div>
+     
     );
 }
 

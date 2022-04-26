@@ -1,3 +1,4 @@
+import { AnimatePresence, MotionConfig } from 'framer-motion';
 import { isEmpty } from 'lodash';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
@@ -8,7 +9,7 @@ import Order from './Order';
 import OrderDetailsWindow from './OrderDetailsWindow';
 import Pagination from './Pagination';
 
-
+import { motion } from 'framer-motion';
 
 const PanelOrders = () => {
 
@@ -37,7 +38,7 @@ const PanelOrders = () => {
 
     useEffect(() => {
         setPagination(paginate(showOrders, 5, currentPage))
-        
+
     }, [showOrders])
 
     useEffect(() => {
@@ -125,9 +126,10 @@ const PanelOrders = () => {
             {pagination.total <= perPage ? null : (
                 <Pagination currentPage={currentPage} pages={pagination.pages} setCurrentPage={setCurrentPage} total={pagination.total} startIndex={pagination.startIndex} endIndex={pagination.endIndex} />
             )}
-
-            {doUserWantOrderDetailsWindow && (<OrderDetailsWindow order={order} setDoUserWantOrderDetailsWindow={setDoUserWantOrderDetailsWindow} />)}
-            {doUserWantOrderDetailsWindow && (<div className="fixed top-0 left-0 w-3/4 h-screen md:w-full backdrop-blur-lg bg-slate-800/70 z-30" onClick={() => setDoUserWantOrderDetailsWindow(false)}></div>)}
+            <AnimatePresence>
+                {doUserWantOrderDetailsWindow && (<OrderDetailsWindow order={order} setDoUserWantOrderDetailsWindow={setDoUserWantOrderDetailsWindow} />)}
+                {doUserWantOrderDetailsWindow && (<motion.div exit={{ opacity: 0 }} className="fixed top-0 left-0 w-full md:w-3/4 h-screen md:w-full backdrop-blur-lg bg-slate-800/70 z-30" onClick={() => setDoUserWantOrderDetailsWindow(false)}></motion.div>)}
+            </AnimatePresence>
         </Fragment>
     );
 }

@@ -7,6 +7,7 @@ import { CreateNote, UpdateNote } from '../Services/NotesServices';
 import EditNoteWindow from './EditNoteWindow';
 import Note from './Note';
 
+import { AnimatePresence, motion } from 'framer-motion';
 
 const PanelNotebook = () => {
 
@@ -104,16 +105,19 @@ const PanelNotebook = () => {
 
             <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 mt-4 mx-2">
 
-
-                {notes.map(note => (
-                    <Note key={note.id} note={note} handleEditNoteWindow={handleEditNoteWindow} />
-                ))}
+                <AnimatePresence>
+                    {notes.map(note => (
+                        <Note key={note.id} note={note} handleEditNoteWindow={handleEditNoteWindow} />
+                    ))}
+                </AnimatePresence>
 
             </div>
 
-            {!doUserNeedEditNoteWindow ? null : (<EditNoteWindow editedNote={editedNote} setDoUserNeedEditNoteWindow={setDoUserNeedEditNoteWindow} handleEditNote={handleEditNote} />)}
-            {!doUserNeedEditNoteWindow ? null : (<div className="fixed top-0 left-0 w-3/4 h-screen md:w-full backdrop-blur-lg bg-slate-800/70 z-30" onClick={() => setDoUserNeedEditNoteWindow(false)}></div>
-            )}
+            <AnimatePresence>
+                {doUserNeedEditNoteWindow && (<EditNoteWindow editedNote={editedNote} setDoUserNeedEditNoteWindow={setDoUserNeedEditNoteWindow} handleEditNote={handleEditNote} />)}
+                {doUserNeedEditNoteWindow && (<motion.div exit={{ opacity: 0 }} className="fixed top-0 left-0 w-full md:w-3/4 h-screen md:w-full backdrop-blur-lg bg-slate-800/70 z-30" onClick={() => setDoUserNeedEditNoteWindow(false)}></motion.div>
+                )}
+            </AnimatePresence>
         </Fragment>
     );
 }

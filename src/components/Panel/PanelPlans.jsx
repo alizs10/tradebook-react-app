@@ -34,12 +34,6 @@ const PanelPlans = () => {
                 <title>اشتراک ها - تریدبوک</title>
             </Helmet>
 
-
-            <div className="mr-2 mt-4">
-                <h2 className="text-slate-300 text-lg">اشتراک شما:
-                    <span className="text-red-400 text-sm mr-1">آزمایشی - یک ماهه</span>
-                </h2>
-            </div>
             <div className="mr-2 mt-4">
                 <h2 className="text-slate-300 text-lg">خرید اشتراک
                 </h2>

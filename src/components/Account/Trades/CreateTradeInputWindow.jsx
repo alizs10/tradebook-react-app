@@ -9,6 +9,8 @@ import Select from 'react-select';
 import { reloadAccount } from '../../Redux/Action/Account';
 import { tradeValidation } from '../../Services/validation';
 
+import { motion } from 'framer-motion';
+
 const CreateTradeInputWindow = ({ setDoUserNeedCreateTradeWindow, acc_id, accType }) => {
 
     const [date, setDate] = useState("");
@@ -70,7 +72,6 @@ const CreateTradeInputWindow = ({ setDoUserNeedCreateTradeWindow, acc_id, accTyp
 
     }
 
-console.log(accType);
 
     const handlePairSelect = (event) => {
         setSelectedOption(event.value);
@@ -102,7 +103,8 @@ console.log(accType);
                     <SyncLoader color={'#ffffff'} loading={checking} size={15} />
                 </div>
             ) : (
-                <section
+                <motion.div key="modal"
+                initial={{ opacity: 0 }} animate={{ y: 25, x: "-50%", opacity: 1 }} exit={{ opacity: 0 }}
                     className="absolute top-0 left-1/2 w-4/5 transform -translate-x-1/2 mt-4 z-50 rounded-lg drop-shadow-lg bg-slate-600" >
                     <div className="w-full text-slate-100 p-2 flex flex-col gap-y-2">
 
@@ -204,7 +206,7 @@ console.log(accType);
                         </div>
 
                     </div>
-                </section>
+                </motion.div>
             )}
 
         </Fragment>

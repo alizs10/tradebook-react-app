@@ -2,6 +2,8 @@ import React from 'react';
 import { useNavigate } from 'react-router';
 import { storeOrder } from '../Services/BuyProduct';
 
+import { motion } from 'framer-motion';
+
 const Plan = ({ plan, length, index }) => {
 
     const navigate = useNavigate();
@@ -22,7 +24,7 @@ const Plan = ({ plan, length, index }) => {
 
     }
     return (
-        <div
+        <motion.div animate={{ y: [0, 25, 0] }}
             className={`col-span-1 py-4 rounded-lg drop-shadow-lg ${index + 1 === length ? "bg-violet-500 relative overflow-hidden" : "bg-slate-700"} text-white flex flex-col gap-y-4 justify-center items-center`}>
 
             {index + 1 === length && (
@@ -38,7 +40,7 @@ const Plan = ({ plan, length, index }) => {
             <button
                 className={`rounded-lg w-3/4 ${index + 1 === length ? "bg-white text-violet-500" : "bg-violet-500"} px-4 py-2`} onClick={() => handleCreateOrderAndRedirect(plan.id)}>خرید</button>
 
-        </div>
+        </motion.div>
     );
 }
 

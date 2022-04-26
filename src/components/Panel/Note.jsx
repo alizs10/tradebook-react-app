@@ -5,6 +5,8 @@ import { DestroyNote } from '../Services/NotesServices';
 import { useDispatch } from 'react-redux';
 import { DeleteNote } from '../Redux/Action/Notes';
 
+import { motion } from 'framer-motion';
+
 const Note = ({ note, handleEditNoteWindow }) => {
 
     const correct_date = moment(note.created_at).format("HH:mm YYYY-MM-DD");
@@ -26,8 +28,8 @@ const Note = ({ note, handleEditNoteWindow }) => {
 
 
     return (
-        <Fragment>
-            <div className="p-2 col-span-1 bg-slate-300 text-slate-900 text-base rounded-lg shadow-lg h-fit">
+      
+            <motion.div animate={{ x: [5,0] }} exit={{ opacity: 0 }} className="p-2 col-span-1 bg-slate-300 text-slate-900 text-base rounded-lg shadow-lg h-fit">
                 <div className="flex justify-between border-b-2 border-slate-500 relative">
                     <span className="text-xxs">{correct_date}</span>
                     <div className="flex gap-x-2 absolute bottom-0 left-0 mb-2 ml-2">
@@ -43,8 +45,8 @@ const Note = ({ note, handleEditNoteWindow }) => {
                 <p className="text-base">
                     {note.note}
                 </p>
-            </div>
-        </Fragment>
+            </motion.div>
+     
     );
 }
 
