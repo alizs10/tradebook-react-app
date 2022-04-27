@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
 import { SyncLoader } from 'react-spinners';
 import { AddUser, ClearUser } from '../Redux/Action/User';
+import { notify } from '../Services/alerts';
 import { getUserByToken } from '../Services/AuthService';
 
 const AuthCkeck = ({ children }) => {
@@ -26,6 +27,7 @@ const AuthCkeck = ({ children }) => {
 
             navigate('/')
             setChecking(false)
+            notify("به حساب کاربری خود وارد شوید", "warning")
             return;
         }
 

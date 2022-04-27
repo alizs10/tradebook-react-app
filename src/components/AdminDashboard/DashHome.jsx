@@ -1,4 +1,4 @@
-import { isEmpty } from 'lodash';
+import { isEmpty, isNumber } from 'lodash';
 import React, { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -116,7 +116,7 @@ const DashHome = () => {
                         <span className="text-base lg:text-xl font-bold text-blue-600">
                             {loading ? (
                                 <ClipLoader color={'#fff'} size={15} />
-                            ) : (homeStat.income)}
+                            ) : (isNumber(homeStat.income) ? homeStat.income.toLocaleString() : homeStat.income)}
                         </span>
                         <span className="text-xs lg:text-base font-light text-gray-600 dark:text-slate-300">درآمد</span>
                     </span>

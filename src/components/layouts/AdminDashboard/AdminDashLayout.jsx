@@ -1,6 +1,10 @@
 import { isEmpty } from 'lodash';
 import React, { Fragment, useEffect, useLayoutEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
+import { ClearUser } from '../../Redux/Action/User';
+import { notify } from '../../Services/alerts';
+import { logout } from '../../Services/AuthService';
 import AdminDashSidebar from './AdminDashSidebar';
 
 const AdmminDashLayout = ({ children }) => {
@@ -9,6 +13,10 @@ const AdmminDashLayout = ({ children }) => {
     const [name, setName] = useState("...");
     const [width, height] = useWindowSize();
     const [doUserWantSidebar, setDoUserWantSidebar] = useState(false)
+
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+
     useEffect(() => {
         if (isEmpty(user)) return
         setAvatar(user.profile_photo_path)
@@ -47,6 +55,21 @@ const AdmminDashLayout = ({ children }) => {
             setDoUserWantSidebar(!doUserWantSidebar)
         }
     }
+
+    const handleLogout = async () => {
+
+        const { status } = await logout();
+
+        if (status === 200) {
+            localStorage.removeItem('token')
+            dispatch(ClearUser())
+            navigate('/')
+            notify('با موفقیت از حساب کاربری خود خارج شدید', 'success')
+        } else {
+            notify('خطایی رخ داده است، دوباره امتحان کنید', 'danger')
+        }
+
+    }
     return (
         <Fragment>
             <header className="fixed top-0 left-0 flex justify-between py-2 shadow-lg h-16 w-full z-30 bg-slate-800">
@@ -72,7 +95,7 @@ const AdmminDashLayout = ({ children }) => {
 
             <section className="flex justify-end">
                 {!doUserWantSidebar ? null : (
-                    <AdminDashSidebar toggleSideBar={toggleSideBar}/>
+                    <AdminDashSidebar toggleSideBar={toggleSideBar} handleLogout={handleLogout}/>
                    
                 )}
                 <main className='w-full md:w-3/4 relative mt-16'>

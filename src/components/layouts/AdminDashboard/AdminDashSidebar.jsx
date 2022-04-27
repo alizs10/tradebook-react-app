@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-const AdminDashSidebar = ({ toggleSideBar }) => {
+const AdminDashSidebar = ({ toggleSideBar, handleLogout }) => {
     return (
         <nav
             className="md:block w-3/4 sm:w-1/2 bg-slate-800 h-screen shadow-lg fixed right-0 md:w-1/4 z-20 pb-16 overflow-scroll no-scrollbar">
@@ -118,7 +118,7 @@ const AdminDashSidebar = ({ toggleSideBar }) => {
 
                         <li className="mt-4">
                             <button
-                                className="flex items-center text-gray-500 hover:text-red-500 transition ease-out duration-300">
+                                className="flex items-center text-gray-500 hover:text-red-500 transition ease-out duration-300" onClick={() => handleLogout()}>
                                 <i className="fa-light fa-right-from-bracket text-lg mr-2"></i>
                                 <span className="text-xs mr-2">خروج</span>
                             </button>
