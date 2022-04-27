@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, NavLink } from 'react-router-dom';
+import { notify } from '../Services/alerts';
 
 const Sidebar = ({ handleLogout, toggleSideBar }) => {
     let zarinpal_logo = require("./Zarinpal.svg");
@@ -8,7 +9,11 @@ const Sidebar = ({ handleLogout, toggleSideBar }) => {
 
     const handleProtectedNavLink = (e) => {
         if (user.status == 0)
+        {
             e.preventDefault();
+            notify("حساب کاربری شما فعال نمی باشد", "warning")
+        }
+         
         toggleSideBar()
     }
 

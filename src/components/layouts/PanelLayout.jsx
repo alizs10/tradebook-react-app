@@ -64,8 +64,8 @@ const PanelLayout = ({ children }) => {
 
         if (status === 200) {
             localStorage.removeItem('token')
-            dispatch(ClearUser())
             navigate('/')
+            dispatch(ClearUser())
             notify('با موفقیت از حساب کاربری خود خارج شدید', 'success')
         } else {
             notify('خطایی رخ داده است، دوباره امتحان کنید', 'danger')

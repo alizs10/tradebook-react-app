@@ -6,12 +6,17 @@ import Account from './Account';
 import CreateAccWin from './CreateAccWin';
 import EditAccWin from './EditAccWin';
 import { AnimatePresence, motion } from 'framer-motion';
+import { isEmpty } from 'lodash';
+import { getAllNotifications } from '../Redux/Action/Notifications';
+import Alert from '../Alerts/Alert';
 
 const PanelAccounts = () => {
 
     const [doUserWantCreateAccWin, setDoUserWantCreateAccWin] = useState(false);
     const [doUserWantEditAccWin, setDoUserWantEditAccWin] = useState(false);
     const [acc, setAcc] = useState({});
+    const [accountsNotifs, setAccountsNotifs] = useState({})
+    const notifications = useSelector(state => state.Notifications)
 
     const accounts = useSelector(state => state.Accounts);
     const blurConditions = doUserWantEditAccWin || doUserWantCreateAccWin;
@@ -27,7 +32,18 @@ const PanelAccounts = () => {
 
     useEffect(() => {
         dispatch(getAllAccounts())
+        if (isEmpty(notifications)) {
+            dispatch(getAllNotifications())
+
+        }
     }, [])
+
+    useEffect(() => {
+        if (isEmpty(notifications)) return
+
+        let showNotifs = notifications.filter(notif => notif.section === "accounts" && notif.seen == 0);
+        setAccountsNotifs(showNotifs)
+    }, [notifications])
     return (
         <Fragment>
 
@@ -59,11 +75,11 @@ const PanelAccounts = () => {
 
                 <h2 className="text-slate-300 text-lg">پیغام های سیستم</h2>
 
-                <div className="bg-yellow-500 rounded-lg drop-shadow-lg p-2 flex flex-col gap-y-2">
-                    <p className="font-semibold text-black text-base">
-                        توجه: در هنگام ساخت حساب، منظور از بالانس اولیه همان مقدار اولیه بالانس شما در هنگام اولین تریدتان می باشد. در صورتیکه این مقدار اشتباه وارد شود؛ محاسباتی که برای شما انجام میگیرد اشتباه خواهند بود. پس کاملا دقت کنید
-                    </p>
-                </div>
+                {accountsNotifs.length > 0 ? accountsNotifs.map(notif => (
+                    <Alert key={notif.id} notification_id={notif.id} message={notif.message} type={notif.type} />
+                )) : (
+                    <p className='text-right text-sm text-slate-300'>پیغامی برای نمایش وجود ندارد</p>
+                )}
 
 
             </div>
@@ -75,7 +91,7 @@ const PanelAccounts = () => {
             </AnimatePresence>
             {!doUserWantEditAccWin ? null : (<EditAccWin acc={acc} setDoUserWantEditAccWin={setDoUserWantEditAccWin} />)}
 
-            {blurConditions && (<motion.div  initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed top-0 left-0 w-full md:w-3/4 h-screen md:w-full backdrop-blur-lg bg-slate-800/70 z-30" onClick={() => handleCloseOpenWindow()}></motion.div>)}
+            {blurConditions && (<motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed top-0 left-0 w-full md:w-3/4 h-screen md:w-full backdrop-blur-lg bg-slate-800/70 z-30" onClick={() => handleCloseOpenWindow()}></motion.div>)}
         </Fragment>
     );
 }

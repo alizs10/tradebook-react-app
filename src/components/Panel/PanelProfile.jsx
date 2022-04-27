@@ -12,6 +12,8 @@ import EmailVerificationWindow from './EmailVerificationWindow';
 import ResetPasswordWindow from './ResetPasswordWindow';
 
 import { motion } from 'framer-motion';
+import { getAllNotifications } from '../Redux/Action/Notifications';
+import Alert from '../Alerts/Alert';
 
 const PanelProfile = () => {
 
@@ -28,6 +30,8 @@ const PanelProfile = () => {
     const [userVerification, setUserVerification] = useState("");
     const [errors, setErrors] = useState({})
 
+    const [profileNotifs, setProfileNotifs] = useState({})
+    const notifications = useSelector(state => state.Notifications)
 
     const [doUserNeedActivationWindow, setDoUserNeedActivationWindow] = useState(false);
     const [doUserNeedResetPasswordWindow, setDoUserNeedResetPasswordWindow] = useState(false);
@@ -44,7 +48,21 @@ const PanelProfile = () => {
         }
     }
 
+    useEffect(() => {
 
+      if (isEmpty(notifications)) {
+          dispatch(getAllNotifications())
+      }
+
+    }, [])
+
+    useEffect(() => {
+        if (isEmpty(notifications)) return
+
+        let showNotifs = notifications.filter(notif => notif.section === "profile" && notif.seen == 0);
+        setProfileNotifs(showNotifs)
+    }, [notifications])
+    
     useEffect(() => {
         if (isEmpty(user)) return;
 
@@ -152,13 +170,13 @@ const PanelProfile = () => {
             <div className="flex flex-col gap-y-4 mx-2 mt-4">
 
                 <h2 className="text-slate-300 text-lg">پیغام های سیستم</h2>
-                {user.referral.code_status === 0 && (
-                    <div className="bg-blue-300 rounded-lg drop-shadow-lg p-2 flex flex-col gap-y-2">
-                        <p className="font-semibold text-black text-base">
-                            از دوستان خود بخواهید با کد معرف شما ثبت نام کنند تا اشتراک 30 روزه هدیه بگیرید
-                        </p>
-                    </div>
+               
+                {profileNotifs.length > 0 ? profileNotifs.map(notif => (
+                    <Alert key={notif.id} notification_id={notif.id} message={notif.message} type={notif.type} />
+                )) : (
+                    <p className='text-right text-sm text-slate-300'>پیغامی برای نمایش وجود ندارد</p>
                 )}
+
                 {!isEmpty(userVerification) ? (null) : (
                     <div className='flex flex-col gap-y-1'>
                         <div className="bg-yellow-500 rounded-lg drop-shadow-lg p-2 flex flex-col gap-y-2">
@@ -176,10 +194,10 @@ const PanelProfile = () => {
             </div>
 
             <AnimatePresence>
-                {doUserNeedResetPasswordWindow && (<ResetPasswordWindow setDoUserNeedResetPasswordWindow={setDoUserNeedResetPasswordWindow} />)}
-                {doUserNeedActivationWindow && (<EmailVerificationWindow userId={userId} setDoUserNeedActivationWindow={setDoUserNeedActivationWindow} />)}
-                {doUserNeedEditProfileWindow && (<EditProfileWindow errors={errors} name={name} email={email} mobile={mobile} setName={setName} setEmail={setEmail} setMobile={setMobile} setProfilePath={setProfilePath} handleUpdateProfile={handleUpdateProfile} setDoUserNeedEditProfileWindow={setDoUserNeedEditProfileWindow} />)}
-                {blurConditions && (<motion.div exit={{ opacity: 0 }} className="fixed top-0 left-0 w-full md:w-3/4 h-screen md:w-full backdrop-blur-lg bg-slate-800/70 z-30" onClick={() => handleCloseOpenWindow()}></motion.div>)}
+                {doUserNeedResetPasswordWindow && (<ResetPasswordWindow key={Math.random()*10000000} setDoUserNeedResetPasswordWindow={setDoUserNeedResetPasswordWindow} />)}
+                {doUserNeedActivationWindow && (<EmailVerificationWindow key={Math.random()*10000000} userId={userId} setDoUserNeedActivationWindow={setDoUserNeedActivationWindow} />)}
+                {doUserNeedEditProfileWindow && (<EditProfileWindow key={Math.random()*10000000} errors={errors} name={name} email={email} mobile={mobile} setName={setName} setEmail={setEmail} setMobile={setMobile} setProfilePath={setProfilePath} handleUpdateProfile={handleUpdateProfile} setDoUserNeedEditProfileWindow={setDoUserNeedEditProfileWindow} />)}
+                {blurConditions && (<motion.div key={Math.random()*10000000} exit={{ opacity: 0 }} className="fixed top-0 left-0 w-full md:w-3/4 h-screen md:w-full backdrop-blur-lg bg-slate-800/70 z-30" onClick={() => handleCloseOpenWindow()}></motion.div>)}
             </AnimatePresence>
 
         </Fragment>

@@ -127,10 +127,7 @@ const Register = () => {
 
                     <div className="flex flex-col gap-y-2">
                         <label htmlFor="referral_code" className="text-xs">کد معرف دارید؟</label>
-                        <input type="text" className="form-input" value={referralCode} onChange={event => {
-                            setReferralCode(event.target.value)
-
-                        }} id="referral_code" />
+                        <input type="text" className="form-input" value={referralCode} onChange={event => setReferralCode(event.target.value)} id="referral_code" />
                         {errors.referral_code && (<span className='text-xxs text-red-400'>{errors.referral_code}</span>)}
 
 

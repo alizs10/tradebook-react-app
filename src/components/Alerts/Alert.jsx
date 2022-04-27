@@ -19,6 +19,7 @@ const Alert = ({ message, type, notification_id }) => {
             break;
 
         default:
+            colorClassName = "bg-red-500"
             break;
     }
 
