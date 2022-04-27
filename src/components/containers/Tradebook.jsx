@@ -38,6 +38,7 @@ import PanelOrders from '../Panel/Orders/PanelOrders';
 import PanelTickets from '../Panel/Tickets/PanelTickets';
 import NotFound404 from '../Other/404';
 import LogoLayout from '../layouts/LogoLayout';
+import DashUsersPlansValues from '../AdminDashboard/UsersPlansValues/DashUsersPlansValues';
 
 
 
@@ -154,6 +155,9 @@ const Tradebook = () => {
                 } />
                 <Route path='users' element={
                     <DashUsers />
+                } />
+                <Route path='users-plans-values' element={
+                    <DashUsersPlansValues />
                 } />
                 <Route path='payments' element={
                     <DashPayments />

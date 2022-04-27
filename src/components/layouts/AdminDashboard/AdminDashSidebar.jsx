@@ -19,14 +19,6 @@ const AdminDashSidebar = ({ toggleSideBar }) => {
                             </NavLink>
                         </li>
                         <li>
-                            <NavLink to="statistics/" onClick={() => toggleSideBar()}
-                                className={(navData) => navData.isActive ? "py-4 px-2 rounded-lg shadow-md border-l-8 border-emerald-400 flex items-center bg-slate-700 hover:bg-slate-600 transition-all ease-out duration-300" : "py-4 px-2 rounded-lg shadow-md flex items-center bg-slate-700 hover:bg-slate-600 transition-all ease-out duration-300"}
-                            >
-                                <i className="fa-light fa-chart-mixed text-xl text-slate-200"></i>
-                                <span className="text-xs mr-2 text-slate-400">آمار</span>
-                            </NavLink>
-                        </li>
-                        <li>
                             <NavLink to="products" onClick={() => toggleSideBar()}
                                 className={(navData) => navData.isActive ? "py-4 px-2 rounded-lg shadow-md border-l-8 border-emerald-400 flex items-center bg-slate-700 hover:bg-slate-600 transition-all ease-out duration-300" : "py-4 px-2 rounded-lg shadow-md flex items-center bg-slate-700 hover:bg-slate-600 transition-all ease-out duration-300"}
                             >
@@ -43,27 +35,20 @@ const AdminDashSidebar = ({ toggleSideBar }) => {
                             </NavLink>
                         </li>
                         <li>
-                            <NavLink to="statistics" onClick={() => toggleSideBar()}
-                                className={(navData) => navData.isActive ? "py-4 px-2 rounded-lg shadow-md border-l-8 border-emerald-400 flex items-center bg-slate-700 hover:bg-slate-600 transition-all ease-out duration-300" : "py-4 px-2 rounded-lg shadow-md flex items-center bg-slate-700 hover:bg-slate-600 transition-all ease-out duration-300"}
-                            >
-                                <i className="fa-light fa-comments text-xl text-slate-200"></i>
-                                <span
-                                    className="flex justify-between w-full items-center text-xs mr-2 text-slate-400">نظرات
-
-                                    <span
-                                        className="text-xs text-white font-bold p-1 w-6 h-6 flex justify-center items-center rounded-full bg-red-600 dark:bg-red-500 dark:text-gray-300">24</span>
-
-                                </span>
-                            </NavLink>
-                        </li>
-                        
-                        <li>
                             <NavLink to="discounts" onClick={() => toggleSideBar()}
                                 className={(navData) => navData.isActive ? "py-4 px-2 rounded-lg shadow-md border-l-8 border-emerald-400 flex items-center bg-slate-700 hover:bg-slate-600 transition-all ease-out duration-300" : "py-4 px-2 rounded-lg shadow-md flex items-center bg-slate-700 hover:bg-slate-600 transition-all ease-out duration-300"}
                             >
                       
                                 <i className="fa-light fa-badge-percent text-xl text-slate-200"></i>
                                 <span className="text-xs mr-2 text-slate-400">کدهای تخفیف</span>
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink to="users-plans-values" onClick={() => toggleSideBar()}
+                                className={(navData) => navData.isActive ? "py-4 px-2 rounded-lg shadow-md border-l-8 border-emerald-400 flex items-center bg-slate-700 hover:bg-slate-600 transition-all ease-out duration-300" : "py-4 px-2 rounded-lg shadow-md flex items-center bg-slate-700 hover:bg-slate-600 transition-all ease-out duration-300"}
+                            >
+                                <i className="fa-light fa-user-clock text-xl text-slate-200"></i>
+                                <span className="text-xs mr-2 text-slate-400">اشتراک کاربران</span>
                             </NavLink>
                         </li>
                         <li>
