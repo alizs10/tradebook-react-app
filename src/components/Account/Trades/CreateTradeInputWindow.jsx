@@ -49,8 +49,9 @@ const CreateTradeInputWindow = ({ setDoUserNeedCreateTradeWindow, acc_id, accTyp
         }
 
         const { success, errors } = tradeValidation(newTrade);
-        
+        console.log("here", errors);
         if (success) {
+            console.log("here");
             setErrors({})
             try {
                 const { status, data } = await CreateTrade(newTrade, acc_id)

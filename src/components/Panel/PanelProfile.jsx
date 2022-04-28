@@ -50,9 +50,7 @@ const PanelProfile = () => {
 
     useEffect(() => {
 
-      if (isEmpty(notifications)) {
           dispatch(getAllNotifications())
-      }
 
     }, [])
 

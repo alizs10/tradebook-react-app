@@ -32,10 +32,9 @@ const PanelAccounts = () => {
 
     useEffect(() => {
         dispatch(getAllAccounts())
-        if (isEmpty(notifications)) {
+     
             dispatch(getAllNotifications())
 
-        }
     }, [])
 
     useEffect(() => {

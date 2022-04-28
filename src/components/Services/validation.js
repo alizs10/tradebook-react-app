@@ -221,8 +221,6 @@ export const tradeValidation = payload => {
     const errors = {};
     let isFormValid = true;
 
-    console.log(payload);
-
     if (validator.isEmpty(payload.trade_date)) {
         isFormValid = false;
         errors.trade_date = "تاریخ معامله الزامی می باشد";
@@ -255,18 +253,18 @@ export const tradeValidation = payload => {
         errors.contract_type = "نوع قرارداد باید از بین لانگ و شورت انتخاب شود";
     }
 
-    if ((validator.isEmpty(payload.margin) && payload.status == 0) || (validator.isEmpty(payload.margin) && payload.accType === "crypto")) {
+    if (validator.isEmpty(payload.margin) && payload.accType === "crypto") {
         isFormValid = false;
         errors.margin = "مارجین الزامی می باشد";
-    } else if ((!validator.isNumeric(payload.margin) && payload.status == 0) || (!validator.isNumeric(payload.margin) && payload.accType === "crypto")) {
+    } else if (!validator.isNumeric(payload.margin) &&  payload.accType === "crypto") {
         isFormValid = false;
         errors.margin = "مارجین باید از نوع عدد باشد";
     }
 
-    if (validator.isEmpty(payload.profit) && payload.accType === "forex" && payload.status == 1) {
+    if (validator.isEmpty(payload.profit) && payload.accType === "forex") {
         isFormValid = false;
         errors.profit = "سود/زیان الزامی می باشد";
-    } else if (!validator.isNumeric(payload.profit) && payload.accType === "forex" && payload.status == 1) {
+    } else if (!validator.isNumeric(payload.profit) && payload.accType === "forex") {
         isFormValid = false;
         errors.profit = "سود/زیان باید از نوع عدد باشد";
     }

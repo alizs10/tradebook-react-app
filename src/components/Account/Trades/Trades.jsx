@@ -388,10 +388,10 @@ const Trades = () => {
             </section>
 
             <AnimatePresence>
-                {doUserNeedUpdatePriceWindow && (<UpdatePriceWindow setDoUserNeedUpdatePriceWindow={setDoUserNeedUpdatePriceWindow} trades={trades} account_id={account_id} />)}
-                {doUserNeedCreateTradeWindow && (<CreateTradeInputWindow setDoUserNeedCreateTradeWindow={setDoUserNeedCreateTradeWindow} acc_id={account_id} accType={accType} />)}
-                {doUserNeedEditTradeWindow && (<EditTradeInputWindow setDoUserNeedEditTradeWindow={setDoUserNeedEditTradeWindow} trade={trade} acc_id={account_id} accType={accType} />)}
-                {doUserWantTradeDetails && (<TradeDetailsWindow setDoUserWantTradeDetails={setDoUserWantTradeDetails} trade={trade} handleDelTrade={handleDelTrade} handleEditTrade={handleEditTrade} />)}
+                {doUserNeedUpdatePriceWindow && (<UpdatePriceWindow key={Math.random()*1000000} setDoUserNeedUpdatePriceWindow={setDoUserNeedUpdatePriceWindow} trades={trades} account_id={account_id} />)}
+                {doUserNeedCreateTradeWindow && (<CreateTradeInputWindow key={Math.random()*1000000} setDoUserNeedCreateTradeWindow={setDoUserNeedCreateTradeWindow} acc_id={account_id} accType={accType} />)}
+                {doUserNeedEditTradeWindow && (<EditTradeInputWindow key={Math.random()*1000000} setDoUserNeedEditTradeWindow={setDoUserNeedEditTradeWindow} trade={trade} acc_id={account_id} accType={accType} />)}
+                {doUserWantTradeDetails && (<TradeDetailsWindow key={Math.random()*1000000} setDoUserWantTradeDetails={setDoUserWantTradeDetails} trade={trade} handleDelTrade={handleDelTrade} handleEditTrade={handleEditTrade} />)}
 
                 {blurConditions && (<motion.div exit={{ opacity: 0 }} className="fixed top-0 left-0 w-full h-screen md:w-full backdrop-blur-lg bg-slate-800/70 z-30" onClick={() => handleCloseOpenWindow()}></motion.div>
                 )}
