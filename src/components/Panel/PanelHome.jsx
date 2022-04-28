@@ -36,7 +36,7 @@ const PanelHome = () => {
     useEffect(() => {
         if (isEmpty(notifications)) return
 
-        let showNotifs = notifications.filter(notif => notif.section === "home" && notif.seen == 0);
+        let showNotifs = notifications.filter(notif => (notif.section === "home" && notif.seen == 0));
         setHomeNotifs(showNotifs)
     }, [notifications])
 
@@ -78,7 +78,7 @@ const PanelHome = () => {
                 <h2 className="text-slate-300 text-lg">پیغام های سیستم</h2>
 
                 {homeNotifs.length > 0 ? homeNotifs.map(notif => (
-                    <Alert key={notif.id} notification_id={notif.id} message={notif.message} type={notif.type} />
+                    <Alert key={notif.id} user_id={notif.user_id} notification_id={notif.id} message={notif.message} type={notif.type} />
                 )) : (
                     <p className='text-right text-sm text-slate-300'>پیغامی برای نمایش وجود ندارد</p>
                 )}

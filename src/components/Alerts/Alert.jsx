@@ -1,9 +1,10 @@
+import { isNull } from 'lodash';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { updateNotification } from '../Redux/Action/Notifications';
 import { seenNotification } from '../Services/NotificationsService';
 
-const Alert = ({ message, type, notification_id }) => {
+const Alert = ({ message, type, notification_id, user_id }) => {
 
     let colorClassName = "bg-yellow-500";
 
@@ -42,8 +43,10 @@ const Alert = ({ message, type, notification_id }) => {
     return (
         <div className={`${colorClassName} rounded-lg drop-shadow-lg p-2 flex flex-col gap-y-2`}>
             <p className="font-semibold text-black text-base">{message}</p>
-            <button className='text-blue-500 text-sm flex w-fit' onClick={() => handleNotificationSeen(notification_id)}
-            >متوجه شدم!</button>
+            {!isNull(user_id) && (
+                <button className='text-blue-500 text-sm flex w-fit' onClick={() => handleNotificationSeen(notification_id)}
+                >متوجه شدم!</button>
+            )}
         </div>
     );
 }
