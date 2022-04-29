@@ -258,3 +258,50 @@ export const userValidation = payload => {
         errors
     };
 };
+export const notificationValidation = payload => {
+    const errors = {};
+    let isFormValid = true;
+    let attribute = "اعلان";
+
+    if (!validator.isEmpty(`${payload.user_id}`) && !validator.isInt(`${payload.user_id}`)) {
+        isFormValid = false;
+        errors.user_id = "کاربر انتخاب شده، صحیح نمی باشد";
+    }
+
+    if (validator.isEmpty(payload.message)) {
+        isFormValid = false;
+        errors.message = `${attribute} الزامی می باشد`;
+    } else if (!validator.isLength(payload.message, { min: 4, max: 255 })) {
+        isFormValid = false;
+        errors.message = `${attribute} نمی تواند کمتر از 4 و بیشتر از 255 حرف باشد`;
+    }
+    
+    if (validator.isEmpty(payload.section)) {
+        isFormValid = false;
+        errors.section = `انتخاب بخش الزامی می باشد`;
+    } else if (!validator.isIn(payload.section, ["home", "profile", "accounts"])) {
+        isFormValid = false;
+        errors.section = `بخش انتخابی باید از بین خانه، پروفایل کاربری و حساب ها انتخاب شود`;
+    }
+
+    if (validator.isEmpty(payload.type)) {
+        isFormValid = false;
+        errors.type = `نوع ${attribute} الزامی می باشد`;
+    } else if (!validator.isIn(payload.type, ["warning", "success", "info", "primary", "error"])) {
+        isFormValid = false;
+        errors.type = `نوع ${attribute} باید از بین (warning, success, info, primary, error) انتخاب شود`;
+    }
+
+    if (validator.isEmpty(`${payload.seen}`)) {
+        isFormValid = false;
+        errors.seen = `وضعیت ${attribute} الزامی می باشد`;
+    } else if (!validator.isIn(`${payload.seen}`, [0, 1])) {
+        isFormValid = false;
+        errors.seen = `وضعیت ${attribute} باید از بین فعال و غیرفعال انتخاب شود`;
+    }
+
+    return {
+        success: isFormValid,
+        errors
+    };
+};

@@ -13,7 +13,7 @@ const AdminDashSidebar = ({ toggleSideBar, handleLogout }) => {
                         <li>
                             <NavLink to="/admin" onClick={() => toggleSideBar()}
                                 className={(navData) => navData.isActive ? "py-4 px-2 rounded-lg shadow-md border-l-8 border-emerald-400 flex items-center bg-slate-700 hover:bg-slate-600 transition-all ease-out duration-300" : "py-4 px-2 rounded-lg shadow-md flex items-center bg-slate-700 hover:bg-slate-600 transition-all ease-out duration-300"}
-                            end>
+                                end>
                                 <i className="fa-light fa-house text-xl text-slate-200"></i>
                                 <span className="text-sm mr-2 text-slate-400">خانه</span>
                             </NavLink>
@@ -38,7 +38,7 @@ const AdminDashSidebar = ({ toggleSideBar, handleLogout }) => {
                             <NavLink to="discounts" onClick={() => toggleSideBar()}
                                 className={(navData) => navData.isActive ? "py-4 px-2 rounded-lg shadow-md border-l-8 border-emerald-400 flex items-center bg-slate-700 hover:bg-slate-600 transition-all ease-out duration-300" : "py-4 px-2 rounded-lg shadow-md flex items-center bg-slate-700 hover:bg-slate-600 transition-all ease-out duration-300"}
                             >
-                      
+
                                 <i className="fa-light fa-badge-percent text-xl text-slate-200"></i>
                                 <span className="text-xs mr-2 text-slate-400">کدهای تخفیف</span>
                             </NavLink>
@@ -68,7 +68,15 @@ const AdminDashSidebar = ({ toggleSideBar, handleLogout }) => {
                             </NavLink>
                         </li>
                         <li>
-                        <NavLink to="tickets" onClick={() => toggleSideBar()}
+                            <NavLink to="notifications" onClick={() => toggleSideBar()}
+                                className={(navData) => navData.isActive ? "py-4 px-2 rounded-lg shadow-md border-l-8 border-emerald-400 flex items-center bg-slate-700 hover:bg-slate-600 transition-all ease-out duration-300" : "py-4 px-2 rounded-lg shadow-md flex items-center bg-slate-700 hover:bg-slate-600 transition-all ease-out duration-300"}
+                            >
+                                <i className="fa-light fa-bell text-xl text-slate-200"></i>
+                                <span className="text-xs mr-2 text-slate-400">اعلان ها</span>
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink to="tickets" onClick={() => toggleSideBar()}
                                 className={(navData) => navData.isActive ? "py-4 px-2 rounded-lg shadow-md border-l-8 border-emerald-400 flex items-center bg-slate-700 hover:bg-slate-600 transition-all ease-out duration-300" : "py-4 px-2 rounded-lg shadow-md flex items-center bg-slate-700 hover:bg-slate-600 transition-all ease-out duration-300"}
                             >
                                 <i className="fa-light fa-ticket-simple text-xl text-slate-200"></i>
