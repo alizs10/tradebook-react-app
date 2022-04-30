@@ -42,7 +42,18 @@ const DashPayments = () => {
     const dispatch = useDispatch()
 
     useState(() => {
-        dispatch(getAllPayments())
+     
+
+        let unmounted = false;
+
+        if (!unmounted) {
+            dispatch(getAllPayments())
+
+        }
+
+        return () => {
+            unmounted = true;
+        }
     }, [])
     useEffect(() => {
 

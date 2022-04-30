@@ -41,7 +41,18 @@ const DashAdminPairs = () => {
     const dispatch = useDispatch()
 
     useState(() => {
-        dispatch(getAllAdminPairs())
+       
+
+        let unmounted = false;
+
+        if (!unmounted) {
+            dispatch(getAllAdminPairs())
+
+        }
+
+        return () => {
+            unmounted = true;
+        }
     }, [])
     useEffect(() => {
 

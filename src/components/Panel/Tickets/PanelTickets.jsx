@@ -24,7 +24,17 @@ const PanelTickets = () => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(getAllTickets())
+
+        let unmounted = false;
+
+        if (!unmounted) {
+            dispatch(getAllTickets())
+
+        }
+
+        return () => {
+            unmounted = true;
+        }
     }, [])
 
     useEffect(() => {

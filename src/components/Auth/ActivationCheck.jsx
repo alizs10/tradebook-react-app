@@ -9,10 +9,20 @@ const ActivationCheck = ({ children }) => {
     const [navigateTo, setNavigateTo] = useState(null)
 
     useEffect(() => {
-        if (user.status == 0) {
-           setNavigateTo("/panel/")
-        } else if (isNull(user.email_verified_at)) {
-            setNavigateTo("/panel/profile")
+      
+        let unmounted = false;
+
+        if (!unmounted) {
+            if (user.status == 0) {
+                setNavigateTo("/panel/")
+             } else if (isNull(user.email_verified_at)) {
+                 setNavigateTo("/panel/profile")
+             }
+     
+        }
+
+        return () => {
+            unmounted = true;
         }
     }, [])
     

@@ -12,30 +12,38 @@ const SnapshotWindow = ({ statistics, setDidUserTakeSnapshot }) => {
     const [date, setDate] = useState("")
     
     useEffect(() => {
-        const node = ref.current;
-        const scale = 750 / node.offsetWidth;
-        domtoimage.toPng(node, {
-            height: node.offsetHeight * scale,
-            width: node.offsetWidth * scale,
-            style: {
-            transform: "scale(" + scale + ")",
-            transformOrigin: "top left",
-            width: node.offsetWidth + "px",
-            height: node.offsetHeight + "px"
-            }
-        }).then(function (dataUrl) {
-            const dateInstance = new Date();
-            const now = dateInstance.getFullYear() + "-" + ("0" + (dateInstance.getMonth() + 1)).slice(-2) + "-" +
-                ("0" + dateInstance.getDate()).slice(-2) + "-" + ("0" + dateInstance.getHours()).slice(-2) + "-" + ("0" + dateInstance.getMinutes()).slice(-2) + "-" + ("0" + dateInstance.getSeconds()).slice(-2);
-            setDate(now);
-            setImage(dataUrl)
+        let unmounted = false;
 
-            setLoading(false)
-        }).catch(function (error) {
-            setDidUserTakeSnapshot(false)
-            notify("مشکلی پیش آمده، دوباره امتحان کنید", "error")
-        });
+        if (!unmounted) {
+            const node = ref.current;
+            const scale = 750 / node.offsetWidth;
+            domtoimage.toPng(node, {
+                height: node.offsetHeight * scale,
+                width: node.offsetWidth * scale,
+                style: {
+                transform: "scale(" + scale + ")",
+                transformOrigin: "top left",
+                width: node.offsetWidth + "px",
+                height: node.offsetHeight + "px"
+                }
+            }).then(function (dataUrl) {
+                const dateInstance = new Date();
+                const now = dateInstance.getFullYear() + "-" + ("0" + (dateInstance.getMonth() + 1)).slice(-2) + "-" +
+                    ("0" + dateInstance.getDate()).slice(-2) + "-" + ("0" + dateInstance.getHours()).slice(-2) + "-" + ("0" + dateInstance.getMinutes()).slice(-2) + "-" + ("0" + dateInstance.getSeconds()).slice(-2);
+                setDate(now);
+                setImage(dataUrl)
+    
+                setLoading(false)
+            }).catch(function (error) {
+                setDidUserTakeSnapshot(false)
+                notify("مشکلی پیش آمده، دوباره امتحان کنید", "error")
+            });
 
+        }
+
+        return () => {
+            unmounted = true;
+        }
 
     }, [])
 

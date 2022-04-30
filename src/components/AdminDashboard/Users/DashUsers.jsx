@@ -37,7 +37,20 @@ const DashUsers = () => {
     const dispatch = useDispatch()
 
     useState(() => {
-        dispatch(getAllUsers())
+     
+
+        
+        let unmounted = false;
+
+        if (!unmounted) {
+           
+            dispatch(getAllUsers())
+
+        }
+
+        return () => {
+            unmounted = true;
+        }
     }, [])
     useEffect(() => {
 

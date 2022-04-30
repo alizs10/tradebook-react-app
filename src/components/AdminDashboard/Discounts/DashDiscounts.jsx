@@ -42,7 +42,18 @@ const DashDiscounts = () => {
     const dispatch = useDispatch()
 
     useState(() => {
-        dispatch(getAllDiscounts())
+       
+
+        let unmounted = false;
+
+        if (!unmounted) {
+            dispatch(getAllDiscounts())
+
+        }
+
+        return () => {
+            unmounted = true;
+        }
     }, [])
     useEffect(() => {
 

@@ -44,23 +44,34 @@ const AccountMain = () => {
     const { account_id } = useParams();
 
     useEffect(async () => {
-        const { data } = await getAccounts();
-        const accounts = data.accounts;
-        const matched_accs = accounts.filter(acc => acc.id === parseInt(account_id))
-        if (trades.length === 0) {
-            if (matched_accs.length !== 0) {
-                dispatch(getAllTrades(account_id))
-            } else {
-                navigate('/panel/accounts');
-                notify('این حساب وجود ندارد', 'error')
+
+
+        let unmounted = false;
+
+        if (!unmounted) {
+            const { data } = await getAccounts();
+            const accounts = data.accounts;
+            const matched_accs = accounts.filter(acc => acc.id === parseInt(account_id))
+            if (trades.length === 0) {
+                if (matched_accs.length !== 0) {
+                    dispatch(getAllTrades(account_id))
+                } else {
+                    navigate('/panel/accounts');
+                    notify('این حساب وجود ندارد', 'error')
+                }
             }
+
+            prepareStatistics(matched_accs[0].statistic_values)
+            if (matched_accs[0].type === 0) {
+                dispatch(setCryptoPairs())
+            } else {
+                dispatch(setForexPairs())
+            }
+
         }
 
-        prepareStatistics(matched_accs[0].statistic_values)
-        if (matched_accs[0].type === 0) {
-            dispatch(setCryptoPairs())
-        } else {
-            dispatch(setForexPairs())
+        return () => {
+            unmounted = true;
         }
     }, [])
 

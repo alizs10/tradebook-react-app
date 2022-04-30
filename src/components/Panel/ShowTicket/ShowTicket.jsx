@@ -30,35 +30,44 @@ const ShowTicket = () => {
     }
 
     useState(async () => {
-        const { data, status } = await getTicket(ticket_id)
+        
+        let unmounted = false;
 
-        if (status == 200) {
-            setShowTicket(data.ticket)
-            setStauts(data.ticket.status)
-            setReplays(data.children)
-            switch (`${data.ticket.type}`) {
-                case "0":
-                    setType("گزارش مشکل");
-                    break;
-                case "1":
-                    setType("پیشنهاد");
-                    break;
-                case "2":
-                    setType("انتقاد");
-                    break;
-                case "3":
-                    setType("پرسش");
-                    break;
-                case "4":
-                    setType("دیگر موارد");
-                    break;
+        if (!unmounted) {
+            const { data, status } = await getTicket(ticket_id)
 
-                default:
-                    break;
+            if (status == 200) {
+                setShowTicket(data.ticket)
+                setStauts(data.ticket.status)
+                setReplays(data.children)
+                switch (`${data.ticket.type}`) {
+                    case "0":
+                        setType("گزارش مشکل");
+                        break;
+                    case "1":
+                        setType("پیشنهاد");
+                        break;
+                    case "2":
+                        setType("انتقاد");
+                        break;
+                    case "3":
+                        setType("پرسش");
+                        break;
+                    case "4":
+                        setType("دیگر موارد");
+                        break;
+    
+                    default:
+                        break;
+                }
+                setLoading(false)
             }
-            setLoading(false)
+
         }
 
+        return () => {
+            unmounted = true;
+        }
 
     }, [])
 

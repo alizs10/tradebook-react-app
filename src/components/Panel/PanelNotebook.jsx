@@ -20,7 +20,17 @@ const PanelNotebook = () => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(getAllNotes(user.id))
+      
+
+        let unmounted = false;
+
+        if (!unmounted) {
+            dispatch(getAllNotes(user.id))
+        }
+
+        return () => {
+            unmounted = true;
+        }
     }, [])
 
     const handleCreateNote = async () => {

@@ -24,7 +24,18 @@ const PanelOrders = () => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(getAllUserOrders())
+     
+
+        let unmounted = false;
+
+        if (!unmounted) {
+            dispatch(getAllUserOrders())
+
+        }
+
+        return () => {
+            unmounted = true;
+        }
     }, [])
 
     useEffect(() => {

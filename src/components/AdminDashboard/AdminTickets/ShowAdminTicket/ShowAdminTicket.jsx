@@ -23,34 +23,42 @@ const ShowAdminTicket = () => {
 
     useState(async () => {
 
+        let unmounted = false;
 
-        const { data, status } = await showAdminTicket(ticket_id)
+        if (!unmounted) {
+            const { data, status } = await showAdminTicket(ticket_id)
 
-        if (status == 200) {
-            setShowTicket(data.ticket)
-            setStauts(data.ticket.status)
-            setReplays(data.children)
-            switch (`${data.ticket.type}`) {
-                case "0":
-                    setType("گزارش مشکل");
-                    break;
-                case "1":
-                    setType("پیشنهاد");
-                    break;
-                case "2":
-                    setType("انتقاد");
-                    break;
-                case "3":
-                    setType("پرسش");
-                    break;
-                case "4":
-                    setType("دیگر موارد");
-                    break;
+            if (status == 200) {
+                setShowTicket(data.ticket)
+                setStauts(data.ticket.status)
+                setReplays(data.children)
+                switch (`${data.ticket.type}`) {
+                    case "0":
+                        setType("گزارش مشکل");
+                        break;
+                    case "1":
+                        setType("پیشنهاد");
+                        break;
+                    case "2":
+                        setType("انتقاد");
+                        break;
+                    case "3":
+                        setType("پرسش");
+                        break;
+                    case "4":
+                        setType("دیگر موارد");
+                        break;
 
-                default:
-                    break;
+                    default:
+                        break;
+                }
+                setLoading(false)
             }
-            setLoading(false)
+
+        }
+
+        return () => {
+            unmounted = true;
         }
 
 

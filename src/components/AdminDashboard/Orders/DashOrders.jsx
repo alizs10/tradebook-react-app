@@ -42,7 +42,18 @@ const DashOrders = () => {
     const dispatch = useDispatch()
 
     useState(() => {
-        dispatch(getAllOrders())
+     
+
+        let unmounted = false;
+
+        if (!unmounted) {
+            dispatch(getAllOrders())
+
+        }
+
+        return () => {
+            unmounted = true;
+        }
     }, [])
     useEffect(() => {
 

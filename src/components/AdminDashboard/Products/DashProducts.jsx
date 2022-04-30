@@ -41,7 +41,19 @@ const DashProducts = () => {
     const dispatch = useDispatch()
 
     useState(() => {
-        dispatch(getAllPlans())
+
+
+        let unmounted = false;
+
+        if (!unmounted) {
+            dispatch(getAllPlans())
+
+        }
+
+        return () => {
+            unmounted = true;
+        }
+        
     }, [])
     useEffect(() => {
 

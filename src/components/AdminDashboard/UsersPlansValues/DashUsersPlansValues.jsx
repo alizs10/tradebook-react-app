@@ -20,33 +20,73 @@ const DashUsersPlansValues = () => {
 
     useState(async () => {
 
-        const { data, status } = await getUsersPlansValues()
+        let unmounted = false;
 
-        if (status == 200) {
-            setUsersPlansValues(await data.users_plans_values)
+        if (!unmounted) {
+            const { data, status } = await getUsersPlansValues()
+
+            if (status == 200) {
+                setUsersPlansValues(await data.users_plans_values)
+            }
         }
 
+        return () => {
+            unmounted = true;
+        }
 
     }, [])
     useEffect(() => {
 
-        if (isUserSearching) {
+        
 
-            handleSearch(searchInp)
-            return
+        let unmounted = false;
+
+        if (!unmounted) {
+            if (isUserSearching) {
+
+                handleSearch(searchInp)
+                return
+            }
+    
+            setShowArr(usersPlansValues)
+    
+
         }
 
-        setShowArr(usersPlansValues)
-
+        return () => {
+            unmounted = true;
+        }
 
     }, [usersPlansValues])
 
     useEffect(() => {
-        setPagination(paginate(showArr, 5, currentPage))
+
+        let unmounted = false;
+
+        if (!unmounted) {
+            setPagination(paginate(showArr, 5, currentPage))
+
+
+        }
+
+        return () => {
+            unmounted = true;
+        }
     }, [showArr])
 
     useEffect(() => {
-        setPagination(paginate(showArr, 5, currentPage))
+     
+
+        let unmounted = false;
+
+        if (!unmounted) {
+            setPagination(paginate(showArr, 5, currentPage))
+
+        }
+
+        return () => {
+            unmounted = true;
+        }
     }, [currentPage])
 
     var iteration = pagination.startIndex + 1;

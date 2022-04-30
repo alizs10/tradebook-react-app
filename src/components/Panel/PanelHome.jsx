@@ -21,9 +21,18 @@ const PanelHome = () => {
 
     useEffect(() => {
 
-        dispatch(setHomeData())
-        dispatch(getAllNotifications())
+        let unmounted = false;
 
+        if (!unmounted) {
+        
+            dispatch(setHomeData())
+            dispatch(getAllNotifications())
+
+        }
+
+        return () => {
+            unmounted = true;
+        }
     }, [])
 
     useEffect(() => {

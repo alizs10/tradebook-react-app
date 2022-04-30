@@ -16,39 +16,47 @@ const AuthCkeck = ({ children }) => {
     const style = { position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)" };
 
     useEffect(async () => {
-        let token = localStorage.getItem('token');
+        
+        let unmounted = false;
 
-        if (!token) {
-            dispatch(ClearUser())
-            if (location.pathname === '/' || location.pathname === '/register' || location.pathname === '/forgot-password' || location.pathname.includes('/reset-password/')) {
-                setChecking(false)
-                return
-            }
+        if (!unmounted) {
+            let token = localStorage.getItem('token');
 
-            navigate('/')
-            setChecking(false)
-            notify("به حساب کاربری خود وارد شوید", "warning")
-            return;
-        }
-
-        try {
-            const { status, data } = await getUserByToken(token)
-
-            if (status === 200) {
-                dispatch(AddUser(data.user))
-                setChecking(false)
-                if (location.pathname === '/' || location.pathname === '/register') {
-                    navigate('/panel/')
+            if (!token) {
+                dispatch(ClearUser())
+                if (location.pathname === '/' || location.pathname === '/register' || location.pathname === '/forgot-password' || location.pathname.includes('/reset-password/')) {
+                    setChecking(false)
+                    return
                 }
-
+    
+                navigate('/')
+                setChecking(false)
+                notify("به حساب کاربری خود وارد شوید", "warning")
+                return;
             }
-        } catch (error) {
-            localStorage.removeItem('token')
-            setChecking(false)
-            navigate('/')
+    
+            try {
+                const { status, data } = await getUserByToken(token)
+    
+                if (status === 200) {
+                    dispatch(AddUser(data.user))
+                    setChecking(false)
+                    if (location.pathname === '/' || location.pathname === '/register') {
+                        navigate('/panel/')
+                    }
+    
+                }
+            } catch (error) {
+                localStorage.removeItem('token')
+                setChecking(false)
+                navigate('/')
+            }
+    
         }
 
-
+        return () => {
+            unmounted = true;
+        }
 
     }, [])
 

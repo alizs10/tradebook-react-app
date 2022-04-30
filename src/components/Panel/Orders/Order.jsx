@@ -9,27 +9,38 @@ const Order = ({ order, setOrder, setDoUserWantOrderDetailsWindow }) => {
     const [statusClassName, setStatusClassName] = useState("")
 
     useEffect(() => {
-        switch (`${order.status}`) {
-            case "0":
-                setStatus("در انتظار پرداخت")
-                setStatusClassName("")
+       
 
-                break;
-            case "1":
-                setStatus("پرداخت شده")
-                setStatusClassName("border-emerald-400")
-                break;
-            case "2":
-                setStatus("لغو شده")
-                setStatusClassName("border-red-400")
-                break;
-            case "3":
-                setStatus("پرداخت ناموفق")
-                setStatusClassName("border-red-400")
-                break;
+        let unmounted = false;
 
-            default:
-                break;
+        if (!unmounted) {
+            switch (`${order.status}`) {
+                case "0":
+                    setStatus("در انتظار پرداخت")
+                    setStatusClassName("")
+    
+                    break;
+                case "1":
+                    setStatus("پرداخت شده")
+                    setStatusClassName("border-emerald-400")
+                    break;
+                case "2":
+                    setStatus("لغو شده")
+                    setStatusClassName("border-red-400")
+                    break;
+                case "3":
+                    setStatus("پرداخت ناموفق")
+                    setStatusClassName("border-red-400")
+                    break;
+    
+                default:
+                    break;
+            }
+
+        }
+
+        return () => {
+            unmounted = true;
         }
     }, [])
 

@@ -20,27 +20,36 @@ const BuyProduct = () => {
     const navigate = useNavigate();
     useEffect(async () => {
 
-        try {
-            const { status, data } = await showOrder(order_id)
+        
+        let unmounted = false;
 
-            if (status == 200) {
-                setOrder(data.order)
-                data.order.discount_id && setHaveDiscount(true)
-                setPlanName(data.plan_name)
-            }
-
-        } catch (e) {
-            var error = Object.assign({}, e);
-            navigate(`/panel/plans`)
-            if (error.response.status === 422) {
+        if (!unmounted) {
+            try {
+                const { status, data } = await showOrder(order_id)
+    
+                if (status == 200) {
+                    setOrder(data.order)
+                    data.order.discount_id && setHaveDiscount(true)
+                    setPlanName(data.plan_name)
+                }
+    
+            } catch (e) {
+                var error = Object.assign({}, e);
                 navigate(`/panel/plans`)
-                notify('سفارشی وجود ندارد', 'error')
-            } else {
-                notify('مشکلی رخ داده است', 'error')
+                if (error.response.status === 422) {
+                    navigate(`/panel/plans`)
+                    notify('سفارشی وجود ندارد', 'error')
+                } else {
+                    notify('مشکلی رخ داده است', 'error')
+                }
             }
+    
+
         }
 
-
+        return () => {
+            unmounted = true;
+        }
     }, [])
 
     const checkAndApplyDiscount = async () => {

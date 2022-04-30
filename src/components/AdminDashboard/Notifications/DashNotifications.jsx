@@ -1,5 +1,4 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { confirm, notify } from '../../Services/alerts';
 import { paginate } from '../../Services/Pagination';
 import Pagination from './Pagination';
@@ -38,37 +37,69 @@ const DashNotifications = () => {
         }
     }
 
-    const dispatch = useDispatch()
-
     useState(async () => {
-        const { data, status } = await getAdminNotifications()
 
-        if (status == 200) {
-            console.log(data);
-            setNotifications(data.notifications)
+        let unmounted = false;
+
+        if (!unmounted) {
+            const { data, status } = await getAdminNotifications()
+
+            if (status == 200) {
+                setNotifications(data.notifications)
+            }
         }
 
+        return () => {
+            unmounted = true;
+        }
 
     }, [])
     useEffect(() => {
 
-        if (isUserSearching) {
+        let unmounted = false;
 
-            handleSearch(searchInp)
-            return
+        if (!unmounted) {
+            if (isUserSearching) {
+
+                handleSearch(searchInp)
+                return
+            }
+
+            setShowArr(notifications)
         }
 
-        setShowArr(notifications)
-
+        return () => {
+            unmounted = true;
+        }
 
     }, [notifications])
 
     useEffect(() => {
-        setPagination(paginate(showArr, 5, currentPage))
+
+        let unmounted = false;
+
+        if (!unmounted) {
+            setPagination(paginate(showArr, 5, currentPage))
+
+        }
+
+        return () => {
+            unmounted = true;
+        }
     }, [showArr])
 
     useEffect(() => {
-        setPagination(paginate(showArr, 5, currentPage))
+
+
+        let unmounted = false;
+
+        if (!unmounted) {
+            setPagination(paginate(showArr, 5, currentPage))
+        }
+
+        return () => {
+            unmounted = true;
+        }
     }, [currentPage])
 
     var iteration = pagination.startIndex + 1;

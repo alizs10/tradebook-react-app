@@ -26,8 +26,18 @@ const CreateOrderWindow = ({ setDoUserNeedCreateOrderWindow }) => {
 
 
     useEffect(() => {
-        dispatch(getAllUsers())
-        dispatch(getAllPlans())
+    
+
+        let unmounted = false;
+
+        if (!unmounted) {
+            dispatch(getAllUsers())
+            dispatch(getAllPlans())
+        }
+
+        return () => {
+            unmounted = true;
+        }
     }, [])
 
 

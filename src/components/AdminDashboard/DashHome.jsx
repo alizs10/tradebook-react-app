@@ -18,8 +18,18 @@ const DashHome = () => {
     const payments = useSelector(state => state.Payments)
 
     useEffect(() => {
-        dispatch(setAdminHomeData())
-        dispatch(getAllPayments())
+
+        let unmounted = false;
+
+        if (!unmounted) {
+            dispatch(setAdminHomeData())
+            dispatch(getAllPayments())
+
+        }
+
+        return () => {
+            unmounted = true;
+        }
     }, [])
 
     useEffect(() => {

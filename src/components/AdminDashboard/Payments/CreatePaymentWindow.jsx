@@ -28,7 +28,18 @@ const CreatePaymentWindow = ({ setDoUserNeedCreatePaymentWindow }) => {
 
 
     useEffect(() => {
-        dispatch(getAllOrders())
+    
+
+        let unmounted = false;
+
+        if (!unmounted) {
+            dispatch(getAllOrders())
+
+        }
+
+        return () => {
+            unmounted = true;
+        }
     }, [])
 
     useEffect(() => {

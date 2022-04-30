@@ -15,6 +15,10 @@ const PaymentResult = () => {
 
     useEffect(async () => {
 
+        let unmounted = false;
+
+        if (!unmounted) {
+         
         let payment = {
             Authority, Status
         }
@@ -34,8 +38,11 @@ const PaymentResult = () => {
             console.log(error);
             setVerifying(false)
         }
+        }
 
-
+        return () => {
+            unmounted = true;
+        }
     }, [])
 
 

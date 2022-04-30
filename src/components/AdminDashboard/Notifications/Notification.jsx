@@ -1,15 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import listenForOutsideClicks from '../../Services/listenForOutsideClick';
+import Dropdown from './Dropdown';
 
 const Notification = ({ notification, iteration, setNotification, handleDelNotification, setDoUserNeedEditNotificationWindow, setDoUserNeedDetailsNotificationWindow }) => {
 
-    const dropdownBtnRef = useRef(null);
-    const [listening, setListening] = useState(false);
 
     const [showDropDownBtn, setShowDropDownBtn] = useState(false);
     const toggleDropDownBtn = () => setShowDropDownBtn(!showDropDownBtn);
 
-    useEffect(listenForOutsideClicks(listening, setListening, dropdownBtnRef, setShowDropDownBtn, setNotification));
 
     const handleOpenEditNotificationWindow = () => {
         setNotification(notification)
@@ -30,36 +27,16 @@ const Notification = ({ notification, iteration, setNotification, handleDelNotif
             <td className="py-4">{notification.user_name}</td>
             <td className="py-4">{`${notification.message.slice(0, 50)} ${notification.message.length > 50 ? "..." : ""}`}</td>
             <td className="py-4">{notification.seen == 0 ? "فعال" : "غیرفعال"}</td>
-            <td className="relative" ref={dropdownBtnRef}>
+            <td className="relative">
                 <button onClick={toggleDropDownBtn}
                     className="py-1 px-2 text-xxs lg:text-base lg:px-4 lg:py-2 rounded-lg bg-slate-200 dark:bg-slate-900"
                 >
                     <span>عملیات</span>
                     <i className="fa-light fa-angle-down mr-1"></i>
                 </button>
-                {!showDropDownBtn ? null : (
-                    <ul
-                        className="absolute top-12 -right-10 lg:top-14 lg:right-auto z-10 drop-shadow-lg bg-slate-100 dark:bg-slate-800 rounded-lg w-24 lg:w-36 overflow-hidden">
-                        <li>
-                            <button onClick={() => handleOpenNotificationDetailsWindow()}
-                                className="w-full text-right text-xxxs lg:text-xs py-2 hover:bg-slate-200 dark:hover:bg-slate-700 transition ease-out duration-300">
-                                <i className="fa-light fa-memo-circle-info text-xs lg:text-base mx-2"></i>
-                                جزییات</button>
-                        </li>
-                        <li>
-                            <button onClick={() => handleOpenEditNotificationWindow()}
-                                className="w-full text-right text-xxxs lg:text-xs py-2 hover:bg-slate-200 dark:hover:bg-slate-700 transition ease-out duration-300">
-                                <i className="fa-light fa-pen-to-square text-xs lg:text-base mx-2"></i>
-                                ویرایش</button>
-                        </li>
-                        <li>
-                            <button onClick={() => handleDelNotification(notification.id)}
-                                className="w-full text-right text-xxxs lg:text-xs py-2 hover:bg-slate-200 dark:hover:bg-slate-700 transition ease-out duration-300">
-                                <i className="fa-light fa-trash text-xs lg:text-base mx-2"></i>
-                                حذف</button>
-                        </li>
+                {showDropDownBtn && (
+                    <Dropdown toggleDropDownBtn={toggleDropDownBtn} notification_id={notification.id} handleDelNotification={handleDelNotification} handleOpenEditNotificationWindow={handleOpenEditNotificationWindow} handleOpenNotificationDetailsWindow={handleOpenNotificationDetailsWindow} />
 
-                    </ul>
                 )}
 
             </td>

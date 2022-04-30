@@ -31,9 +31,18 @@ const PanelAccounts = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(getAllAccounts())
-     
+
+        let unmounted = false;
+
+        if (!unmounted) {
+            dispatch(getAllAccounts())
             dispatch(getAllNotifications())
+
+        }
+
+        return () => {
+            unmounted = true;
+        }
 
     }, [])
 

@@ -8,28 +8,37 @@ const OrderDetailsWindow = ({ order, setDoUserWantOrderDetailsWindow }) => {
     const [status, setStatus] = useState("")
 
     useEffect(() => {
-        switch (`${order.status}`) {
-            case "0":
-                setStatus("در انتظار پرداخت")
-                break;
-            case "1":
-                setStatus("پرداخت شده")
-                break;
-            case "2":
-                setStatus("لغو شده")
-                break;
-            case "3":
-                setStatus("پرداخت ناموفق")
-                break;
+        let unmounted = false;
 
-            default:
-                break;
+        if (!unmounted) {
+            switch (`${order.status}`) {
+                case "0":
+                    setStatus("در انتظار پرداخت")
+                    break;
+                case "1":
+                    setStatus("پرداخت شده")
+                    break;
+                case "2":
+                    setStatus("لغو شده")
+                    break;
+                case "3":
+                    setStatus("پرداخت ناموفق")
+                    break;
+
+                default:
+                    break;
+            }
+
+        }
+
+        return () => {
+            unmounted = true;
         }
     }, [])
-    
+
     return (
-        <motion.div  key="modal"
-        initial={{ opacity: 0 }} animate={{ y: 25, x: "-50%", opacity: 1 }} exit={{ opacity: 0 }}
+        <motion.div key="modal"
+            initial={{ opacity: 0 }} animate={{ y: 25, x: "-50%", opacity: 1 }} exit={{ opacity: 0 }}
             className="absolute top-4 left-1/2 w-full md:w-3/4 transform -translate-x-1/2 mt-4 z-50 rounded-lg drop-shadow-lg bg-slate-600">
             <div className="w-full text-slate-100 p-2 flex flex-col gap-y-2">
 

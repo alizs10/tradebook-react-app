@@ -10,21 +10,29 @@ const PanelPlans = () => {
 
     useEffect(async () => {
 
-        try {
-            const { status, data } = await getPlans()
+       
+        let unmounted = false;
 
-            if (status == 200) {
-                let unsortedPlans = data.plans;
-                let sortedPlans = unsortedPlans.sort(function(a,b){
-                    return (a.price - b.price);
-                });
-                setPlans(sortedPlans)
+        if (!unmounted) {
+            try {
+                const { status, data } = await getPlans()
+    
+                if (status == 200) {
+                    let unsortedPlans = data.plans;
+                    let sortedPlans = unsortedPlans.sort(function(a,b){
+                        return (a.price - b.price);
+                    });
+                    setPlans(sortedPlans)
+                }
+            } catch (error) {
+    
             }
-        } catch (error) {
-
+    
         }
 
-
+        return () => {
+            unmounted = true;
+        }
     }, [])
 
     return (

@@ -27,7 +27,18 @@ const DashAdminTickets = () => {
     const dispatch = useDispatch()
 
     useState(() => {
-        dispatch(getAllAdminTickets())
+
+        let unmounted = false;
+
+        if (!unmounted) {
+            dispatch(getAllAdminTickets())
+
+
+        }
+
+        return () => {
+            unmounted = true;
+        }
     }, [])
     useEffect(() => {
 

@@ -18,16 +18,26 @@ const AccountLayout = ({ children }) => {
     const navigate = useNavigate()
 
     useEffect(async () => {
-        const { status, data } = await ShowAcc(account_id)
+        
 
-        if (status === 200) {
-            dispatch(setAccount(data.account))
-        } else if (status === 422) {
-            navigate('/panel/accounts')
-            notify('این حساب وجود ندارد', 'warning')
-        } else {
-            navigate('/panel/accounts')
-            notify('خطایی رخ داده است', 'danger')
+        let unmounted = false;
+
+        if (!unmounted) {
+            const { status, data } = await ShowAcc(account_id)
+
+            if (status === 200) {
+                dispatch(setAccount(data.account))
+            } else if (status === 422) {
+                navigate('/panel/accounts')
+                notify('این حساب وجود ندارد', 'warning')
+            } else {
+                navigate('/panel/accounts')
+                notify('خطایی رخ داده است', 'danger')
+            }
+        }
+
+        return () => {
+            unmounted = true;
         }
     }, [])
 

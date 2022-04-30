@@ -50,8 +50,16 @@ const PanelProfile = () => {
 
     useEffect(() => {
 
-          dispatch(getAllNotifications())
+         
+          let unmounted = false;
 
+          if (!unmounted) {
+            dispatch(getAllNotifications())
+          }
+  
+          return () => {
+              unmounted = true;
+          }
     }, [])
 
     useEffect(() => {

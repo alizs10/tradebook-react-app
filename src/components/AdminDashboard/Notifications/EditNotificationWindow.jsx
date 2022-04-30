@@ -19,8 +19,19 @@ const EditNotificationWindow = ({ setDoUserNeedEditNotificationWindow, notificat
 
     const dispatch = useDispatch()
     useEffect(() => {
-        if (isEmpty(users)) {
-            dispatch(getAllUsers())
+        
+        let unmounted = false;
+
+        if (!unmounted) {
+            if (isEmpty(users)) {
+                dispatch(getAllUsers())
+            }
+    
+
+        }
+
+        return () => {
+            unmounted = true;
         }
 
     }, [])

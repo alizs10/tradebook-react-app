@@ -4,13 +4,8 @@ import moment from 'moment';
 
 const Trade = ({ setDoUserWantTradeDetails, setDoUserNeedEditTradeWindow, trade, index, setTrade, handleDelTrade }) => {
 
-    const dropdownBtnRef = useRef(null);
-    const [listening, setListening] = useState(false);
-
     const [showDropDownBtn, setShowDropDownBtn] = useState(false);
     const toggleDropDownBtn = () => setShowDropDownBtn(!showDropDownBtn);
-
-    useEffect(listenForOutsideClicks(listening, setListening, dropdownBtnRef, setShowDropDownBtn, setTrade));
 
     const handleOpenTradeDetailsWindow = () => {
         setTrade(trade)
@@ -41,14 +36,14 @@ const Trade = ({ setDoUserWantTradeDetails, setDoUserNeedEditTradeWindow, trade,
                     </span>
                     <span>{`${trade.pnl} %`}</span>
                 </td>
-                <td className="relative" ref={dropdownBtnRef}>
+                <td className="relative">
                     <button onClick={toggleDropDownBtn}
                         className="py-1 px-2 text-xxs lg:text-base lg:px-4 lg:py-2 rounded-lg bg-slate-200 dark:bg-slate-900"
                     >
                         <span>عملیات</span>
                         <i className="fa-light fa-angle-down mr-1"></i>
                     </button>
-                    {!showDropDownBtn ? null : (
+                    {showDropDownBtn && (
                         <ul
                             className="absolute top-12 -right-10 lg:top-14 lg:right-auto z-10 drop-shadow-lg bg-slate-100 dark:bg-slate-800 rounded-lg w-24 lg:w-36 overflow-hidden">
                             <li>
