@@ -17,6 +17,8 @@ import Alert from '../Alerts/Alert';
 
 const PanelProfile = () => {
 
+    const [loading, setLoading] = useState(false)
+
     const dispatch = useDispatch();
 
     const user = useSelector(state => state.User);
@@ -50,16 +52,17 @@ const PanelProfile = () => {
 
     useEffect(() => {
 
-         
-          let unmounted = false;
 
-          if (!unmounted) {
+        let unmounted = false;
+
+        if (!unmounted) {
             dispatch(getAllNotifications())
-          }
-  
-          return () => {
-              unmounted = true;
-          }
+            dispatch(getAllNotifications())
+        }
+
+        return () => {
+            unmounted = true;
+        }
     }, [])
 
     useEffect(() => {
@@ -68,7 +71,7 @@ const PanelProfile = () => {
         let showNotifs = notifications.filter(notif => notif.section === "profile" && notif.seen == 0);
         setProfileNotifs(showNotifs)
     }, [notifications])
-    
+
     useEffect(() => {
         if (isEmpty(user)) return;
 
@@ -81,7 +84,11 @@ const PanelProfile = () => {
     }, [user])
 
     const handleUpdateProfile = async () => {
-
+        if (loading) {
+            notify('سیستم در حال انجام درخواست شما می باشد، صبر کنید', 'warning')
+            return
+        }
+        setLoading(true)
         var formData = new FormData();
 
         formData.append('name', name);
@@ -100,19 +107,33 @@ const PanelProfile = () => {
                     dispatch(AddUser(data.user))
                     setDoUserNeedEditProfileWindow(false)
                     notify('پروفایل کاربری شما با موفقیت بروزرسانی شد', 'success')
+                    
                 }
             } catch (e) {
-
                 var error = Object.assign({}, e);
-                if (error.response.status === 422) {
-                    notify('اطلاعات وارد شده صحیح نمی باشد', 'warning')
+                if (isEmpty(error.response)) {
+                    if (error.isAxiosError) {
+                        notify('مشکلی در برقراری ارتباط رخ داده است، از اتصال خود به اینترنت اطمینان حاصل کنید', 'error')
+                    }
                 } else {
-                    notify('خطای سرور', 'error')
+                    if (error.response.status === 422) {
+                        let errorsObj = error.response.data.errors;
+                        let errorsArr = [];
+
+                        Object.keys(errorsObj).map(key => {
+                            errorsArr[key] = errorsObj[key][0]
+                        })
+                        setErrors(errorsArr)
+                        notify('اطلاعات وارد شده صحیح نمی باشد', 'error')
+                    } else {
+                        notify('مشکلی رخ داده است', 'error')
+                    }
                 }
             }
         } else {
             setErrors(errors)
         }
+        setLoading(false)
     }
 
 
@@ -141,15 +162,15 @@ const PanelProfile = () => {
                     <div className="flex flex-col gap-y-4">
                         <div className="flex flex-col gap-y-1">
                             <span className="text-xs font-light text-slate-400">نام و نام خانوداگی:</span>
-                            <span className="text-sm font-semibold dark:text-slate-300">{name}</span>
+                            <span className="text-sm font-semibold dark:text-slate-300">{user.name}</span>
                         </div>
                         <div className="flex flex-col gap-y-1">
                             <span className="text-xs font-light text-slate-400">ایمیل:</span>
-                            <span className="text-sm font-semibold dark:text-slate-300">{email}</span>
+                            <span className="text-sm font-semibold dark:text-slate-300">{user.email}</span>
                         </div>
                         <div className="flex flex-col gap-y-1">
                             <span className="text-xs font-light text-slate-400">شماره موبایل:</span>
-                            <span className="text-sm font-semibold dark:text-slate-300">{mobile}</span>
+                            <span className="text-sm font-semibold dark:text-slate-300">{user.mobile}</span>
                         </div>
                         <span className="text-base text-slate-300">کد معرف شما: <span
                             className="text-emerald-400 font-bold">{user.referral_code}</span></span>
@@ -176,14 +197,14 @@ const PanelProfile = () => {
             <div className="flex flex-col gap-y-4 mx-2 mt-4">
 
                 <h2 className="text-slate-300 text-lg">پیغام های سیستم</h2>
-               
+
                 {profileNotifs.length > 0 ? profileNotifs.map(notif => (
                     <Alert key={notif.id} notification_id={notif.id} message={notif.message} type={notif.type} />
                 )) : (
                     <p className='text-right text-sm text-slate-300'>پیغامی برای نمایش وجود ندارد</p>
                 )}
 
-                {!isEmpty(userVerification) ? (null) : (
+                {isEmpty(userVerification) && (
                     <div className='flex flex-col gap-y-1'>
                         <div className="bg-yellow-500 rounded-lg drop-shadow-lg p-2 flex flex-col gap-y-2">
                             <p className="font-semibold text-black text-base">
@@ -200,10 +221,16 @@ const PanelProfile = () => {
             </div>
 
             <AnimatePresence>
-                {doUserNeedResetPasswordWindow && (<ResetPasswordWindow key={Math.random()*10000000} setDoUserNeedResetPasswordWindow={setDoUserNeedResetPasswordWindow} />)}
-                {doUserNeedActivationWindow && (<EmailVerificationWindow key={Math.random()*10000000} userId={userId} setDoUserNeedActivationWindow={setDoUserNeedActivationWindow} />)}
-                {doUserNeedEditProfileWindow && (<EditProfileWindow key={Math.random()*10000000} errors={errors} name={name} email={email} mobile={mobile} setName={setName} setEmail={setEmail} setMobile={setMobile} setProfilePath={setProfilePath} handleUpdateProfile={handleUpdateProfile} setDoUserNeedEditProfileWindow={setDoUserNeedEditProfileWindow} />)}
-                {blurConditions && (<motion.div key={Math.random()*10000000} exit={{ opacity: 0 }} className="fixed top-0 left-0 w-full md:w-3/4 h-screen md:w-full backdrop-blur-lg bg-slate-800/70 z-30" onClick={() => handleCloseOpenWindow()}></motion.div>)}
+                {doUserNeedResetPasswordWindow && (<ResetPasswordWindow setDoUserNeedResetPasswordWindow={setDoUserNeedResetPasswordWindow} />)}
+            </AnimatePresence>
+            <AnimatePresence>
+                {doUserNeedActivationWindow && (<EmailVerificationWindow userId={userId} setDoUserNeedActivationWindow={setDoUserNeedActivationWindow} />)}
+            </AnimatePresence>
+            <AnimatePresence>
+                {doUserNeedEditProfileWindow && (<EditProfileWindow loading={loading} errors={errors} name={name} email={email} mobile={mobile} setName={setName} setEmail={setEmail} setMobile={setMobile} setProfilePath={setProfilePath} handleUpdateProfile={handleUpdateProfile} setDoUserNeedEditProfileWindow={setDoUserNeedEditProfileWindow} />)}
+            </AnimatePresence>
+            <AnimatePresence>
+                {blurConditions && (<motion.div exit={{ opacity: 0 }} className="fixed top-0 left-0 w-full md:w-3/4 h-screen md:w-full backdrop-blur-lg bg-slate-800/70 z-30" onClick={() => handleCloseOpenWindow()}></motion.div>)}
             </AnimatePresence>
 
         </Fragment>

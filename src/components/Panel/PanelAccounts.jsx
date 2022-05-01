@@ -97,9 +97,13 @@ const PanelAccounts = () => {
                     <CreateAccWin setDoUserWantCreateAccWin={setDoUserWantCreateAccWin} />
                 )}
             </AnimatePresence>
-            {!doUserWantEditAccWin ? null : (<EditAccWin acc={acc} setDoUserWantEditAccWin={setDoUserWantEditAccWin} />)}
+            <AnimatePresence>
+                {doUserWantEditAccWin && (<EditAccWin acc={acc} setDoUserWantEditAccWin={setDoUserWantEditAccWin} />)}
+            </AnimatePresence>
+            <AnimatePresence>
+                {blurConditions && (<motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed top-0 left-0 w-full md:w-3/4 h-screen md:w-full backdrop-blur-lg bg-slate-800/70 z-30" onClick={() => handleCloseOpenWindow()}></motion.div>)}
+            </AnimatePresence>
 
-            {blurConditions && (<motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed top-0 left-0 w-full md:w-3/4 h-screen md:w-full backdrop-blur-lg bg-slate-800/70 z-30" onClick={() => handleCloseOpenWindow()}></motion.div>)}
         </Fragment>
     );
 }

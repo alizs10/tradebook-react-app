@@ -1,11 +1,14 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useLocation } from 'react-router';
+import { AuthData } from '../Auth/AuthContext';
 
 const AuthLayouts = ({ children }) => {
 
     const location = useLocation()
 
+    const [email, setEmail]= useState("")
+    const [password, setPassword]= useState("")
 
     return (
         <Fragment>
@@ -52,8 +55,9 @@ const AuthLayouts = ({ children }) => {
                             ) : null}
 
 
-
-                            {children}
+                            <AuthData.Provider value={{ email, setEmail, password, setPassword }}>
+                                {children}
+                            </AuthData.Provider>
 
 
 

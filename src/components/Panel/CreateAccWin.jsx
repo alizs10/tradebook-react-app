@@ -6,8 +6,12 @@ import { notify } from '../Services/alerts';
 import { accValidation } from '../Services/validation';
 
 import { motion } from 'framer-motion';
+import { isEmpty } from 'lodash';
+import { BeatLoader } from 'react-spinners';
 
 const CreateAccWin = ({ setDoUserWantCreateAccWin }) => {
+
+    const [loading, setLoading] = useState(false)
 
     const [accName, setAccName] = useState("");
     const [accType, setAccType] = useState("0");
@@ -19,6 +23,13 @@ const CreateAccWin = ({ setDoUserWantCreateAccWin }) => {
     const dispatch = useDispatch()
 
     const handleCreateAcc = async () => {
+
+        if (loading) {
+            notify('سیستم در حال انجام درخواست شما می باشد، صبر کنید', 'warning')
+            return
+        }
+        setLoading(true)
+
         const acc = { name: accName, balance: accBalance, type: accType, user_id: user.id, account_created_at: accCreatedDate };
         const { success, errors } = accValidation(acc);
         if (success) {
@@ -29,21 +40,40 @@ const CreateAccWin = ({ setDoUserWantCreateAccWin }) => {
                     dispatch(getAllAccounts());
                     setDoUserWantCreateAccWin(false);
                     notify('حساب جدید شما با موفقیت ساخته شد', 'success')
+                   
                 } else {
                     notify('مشکلی پیش آمده است، دوباره امتحان کنید', 'error')
                 }
             } catch (e) {
                 var error = Object.assign({}, e);
+                if (isEmpty(error.response)) {
+                    if (error.isAxiosError) {
+                        notify('مشکلی در برقراری ارتباط رخ داده است، از اتصال خود به اینترنت اطمینان حاصل کنید', 'error')
+                    }
+                } else {
+                    if (error.response.status === 422) {
+                        let errorsObj = error.response.data.errors;
+                        let errorsArr = [];
 
+                        Object.keys(errorsObj).map(key => {
+                            errorsArr[key] = errorsObj[key][0]
+                        })
+                        setErrors(errorsArr)
+                        notify('اطلاعات وارد شده صحیح نمی باشد', 'error')
+                    } else {
+                        notify('مشکلی رخ داده است', 'error')
+                    }
+                }
             }
 
         } else {
             setErrors(errors)
         }
+        setLoading(false)
     }
 
     return (
-        
+
         <motion.div key="modal"
             initial={{ opacity: 0 }} animate={{ y: 25, x: "-50%", opacity: 1 }} exit={{ opacity: 0 }}
             className="absolute top-0 left-1/2 w-4/5 transform -translate-x-1/2 mt-4 z-50 rounded-lg drop-shadow-lg bg-slate-600" >
@@ -86,8 +116,14 @@ const CreateAccWin = ({ setDoUserWantCreateAccWin }) => {
                 <div className="mt-4 flex justify-end">
 
                     <button className="px-4 py-2 rounded-lg text-base bg-emerald-400 text-slate-900 flex justify-center items-center" onClick={() => handleCreateAcc()}>
-                        <i className="fa-regular fa-circle-check"></i>
-                        <span className='mr-1'>ثبت</span>
+                        {loading ? (
+                            <BeatLoader color={'#000'} loading={loading} size={5} />
+                        ) : (
+                            <span className='flex gap-x-2'>
+                                <i className="fa-regular fa-circle-check"></i>
+                                <span className='mr-1'>ثبت</span>
+                            </span>
+                        )}
                     </button>
                 </div>
 

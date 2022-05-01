@@ -126,8 +126,10 @@ const PanelTickets = () => {
             )}
 
             <AnimatePresence>
-            {doUserWantCreateTicketWindow && <CreateTicketWindow setDoUserWantCreateTicketWindow={setDoUserWantCreateTicketWindow} />}
-            {doUserWantCreateTicketWindow && (<motion.div exit={{ opacity: 0 }} className="fixed top-0 left-0 w-full md:w-3/4 h-screen md:w-full backdrop-blur-lg bg-slate-800/70 z-30" onClick={() => setDoUserWantCreateTicketWindow(false)}></motion.div>)}
+                {doUserWantCreateTicketWindow && <CreateTicketWindow setDoUserWantCreateTicketWindow={setDoUserWantCreateTicketWindow} />}
+            </AnimatePresence>
+            <AnimatePresence>
+                {doUserWantCreateTicketWindow && (<motion.div exit={{ opacity: 0 }} className="fixed top-0 left-0 w-full md:w-3/4 h-screen md:w-full backdrop-blur-lg bg-slate-800/70 z-30" onClick={() => setDoUserWantCreateTicketWindow(false)}></motion.div>)}
             </AnimatePresence>
         </Fragment>
     );

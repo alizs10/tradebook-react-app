@@ -1,11 +1,9 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 
 import { motion } from 'framer-motion';
+import { BeatLoader } from 'react-spinners';
 
-const EditProfileWindow = ({ errors, name, email, mobile, handleUpdateProfile, setProfilePath, setName, setMobile, setEmail, setDoUserNeedEditProfileWindow }) => {
-
-
-
+const EditProfileWindow = ({ errors, loading, name, email, mobile, handleUpdateProfile, setProfilePath, setName, setMobile, setEmail, setDoUserNeedEditProfileWindow }) => {
 
     return (
 
@@ -47,8 +45,14 @@ const EditProfileWindow = ({ errors, name, email, mobile, handleUpdateProfile, s
 
                 <div className="mt-4 flex justify-end gap-x-2">
                     <button className="px-4 py-2 rounded-lg text-sm bg-yellow-300 text-slate-900" onClick={() => handleUpdateProfile()}>
-                        <i className="fa-regular fa-edit"></i>
-                        <span className="mr-1">ویرایش</span>
+                        {loading ? (
+                            <BeatLoader color={'#000'} loading={loading} size={5} />
+                        ) : (
+                            <span className='flex gap-x-2'>
+                                <i className="fa-regular fa-edit"></i>
+                                <span className="mr-1">ویرایش</span>
+                            </span>
+                        )}
                     </button>
 
                 </div>

@@ -4,7 +4,7 @@ import { getAllTrades } from '../../Redux/Action/Trades';
 import { notify } from '../../Services/alerts';
 import { CreateTrade } from '../../Services/TradesServices';
 import { isEmpty } from 'lodash';
-import { SyncLoader } from 'react-spinners';
+import { BeatLoader, SyncLoader } from 'react-spinners';
 import Select from 'react-select';
 import { reloadAccount } from '../../Redux/Action/Account';
 import { tradeValidation } from '../../Services/validation';
@@ -12,6 +12,7 @@ import { tradeValidation } from '../../Services/validation';
 import { motion } from 'framer-motion';
 
 const CreateTradeInputWindow = ({ setDoUserNeedCreateTradeWindow, acc_id, accType }) => {
+    const [loading, setLoading] = useState(false)
 
     const [date, setDate] = useState("");
     const [pairName, setPairName] = useState("");
@@ -42,19 +43,23 @@ const CreateTradeInputWindow = ({ setDoUserNeedCreateTradeWindow, acc_id, accTyp
     }, [pairs])
 
     const handleCreateTrade = async () => {
-
+        if (loading) {
+            notify('سیستم در حال انجام درخواست شما می باشد، صبر کنید', 'warning')
+            return
+        }
+        setLoading(true)
 
         const newTrade = {
             trade_date: date, pair_id: pairId, margin, profit, leverage, entry_price: entryPrice, exit_price: exitPrice, status: contractStatus, contract_type: contractType, account_id: acc_id, user_id: user.id, accType
         }
 
         const { success, errors } = tradeValidation(newTrade);
-        console.log("here", errors);
+
         if (success) {
-            console.log("here");
+
             setErrors({})
             try {
-                const { status, data } = await CreateTrade(newTrade, acc_id)
+                const { status } = await CreateTrade(newTrade, acc_id)
 
                 if (status === 201) {
                     dispatch(getAllTrades(acc_id))
@@ -64,12 +69,31 @@ const CreateTradeInputWindow = ({ setDoUserNeedCreateTradeWindow, acc_id, accTyp
                 }
             } catch (e) {
                 var error = Object.assign({}, e);
-               
+                if (isEmpty(error.response)) {
+                    if (error.isAxiosError) {
+                        notify('مشکلی در برقراری ارتباط رخ داده است، از اتصال خود به اینترنت اطمینان حاصل کنید', 'error')
+                    }
+                } else {
+                    if (error.response.status === 422) {
+                        let errorsObj = error.response.data.errors;
+                        let errorsArr = [];
+
+                        Object.keys(errorsObj).map(key => {
+                            errorsArr[key] = errorsObj[key][0]
+                        })
+                        setErrors(errorsArr)
+                        notify('اطلاعات وارد شده صحیح نمی باشد', 'error')
+                    } else {
+                        notify('مشکلی رخ داده است', 'error')
+                    }
+                }
+
             }
         } else {
             setErrors(errors)
         }
 
+        setLoading(false)
 
     }
 
@@ -105,7 +129,7 @@ const CreateTradeInputWindow = ({ setDoUserNeedCreateTradeWindow, acc_id, accTyp
                 </div>
             ) : (
                 <motion.div key="modal"
-                initial={{ opacity: 0 }} animate={{ y: 25, x: "-50%", opacity: 1 }} exit={{ opacity: 0 }}
+                    initial={{ opacity: 0 }} animate={{ y: 25, x: "-50%", opacity: 1 }} exit={{ opacity: 0 }}
                     className="absolute top-0 left-1/2 w-4/5 transform -translate-x-1/2 mt-4 z-50 rounded-lg drop-shadow-lg bg-slate-600" >
                     <div className="w-full text-slate-100 p-2 flex flex-col gap-y-2">
 
@@ -201,8 +225,16 @@ const CreateTradeInputWindow = ({ setDoUserNeedCreateTradeWindow, acc_id, accTyp
                         <div className="mt-4 flex justify-end">
 
                             <button className="px-4 py-2 rounded-lg text-base bg-emerald-400 text-slate-900 flex justify-center items-center" onClick={() => handleCreateTrade()}>
-                                <i className="fa-regular fa-circle-check"></i>
-                                <span className='mr-1'>ثبت</span>
+
+
+                                {loading ? (
+                                    <BeatLoader color={'#000'} loading={loading} size={5} />
+                                ) : (
+                                    <span className='flex gap-x-2'>
+                                        <i className="fa-regular fa-circle-check"></i>
+                                        <span className='mr-1'>ثبت</span>
+                                    </span>
+                                )}
                             </button>
                         </div>
 

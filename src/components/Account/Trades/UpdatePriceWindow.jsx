@@ -2,29 +2,29 @@ import { isEmpty } from 'lodash';
 import React, { Fragment, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import Select from 'react-select';
-import { SyncLoader } from 'react-spinners';
+import { BeatLoader, SyncLoader } from 'react-spinners';
 import { reloadAccount } from '../../Redux/Action/Account';
 import { getAllTrades } from '../../Redux/Action/Trades';
 import { notify } from '../../Services/alerts';
 import { UpdatePrice } from '../../Services/TradesServices';
 
 import { motion } from 'framer-motion';
+import { updatePriceValidation } from '../../Services/validation';
 
 const UpdatePriceWindow = ({ setDoUserNeedUpdatePriceWindow, trades, account_id }) => {
-
+    const [loading, setLoading] = useState(false)
     const [pairs, setPairs] = useState([]);
     const [pairName, setPairName] = useState("");
     const [pairId, setPairId] = useState("");
     const [exitPrice, setExitPrice] = useState("");
-    const [, forceUpdate] = useState("");
     const [selectedOption, setSelectedOption] = useState(null);
     const [checking, setChecking] = useState(true);
     const style = { position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)" };
-
+    const [errors, setErrors] = useState({})
 
     const dispatch = useDispatch()
 
- 
+
     useEffect(() => {
         if (isEmpty(trades)) return
 
@@ -68,24 +68,52 @@ const UpdatePriceWindow = ({ setDoUserNeedUpdatePriceWindow, trades, account_id 
     });
 
     const handleUpdatePrice = async () => {
-  
+        if (loading) {
+            notify('سیستم در حال انجام درخواست شما می باشد، صبر کنید', 'warning')
+            return
+        }
+        setLoading(true)
+        let updatePrice = {
+            pair_id: pairId, exit_price: exitPrice, _method: "PUT"
+        }
+        const { success, errors } = updatePriceValidation(updatePrice);
 
-            let updatePrice = {
-                pair_id: pairId, exit_price: exitPrice, _method: "PUT"
+        if (success) {
+
+            setErrors({})
+            try {
+
+
+                const { status } = await UpdatePrice(updatePrice, account_id)
+
+                if (status === 200) {
+                    dispatch(getAllTrades(account_id))
+                    dispatch(reloadAccount(account_id))
+                    setDoUserNeedUpdatePriceWindow(false)
+                    notify('قیمت فعلی با موفقیت بروزرسانی شد', 'success')
+                } else {
+                    notify('خطا', 'error')
+                }
+            } catch (error) {
+                if (error.response.status === 422) {
+                    let errorsObj = error.response.data.errors;
+                    let errorsArr = [];
+
+                    Object.keys(errorsObj).map(key => {
+                        errorsArr[key] = errorsObj[key][0]
+                    })
+                    setErrors(errorsArr)
+                    notify('اطلاعات وارد شده صحیح نمی باشد', 'error')
+                } else {
+                    notify('مشکلی رخ داده است', 'error')
+                }
             }
 
-            const { status } = await UpdatePrice(updatePrice, account_id)
+        } else {
+            setErrors(errors)
+        }
 
-            if (status === 200) {
-                dispatch(getAllTrades(account_id))
-                dispatch(reloadAccount(account_id))
-                setDoUserNeedUpdatePriceWindow(false)
-                notify('قیمت فعلی با موفقیت بروزرسانی شد', 'success')
-            } else {
-                notify('خطا', 'error')
-            }
-        
-
+        setLoading(false)
     }
 
 
@@ -97,7 +125,7 @@ const UpdatePriceWindow = ({ setDoUserNeedUpdatePriceWindow, trades, account_id 
                 </div>
             ) : (
                 <motion.div key="modal"
-                initial={{ opacity: 0 }} animate={{ y: 25, x: "-50%", opacity: 1 }} exit={{ opacity: 0 }}
+                    initial={{ opacity: 0 }} animate={{ y: 25, x: "-50%", opacity: 1 }} exit={{ opacity: 0 }}
                     className="absolute top-0 left-1/2 w-4/5 transform -translate-x-1/2 mt-4 z-50 rounded-lg drop-shadow-lg bg-slate-600" >
                     <div className="w-full text-slate-100 p-2 flex flex-col gap-y-2">
 
@@ -118,7 +146,7 @@ const UpdatePriceWindow = ({ setDoUserNeedUpdatePriceWindow, trades, account_id 
                                     options={pairs}
                                     styles={customStyles(selectedOption)}
                                 />
-
+                                {errors.pair_id && (<span className='text-xxs text-red-400'>{errors.pair_id}</span>)}
 
                             </div>
                             <div className="clo-span-1 flex flex-col gap-y-1">
@@ -126,14 +154,22 @@ const UpdatePriceWindow = ({ setDoUserNeedUpdatePriceWindow, trades, account_id 
                                 <input type="text" className="form-input" value={exitPrice} onChange={event => {
                                     setExitPrice(event.target.value);
                                 }} id="exitPrice" />
+                                {errors.exit_price && (<span className='text-xxs text-red-400'>{errors.exit_price}</span>)}
                             </div>
                         </div>
 
                         <div className="mt-4 flex justify-end">
 
-                            <button className="px-4 py-2 rounded-lg text-base bg-emerald-400 text-slate-900 flex justify-center items-center" onClick={() => handleUpdatePrice()}>
-                                <i className="fa-solid fa-arrows-retweet"></i>
-                                <span className='mr-1'>بروزرسانی</span>
+                            <button className="px-4 py-2 rounded-lg text-base bg-emerald-400 text-slate-900" onClick={() => handleUpdatePrice()}>
+
+                                {loading ? (
+                                    <BeatLoader color={'#000'} loading={loading} size={5} />
+                                ) : (
+                                    <span className='flex justify-center items-center gap-x-2'>
+                                        <i className="fa-solid fa-arrows-retweet"></i>
+                                        <span className='mr-1'>بروزرسانی</span>
+                                    </span>
+                                )}
                             </button>
                         </div>
 

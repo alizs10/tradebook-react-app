@@ -8,8 +8,11 @@ import { notify } from '../Services/alerts';
 import { accValidation } from '../Services/validation';
 
 import { motion } from 'framer-motion';
+import { BeatLoader } from 'react-spinners';
 
 const EditAccWin = ({ acc, setDoUserWantEditAccWin }) => {
+
+    const [loading, setLoading] = useState(false)
 
     const [accName, setAccName] = useState(acc.name);
     const [accType, setAccType] = useState(`${acc.type}`);
@@ -29,8 +32,14 @@ const EditAccWin = ({ acc, setDoUserWantEditAccWin }) => {
     }, [acc])
 
     const handleEditAcc = async () => {
+        if (loading) {
+            notify('سیستم در حال انجام درخواست شما می باشد، صبر کنید', 'warning')
+            return
+        }
+        setLoading(true)
+
         const edited_acc = { ...acc, name: accName, balance: accBalance, type: accType, account_created_at: accCreatedDate, _method: "put" };
-        console.log(edited_acc);
+
         const { success, errors } = accValidation(edited_acc);
         if (success) {
             setErrors({})
@@ -41,24 +50,43 @@ const EditAccWin = ({ acc, setDoUserWantEditAccWin }) => {
                     dispatch(getAllAccounts());
                     setDoUserWantEditAccWin(false);
                     notify('حساب شما با موفقیت ویرایش شد', 'success')
-
+                    
                 } else {
                     notify('مشکلی پیش آمده است، دوباره امتحان کنید', 'error')
                 }
             } catch (e) {
                 var error = Object.assign({}, e);
+                if (isEmpty(error.response)) {
+                    if (error.isAxiosError) {
+                        notify('مشکلی در برقراری ارتباط رخ داده است، از اتصال خود به اینترنت اطمینان حاصل کنید', 'error')
+                    }
+                } else {
+                    if (error.response.status === 422) {
+                        let errorsObj = error.response.data.errors;
+                        let errorsArr = [];
+
+                        Object.keys(errorsObj).map(key => {
+                            errorsArr[key] = errorsObj[key][0]
+                        })
+                        setErrors(errorsArr)
+                        notify('اطلاعات وارد شده صحیح نمی باشد', 'error')
+                    } else {
+                        notify('مشکلی رخ داده است', 'error')
+                    }
+                }
 
             }
 
         } else {
             setErrors(errors)
         }
+        setLoading(false)
     }
 
     return (
 
         <motion.div key="modal"
-        initial={{ opacity: 0 }} animate={{ y: 25, x: "-50%", opacity: 1 }} exit={{ opacity: 0 }} 
+            initial={{ opacity: 0 }} animate={{ y: 25, x: "-50%", opacity: 1 }} exit={{ opacity: 0 }}
             className="absolute top-0 left-1/2 w-4/5 transform -translate-x-1/2 mt-4 z-50 rounded-lg drop-shadow-lg bg-slate-600" >
             <div className="w-full text-slate-100 p-2 flex flex-col gap-y-2">
 
@@ -99,8 +127,16 @@ const EditAccWin = ({ acc, setDoUserWantEditAccWin }) => {
                 <div className="mt-4 flex justify-end">
 
                     <button className="px-4 py-2 rounded-lg text-base bg-yellow-300 text-slate-900 flex justify-center items-center" onClick={() => handleEditAcc()}>
-                        <i className="fa-regular fa-edit"></i>
-                        <span className='mr-1'>ویرایش</span>
+
+
+                        {loading ? (
+                            <BeatLoader color={'#000'} loading={loading} size={5} />
+                        ) : (
+                            <span className='flex gap-x-2'>
+                                <i className="fa-regular fa-edit"></i>
+                                <span className='mr-1'>ویرایش</span>
+                            </span>
+                        )}
                     </button>
                 </div>
 

@@ -1,18 +1,18 @@
-import React, { Fragment, useState } from 'react';
+import { isEmpty } from 'lodash';
+import React, { Fragment, useContext, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { useNavigate } from 'react-router';
 import { BeatLoader } from 'react-spinners';
 import { notify } from '../Services/alerts';
 import { registerUser } from '../Services/AuthService';
 import { signupValidation } from '../Services/validation';
+import { AuthData } from './AuthContext';
 
 const Register = () => {
     const [loading, setLoading] = useState(false)
 
     const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
     const [mobile, setMobile] = useState("");
-    const [password, setPassword] = useState("");
     const [password_confirm, setPasswordConfirm] = useState("");
     const [referralCode, setReferralCode] = useState("");
 
@@ -21,7 +21,7 @@ const Register = () => {
     const navigate = useNavigate();
 
 
-
+    const authData = useContext(AuthData);
 
 
     const handelRegister = async event => {
@@ -32,42 +32,50 @@ const Register = () => {
         }
         setLoading(true)
         const user = {
-            name, email, password, password_confirmation: password_confirm, mobile, referral_code: referralCode
+            name, email: authData.email, password: authData.password, password_confirmation: password_confirm, mobile, referral_code: referralCode
         }
         const { success, errors } = signupValidation(user);
-        console.log(errors);
+
         if (success) {
             setErrors({})
 
             try {
-
-
                 const { status } = await registerUser(user);
 
                 if (status === 201) {
+                    navigate("/")
                     notify('تبریک، عضویت شما با موفقیت انجام شد', 'success')
-                    reset();
-                    navigate("/", { replace: true })
+                    return;
                 }
             }
 
-            catch (error) {
-                notify('مشکلی پیش آمده است', 'error')
+            catch (e) {
+                var error = Object.assign({}, e);
+
+                if (isEmpty(error.response)) {
+                    if (error.isAxiosError) {
+                        notify('مشکلی در برقراری ارتباط رخ داده است، از اتصال خود به اینترنت اطمینان حاصل کنید', 'error')
+                    }
+                } else {
+                    if (error.response.status === 422) {
+                        let errorsObj = error.response.data.errors;
+                        let errorsArr = [];
+
+                        Object.keys(errorsObj).map(key => {
+                            errorsArr[key] = errorsObj[key][0]
+                        })
+                        setErrors(errorsArr)
+                        notify('اطلاعات وارد شده صحیح نمی باشد', 'error')
+                    } else {
+                        notify('مشکلی رخ داده است', 'error')
+                    }
+                }
             }
         } else {
             setErrors(errors)
         }
         setLoading(false)
     }
-
-    const reset = () => {
-        setName("")
-        setMobile("")
-        setEmail("")
-        setPassword("")
-        setPasswordConfirm("")
-    }
-
 
     return (
 
@@ -91,8 +99,8 @@ const Register = () => {
                     </div>
                     <div className="flex flex-col gap-y-2">
                         <label htmlFor="" className="text-xs">ایمیل</label>
-                        <input type="email" className='form-input' value={email} onChange={event => {
-                            setEmail(event.target.value)
+                        <input type="email" className='form-input' value={authData.email} onChange={event => {
+                            authData.setEmail(event.target.value)
 
                         }} id="email" />
                         {errors.email && (<span className='text-xxs text-red-400'>{errors.email}</span>)}
@@ -108,8 +116,8 @@ const Register = () => {
                     </div>
                     <div className="flex flex-col gap-y-2">
                         <label htmlFor="" className="text-xs">کلمه عبور</label>
-                        <input type="password" className='form-input' value={password} onChange={event => {
-                            setPassword(event.target.value)
+                        <input type="password" className='form-input' value={authData.password} onChange={event => {
+                            authData.setPassword(event.target.value)
 
                         }} id="password" />
                         {errors.password && (<span className='text-xxs text-red-400'>{errors.password}</span>)}

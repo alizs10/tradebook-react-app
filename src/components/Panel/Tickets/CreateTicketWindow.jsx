@@ -6,8 +6,11 @@ import { storeTicket } from '../../Services/TicketsService';
 import { ticketValidation } from '../../Services/validation';
 
 import { motion } from 'framer-motion';
+import { isEmpty } from 'lodash';
+import { BeatLoader } from 'react-spinners';
 
 const CreateTicketWindow = ({ setDoUserWantCreateTicketWindow, parent_id = null }) => {
+    const [loading, setLoading] = useState(false)
 
     const [subject, setSubject] = useState("")
     const [type, setType] = useState("")
@@ -17,7 +20,11 @@ const CreateTicketWindow = ({ setDoUserWantCreateTicketWindow, parent_id = null 
     const dispatch = useDispatch()
 
     const handleCreateTicket = async () => {
-
+        if (loading) {
+            notify('سیستم در حال انجام درخواست شما می باشد، صبر کنید', 'warning')
+            return
+        }
+        setLoading(true)
         let newTicket = {
             subject, type, body, parent_id
         }
@@ -32,13 +39,31 @@ const CreateTicketWindow = ({ setDoUserWantCreateTicketWindow, parent_id = null 
                     setDoUserWantCreateTicketWindow(false)
                     notify("تیکت شما با موفقیت ارسال شد", "success")
                 }
-            } catch (error) {
-                console.log(error);
+            } catch (e) {
+                var error = Object.assign({}, e);
+                if (isEmpty(error.response)) {
+                    if (error.isAxiosError) {
+                        notify('مشکلی در برقراری ارتباط رخ داده است، از اتصال خود به اینترنت اطمینان حاصل کنید', 'error')
+                    }
+                } else {
+                    if (error.response.status === 422) {
+                        let errorsObj = error.response.data.errors;
+                        let errorsArr = [];
+
+                        Object.keys(errorsObj).map(key => {
+                            errorsArr[key] = errorsObj[key][0]
+                        })
+                        setErrors(errorsArr)
+                        notify('اطلاعات وارد شده صحیح نمی باشد', 'error')
+                    } else {
+                        notify('مشکلی رخ داده است', 'error')
+                    }
+                }
             }
         } else {
             setErrors(errors)
         }
-
+        setLoading(false)
 
     }
 
@@ -46,7 +71,7 @@ const CreateTicketWindow = ({ setDoUserWantCreateTicketWindow, parent_id = null 
 
     return (
         <motion.div key="modal"
-        initial={{ opacity: 0 }} animate={{ y: 25, x: "-50%", opacity: 1 }} exit={{ opacity: 0 }}
+            initial={{ opacity: 0 }} animate={{ y: 25, x: "-50%", opacity: 1 }} exit={{ opacity: 0 }}
             className="absolute top-0 left-1/2 w-4/5 transform -translate-x-1/2 mt-4 z-50 rounded-lg drop-shadow-lg bg-slate-600">
             <div className="w-full text-slate-100 p-2 flex flex-col gap-y-2">
 
@@ -92,8 +117,15 @@ const CreateTicketWindow = ({ setDoUserWantCreateTicketWindow, parent_id = null 
                     </button>
                     <button
                         className="px-4 py-2 rounded-lg text-xs bg-emerald-400 text-slate-900 flex gap-x-1 items-center" onClick={() => handleCreateTicket()}>
-                        <i className="fa-light fa-paper-plane text-sm"></i>
-                        ارسال تیکت
+                        
+                        {loading ? (
+                            <BeatLoader color={'#000'} loading={loading} size={5} />
+                        ) : (
+                            <span className='flex gap-x-2'>
+                                <i className="fa-light fa-paper-plane text-sm"></i>
+                                <span className='mr-1'> ارسال تیکت</span>
+                            </span>
+                        )}
                     </button>
                 </div>
 

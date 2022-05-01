@@ -29,12 +29,9 @@ export const signupValidation = payload => {
     if (validator.isEmpty(payload.name)) {
         isFormValid = false;
         errors.name = "نام و نام خانوادگی الزامی می باشد";
-    } else if (!validator.isAlpha(payload.name, "fa-IR", { ignore: ' ' }) && !validator.isAlpha(payload.name, "en-US", { ignore: ' ' })) {
+    } else if (!validator.isLength(payload.name, { min: 5, max: 90 })) {
         isFormValid = false;
-        errors.name = "فقط حروف فارسی یا انگلیسی وارد کنید";
-    } else if (!validator.isLength(payload.name, { min: 4, max: 90 })) {
-        isFormValid = false;
-        errors.name = "نام شما نمی تواند کمتر از 4 و بیشتر از 90 حرف باشد";
+        errors.name = "نام شما نمی تواند کمتر از 5 و بیشتر از 90 حرف باشد";
     }
 
     if (validator.isEmpty(payload.email)) {
@@ -98,6 +95,9 @@ export const accValidation = payload => {
     } else if (!validator.isNumeric(payload.balance)) {
         isFormValid = false;
         errors.balance = "بالانس حساب باید از نوع عدد باشد";
+    } else if (payload.balance <= 0) {
+        isFormValid = false;
+        errors.balance = "بالانس حساب نباید 0 یا کمتر از آن باشد";
     }
 
     if (validator.isEmpty(payload.account_created_at)) {
@@ -135,9 +135,6 @@ export const profileValidation = formData => {
     if (validator.isEmpty(payload.name)) {
         isFormValid = false;
         errors.name = "نام و نام خانوادگی الزامی می باشد";
-    } else if (!validator.isAlpha(payload.name, "fa-IR", { ignore: ' ' }) && !validator.isAlpha(payload.name, "en-US", { ignore: ' ' })) {
-        isFormValid = false;
-        errors.name = "فقط حروف فارسی یا انگلیسی وارد کنید";
     } else if (!validator.isLength(payload.name, { min: 4, max: 90 })) {
         isFormValid = false;
         errors.name = "نام شما نمی تواند کمتر از 4 و بیشتر از 90 حرف باشد";
@@ -288,6 +285,34 @@ export const tradeValidation = payload => {
     } else if (!validator.isNumeric(payload.exit_price)) {
         isFormValid = false;
         errors.exit_price = "نقطه خروج باید از نوع عدد باشد";
+    }
+
+    return {
+        success: isFormValid,
+        errors
+    };
+};
+export const updatePriceValidation = payload => {
+    const errors = {};
+    let isFormValid = true;
+
+    if (validator.isEmpty(`${payload.pair_id}`)) {
+        isFormValid = false;
+        errors.pair_id = "انتخاب جفت ارز الزامی می باشد";
+    } else if (!validator.isInt(`${payload.pair_id}`)) {
+        isFormValid = false;
+        errors.pair_id = "جفت ارز انتخاب شده، صحیح نمی باشد";
+    }
+
+    if (validator.isEmpty(`${payload.exit_price}`)) {
+        isFormValid = false;
+        errors.exit_price = "نقطه خروج الزامی می باشد";
+    } else if (!validator.isNumeric(`${payload.exit_price}`)) {
+        isFormValid = false;
+        errors.exit_price = "نقطه خروج باید از نوع عدد باشد";
+    } else if (payload.exit_price <= 0) {
+        isFormValid = false;
+        errors.exit_price = "نقطه خروج نباید 0 یا کمتر از آن باشد";
     }
 
     return {

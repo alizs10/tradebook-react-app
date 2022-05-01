@@ -1,4 +1,5 @@
-import React, { Fragment, useState } from 'react';
+import { isEmpty } from 'lodash';
+import React, { Fragment, useContext, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
@@ -9,17 +10,24 @@ import { AddUser } from '../Redux/Action/User';
 import { notify } from '../Services/alerts';
 import { loginUser } from '../Services/AuthService';
 import { loginValidation } from '../Services/validation';
+import { AuthData } from './AuthContext';
 
 const Login = () => {
+    const authData = useContext(AuthData)
 
     const [loading, setLoading] = useState(false)
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("")
     const [errors, setErrors] = useState({})
 
+    const [unmounted, setUnmounted] = useState(false)
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        return () => {
+            setUnmounted(true)
+        }
+    }, [])
 
 
 
@@ -31,7 +39,7 @@ const Login = () => {
         }
         setLoading(true)
         const user = {
-            email, password
+            email: authData.email, password: authData.password
         }
 
 
@@ -43,23 +51,29 @@ const Login = () => {
                 const { data, status } = await loginUser(user);
 
                 if (status === 200) {
-                    reset()
+                    !unmounted && reset();
                     localStorage.setItem('token', data.token)
                     dispatch(AddUser(data.user))
                     navigate("/panel/")
                     notify('با موفقیت وارد شدید', 'success')
-                } else if (status === 401) {
-                    notify('ایمیل یا کلمه عبور شما اشتباه می باشد', 'danger')
                 } else {
-                    notify('مشکلی رخ داده است', 'danger')
+                    notify('مشکلی پیش آمده، دوباره امتحان کنید', 'error')
                 }
             } catch (e) {
                 var error = Object.assign({}, e);
-                if (error.response.status === 401) {
-                    notify('ایمیل یا کلمه عبور شما اشتباه می باشد', 'error')
+
+                if (isEmpty(error.response)) {
+                    if (error.isAxiosError) {
+                        notify('مشکلی در برقراری ارتباط رخ داده است، از اتصال خود به اینترنت اطمینان حاصل کنید', 'error')
+                    }
                 } else {
-                    notify('مشکلی رخ داده است', 'error')
+                    if (error.response.status === 401) {
+                        notify('ایمیل یا کلمه عبور شما اشتباه می باشد', 'error')
+                    } else {
+                        notify('مشکلی رخ داده است', 'error')
+                    }
                 }
+
             }
         } else {
             setErrors(errors)
@@ -73,8 +87,8 @@ const Login = () => {
     }
 
     const reset = () => {
-        setEmail("")
-        setPassword("")
+        authData.setEmail("")
+        authData.setPassword("")
     }
 
     return (
@@ -88,12 +102,12 @@ const Login = () => {
                 <div className="rounded-lg p-2 backdrop-blur-sm bg-white/10 flex flex-col gap-y-2">
                     <div className="flex flex-col gap-y-2">
                         <label htmlFor="" className="text-xs">ایمیل</label>
-                        <input type="email" className="form-input" value={email} onChange={event => setEmail(event.target.value)} id="email" />
+                        <input type="email" className="form-input" value={authData.email} onChange={event => authData.setEmail(event.target.value)} id="authData.email" />
                         {errors.email && (<span className='text-xxs text-red-400'>{errors.email}</span>)}
                     </div>
                     <div className="flex flex-col gap-y-2">
                         <label htmlFor="" className="text-xs">کلمه عبور</label>
-                        <input type="password" className="form-input" value={password} onChange={event => setPassword(event.target.value)} id="password" />
+                        <input type="password" className="form-input" value={authData.password} onChange={event => authData.setPassword(event.target.value)} id="authData.authData.setPassword" />
                         {errors.password && (<span className='text-xxs text-red-400'>{errors.password}</span>)}
 
                     </div>
