@@ -48,7 +48,7 @@ const StopLossAndTakeProfitSection = ({ setUpdatedAt, setTakeProfitsAverage, set
 
             </div>
 
-            <div className="rounded-lg p-2 shadow-lg mx-2 grid grid-cols-2 md:grid-cols-4 gap-4 bg-slate-800">
+            <div className="rounded-lg p-2 shadow-lg mx-2 grid grid-cols-2 md:grid-cols-4 gap-4 bg-slate-800 text-slate-800">
 
                 <div className="col-span-4 md:col-span-2 bg-red-300 p-2 rounded-lg flex flex-col gap-y-2">
                     <span className="flex gap-x-2 items-center text-sm">

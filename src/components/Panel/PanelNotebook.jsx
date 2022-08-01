@@ -106,7 +106,7 @@ const PanelNotebook = () => {
 
             <div className="py-4 border-b-2">
                 <div className="grid grid-cols-12 mx-2 rounded-lg overflow-hidden">
-                    <input type="text" value={noteBody} onChange={(e) => setNoteBody(e.target.value)} className="col-span-10 focus:outline-none py-3 text-base px-2" />
+                    <input type="text" value={noteBody} onChange={(e) => setNoteBody(e.target.value)} className="col-span-10 text-black focus:outline-none py-3 text-base px-2" />
                     <button className="bg-blue-500 col-span-2 py-3 text-base" onClick={() => handleCreateNote()}>
                         <i className="fa-regular fa-plus text-lg text-white"></i>
                     </button>

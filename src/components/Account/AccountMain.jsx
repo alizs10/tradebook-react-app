@@ -163,7 +163,7 @@ const AccountMain = () => {
                                 Math.floor(statistics.winRatio)
                             )}
                         </span>
-                        <span className="row-span-1 text-sm text-center">درصد برد شما</span>
+                        <span className="row-span-1 text-sm text-gray-700 text-center">درصد برد شما</span>
                     </div>
                     <div className="col-span-1 grid grid-rows-4 gap-y-2 h-52">
                         <span
@@ -174,7 +174,7 @@ const AccountMain = () => {
                                 Math.floor(statistics.averagePnl)
                             )}
                         </span>
-                        <span className="row-span-1 text-sm text-center">میانگین سود های شما</span>
+                        <span className="row-span-1 text-sm text-gray-700 text-center">میانگین سود های شما</span>
                     </div>
                     <div className="col-span-1 grid grid-rows-4 gap-y-2 h-52">
                         <span
@@ -185,7 +185,7 @@ const AccountMain = () => {
                                 Math.floor(statistics.updatedBalance)
                             )}
                         </span>
-                        <span className="row-span-1 text-sm text-center">بالانس حساب شما</span>
+                        <span className="row-span-1 text-sm text-gray-700 text-center">بالانس حساب شما</span>
                     </div>
                     <div className="col-span-1 grid grid-rows-4 gap-y-2 h-52">
                         <span
@@ -196,7 +196,7 @@ const AccountMain = () => {
                                 statistics.allTrades
                             )}
                         </span>
-                        <span className="row-span-1 text-sm text-center">تعداد کل معاملات شما</span>
+                        <span className="row-span-1 text-sm text-gray-700 text-center">تعداد کل معاملات شما</span>
                     </div>
                     <div className="col-span-2 md:col-span-4 flex justify-end">
                         <button className="p-2 text-xl md:text-2xl backdrop-blur-lg text-slate-900 rounded-lg bg-slate-900/30" onClick={() => setDidUserTakeSnapshot(true)}>

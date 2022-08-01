@@ -84,17 +84,17 @@ const SnapshotWindow = ({ statistics, setDidUserTakeSnapshot }) => {
 
                                 <div className="col-span-1 m-2 grid grid-rows-4 gap-y-2">
                                     <span
-                                        className="row-span-3 bg-slate-300 rounded-lg text-3xl drop-shadow-lg text-slate-900 flex justify-center items-center">{Math.floor(statistics.winRatio)}</span>
+                                        className="row-span-3 bg-slate-300 rounded-lg text-2xl drop-shadow-lg text-slate-900 flex justify-center items-center">{Math.floor(statistics.winRatio)}</span>
                                     <span className="row-span-1 text-sm text-center text-slate-900">درصد برد معاملات</span>
                                 </div>
                                 <div className="col-span-1 m-2 grid grid-rows-4 gap-y-2">
                                     <span
-                                        className="row-span-3 bg-slate-300 rounded-lg text-3xl drop-shadow-lg text-slate-900 flex justify-center items-center">{statistics.allTrades}</span>
+                                        className="row-span-3 bg-slate-300 rounded-lg text-2xl drop-shadow-lg text-slate-900 flex justify-center items-center">{statistics.allTrades}</span>
                                     <span className="row-span-1 text-sm text-center text-slate-900">کل معاملات</span>
                                 </div>
                                 <div className="col-span-1 m-2 grid grid-rows-4 gap-y-2">
                                     <span style={{ direction: "ltr" }}
-                                        className="row-span-3 bg-slate-300 rounded-lg text-3xl drop-shadow-lg text-slate-900 flex flex-col gap-y-1 justify-center items-center">
+                                        className="row-span-3 bg-slate-300 rounded-lg text-2xl drop-shadow-lg text-slate-900 flex flex-col gap-y-1 justify-center items-center">
                                         <span>{`${Math.floor(statistics.bestPnl.value)} %`}</span>
                                         <span className='text-sm'>{statistics.bestPnl.pair_name}</span>
                                     </span>
@@ -102,7 +102,7 @@ const SnapshotWindow = ({ statistics, setDidUserTakeSnapshot }) => {
                                 </div>
                                 <div className="col-span-1 m-2 grid grid-rows-4 gap-y-2">
                                     <span style={{ direction: "ltr" }}
-                                        className="row-span-3 bg-slate-300 rounded-lg text-3xl drop-shadow-lg text-slate-900 flex flex-col gap-y-1 justify-center items-center">
+                                        className="row-span-3 bg-slate-300 rounded-lg text-2xl drop-shadow-lg text-slate-900 flex flex-col gap-y-1 justify-center items-center">
                                         <span>{`${Math.floor(statistics.worstPnl.value)} %`}</span>
                                         <span className='text-sm'>{statistics.worstPnl.pair_name}</span>
                                         </span>

@@ -165,9 +165,9 @@ export const profileValidation = formData => {
         if (typeOfFile != "image") {
             isFormValid = false;
             errors.profile_photo_path = "فایل انتخابی باید از نوع عکس باشد";
-        } else if (format != "jpg" && format != "png" && format != "jpeg") {
+        } else if (format != "jpg" && format != "png" && format != "jpeg" && format != "webp") {
             isFormValid = false;
-            errors.profile_photo_path = "فقط فرمت های jpg, jpeg, png مورد قبول است";
+            errors.profile_photo_path = "فقط فرمت های jpg, jpeg, webp, png مورد قبول است";
         } else if (size > 2000000) {
             size /= 1000000;
             size = size.toFixed(2)

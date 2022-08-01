@@ -118,10 +118,10 @@ const DashProfile = () => {
                     </div>
 
                     <div className="flex gap-x-2 mt-4 mr-2">
-                        <button className="px-4 py-2 rounded-lg text-xs bg-yellow-200 flex items-center" onClick={() => setDoUserNeedEditProfileWindow(true)}>
+                        <button className="px-4 py-2 rounded-lg text-xs text-gray-700 bg-yellow-200 flex items-center" onClick={() => setDoUserNeedEditProfileWindow(true)}>
                             <i className="fa-light fa-pen-to-square text-xs lg:text-base ml-2"></i>
                             ویرایش پروفایل</button>
-                        <button className="px-4 py-2 rounded-lg text-xs bg-gray-300 flex items-center" onClick={() => setDoUserNeedResetPasswordWindow(true)}>
+                        <button className="px-4 py-2 rounded-lg text-xs text-gray-700 bg-gray-300 flex items-center" onClick={() => setDoUserNeedResetPasswordWindow(true)}>
                             <i className="fa-light fa-key-skeleton text-xs lg:text-base ml-2"></i>
                             تغییر کلمه عبور</button>
                     </div>

@@ -57,7 +57,7 @@ const Account = ({ account, setDoUserWantEditAccWin, setAcc }) => {
         <motion.div initial="hidden"
             animate="visible"
             variants={item} onClick={() => handleNavigateToTrades(account.id)}
-            className="rounded-lg drop-shadow-lg cursor-pointer bg-emerald-400 flex justify-center items-center col-span-1 h-36 hover:bg-emerald-500 transition ease-out duration-300">
+            className="rounded-lg drop-shadow-lg cursor-pointer bg-emerald-400 text-gray-800 flex justify-center items-center col-span-1 h-36 hover:bg-emerald-500 transition ease-out duration-300">
             <span className="text-sm">{account.name}</span>
             <div className="flex gap-x-4 absolute bottom-0 left-0 mb-2 ml-2">
                 <button className="text-xl text-gray-800 rounded-lg" onClick={(event) => handleAccEdit(event, account)}>

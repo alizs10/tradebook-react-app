@@ -68,7 +68,7 @@ const PanelAccounts = () => {
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 mx-2 mt-4 relative">
                 <button onClick={() => setDoUserWantCreateAccWin(true)}
                     className="rounded-lg drop-shadow-lg bg-emerald-400 flex justify-center items-center col-span-1 h-36 hover:bg-emerald-500 transition ease-out duration-300">
-                    <i className="fa-regular fa-plus text-4xl"></i>
+                    <i className="fa-regular fa-plus text-4xl text-gray-800"></i>
                 </button>
 
                 {accounts.map(account => (

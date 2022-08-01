@@ -110,7 +110,7 @@ const ShowTicket = () => {
 
 
                     {replays.map(replay => (
-                        <motion.div animate={{ y: [-25, 0] }} key={replay.id} className={`flex flex-col gap-y-2 p-2 ${replay.user_id === replay.admin_id ? "bg-emerald-300" : "bg-slate-300"} rounded-lg relative`}>
+                        <motion.div animate={{ y: [-25, 0] }} key={replay.id} className={`flex flex-col gap-y-2 p-2 ${replay.user_id == replay.admin_id ? "bg-emerald-300" : "bg-slate-300"} rounded-lg relative`}>
 
                             <div className="flex justify-between">
                                 <h3 className="font-bold text-slate-600">{replay.user_id == showTicket.user_id ? showTicket.user.name : "پاسخ تیکت (ادمین)"}</h3>
