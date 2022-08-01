@@ -82,19 +82,19 @@ const CreatePaymentWindow = ({ setDoUserNeedCreatePaymentWindow }) => {
         <section className="absolute top-4 z-40 p-2 w-full">
 
             <div
-                className="flex flex-col gap-y-1 mx-2 rounded-lg shadow-lg bg-slate-100 dark:bg-slate-900 dark:text-white overflow-hidden">
+                className="flex flex-col gap-y-1 mx-2 rounded-lg shadow-lg bg-slate-900 text-white overflow-hidden">
 
                 <div className="flex justify-between items-center p-2">
                     <h2 className="text-sm">پرداخت جدید</h2>
 
-                    <button className="p-2 text-lg dark:text-slate-300" onClick={() => setDoUserNeedCreatePaymentWindow(false)}>
+                    <button className="p-2 text-lg text-slate-300" onClick={() => setDoUserNeedCreatePaymentWindow(false)}>
                         <i className="fa-regular fa-xmark"></i>
                     </button>
                 </div>
 
                 <div className="p-2 flex flex-col gap-y-1">
 
-                    <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
+                    <div className="flex flex-col gap-y-1 rounded-lg bg-slate-800 p-2">
                         <label htmlFor="orderId">سفارش</label>
                         <select className='form-input' id="orderId" value={orderId} onChange={event => {
                             setOrderId(event.target.value);
@@ -108,7 +108,7 @@ const CreatePaymentWindow = ({ setDoUserNeedCreatePaymentWindow }) => {
                         {errors.order_id && (<span className='text-xxs text-red-400'>{errors.order_id}</span>)}
 
                     </div>
-                    <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
+                    <div className="flex flex-col gap-y-1 rounded-lg bg-slate-800 p-2">
                         <label className="text-xs h-fit">کد پرداخت</label>
                         <input type="text" className="form-input" value={transactionId} onChange={event => {
                             setTransactionId(event.target.value);
@@ -117,7 +117,7 @@ const CreatePaymentWindow = ({ setDoUserNeedCreatePaymentWindow }) => {
 
                     </div>
 
-                    <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
+                    <div className="flex flex-col gap-y-1 rounded-lg bg-slate-800 p-2">
                         <label className="text-xs h-fit">تاریخ پرداخت</label>
                         <input type="date" className="form-input" value={paymentDate} onChange={event => {
                             setPaymentDate(event.target.value);
@@ -127,7 +127,7 @@ const CreatePaymentWindow = ({ setDoUserNeedCreatePaymentWindow }) => {
 
                     </div>
 
-                    <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
+                    <div className="flex flex-col gap-y-1 rounded-lg bg-slate-800 p-2">
                         <label htmlFor="status">وضعیت</label>
                         <select className='form-input' id="status" value={status} onChange={event => {
                             setStatus(event.target.value);
@@ -139,7 +139,7 @@ const CreatePaymentWindow = ({ setDoUserNeedCreatePaymentWindow }) => {
 
                     </div>
 
-                    <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
+                    <div className="flex flex-col gap-y-1 rounded-lg bg-slate-800 p-2">
                         <label htmlFor="type">نوع پرداخت</label>
                         <select className='form-input' id="type" value={type} onChange={event => {
                             setType(event.target.value);

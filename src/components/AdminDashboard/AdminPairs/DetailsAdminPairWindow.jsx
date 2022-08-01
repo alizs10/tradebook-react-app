@@ -30,12 +30,12 @@ const DetailsAdminPairWindow = ({ setDoUserNeedDetailsAdminPairWindow, adminPair
         <section className="absolute top-4 z-40 p-2 w-full">
 
             <div
-                className="flex flex-col gap-y-1 mx-2 rounded-lg shadow-lg bg-slate-100 dark:bg-slate-900 dark:text-white overflow-hidden">
+                className="flex flex-col gap-y-1 mx-2 rounded-lg shadow-lg bg-slate-900 text-white overflow-hidden">
 
                 <div className="flex justify-between items-center p-2">
                     <h2 className="text-sm">جزییات جفت ارز</h2>
 
-                    <button className="p-2 text-lg dark:text-slate-300" onClick={() => setDoUserNeedDetailsAdminPairWindow(false)}>
+                    <button className="p-2 text-lg text-slate-300" onClick={() => setDoUserNeedDetailsAdminPairWindow(false)}>
                         <i className="fa-regular fa-xmark"></i>
                     </button>
                 </div>

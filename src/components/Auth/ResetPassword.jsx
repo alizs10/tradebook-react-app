@@ -9,7 +9,6 @@ const ResetPassword = () => {
     const [loading, setLoading] = useState(false)
     const [password, setPassword] = useState("")
     const [passwordConfirmation, setPasswordConfirmation] = useState("")
-    const [, forceUpdate] = useState()
 
     const { token, email } = useParams();
     const navigate = useNavigate()

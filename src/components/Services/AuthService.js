@@ -18,7 +18,6 @@ export const loginUser = async user => {
         return await http.post(`${config['base_url']}/api/login`, JSON.stringify(user));
     });
 
-
 }
 
 export const logout = async () => {

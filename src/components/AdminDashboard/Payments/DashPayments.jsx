@@ -157,7 +157,7 @@ const DashPayments = () => {
 
 
                     <div
-                        className="p-2 rounded-lg bg-white dark:bg-slate-800 dark:text-slate-300 shadow-md flex gap-2 lg:gap-4 items-center">
+                        className="p-2 rounded-lg bg-slate-800 text-slate-300 shadow-md flex gap-2 lg:gap-4 items-center">
                         <span className={`cursor-pointer text-xxxs lg:text-xs ${filterMode === 'all' ? ' p-2 rounded-lg bg-slate-900' : ''}`} onClick={() => handleFiltringOnPayments('all')}>همه</span>
                         <span className={`cursor-pointer text-xxxs lg:text-xs ${filterMode === 'successful' ? ' p-2 rounded-lg bg-slate-900' : ''}`} onClick={() => handleFiltringOnPayments('successful')}>پرداخت موفق</span>
                         <span className={`cursor-pointer text-xxxs lg:text-xs ${filterMode === 'unsuccessful' ? ' p-2 rounded-lg bg-slate-900' : ''}`} onClick={() => handleFiltringOnPayments('unsuccessful')}>پرداخت ناموفق</span>
@@ -185,13 +185,13 @@ const DashPayments = () => {
                 </div>
 
 
-                <section className="py-2 mt-2 bg-white dark:bg-slate-800  shadow-md rounded-xl">
+                <section className="py-2 mt-2 bg-slate-800  shadow-md rounded-xl">
 
                     <table className="border-collapse text-right min-w-full">
 
                         <thead>
                             <tr
-                                className="text-xs lg:text-lg font-semibold border-b border-gray-200 dark:text-slate-500">
+                                className="text-xs lg:text-lg font-semibold border-b border-gray-200 text-slate-500">
                                 <th className="py-2 pr-1">#</th>
                                 <th className="py-2">نام کاربر</th>
                                 <th className="py-2">نام محصول</th>

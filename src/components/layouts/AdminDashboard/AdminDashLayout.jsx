@@ -76,7 +76,7 @@ const AdmminDashLayout = ({ children }) => {
                 <div className="flex items-center mr-2">
 
                     <button className="p-2 md:hidden" onClick={() => toggleSideBar()}>
-                        <i className="fa-solid fa-bars-staggered text-xl sm:text-2xl dark:text-slate-300"></i>
+                        <i className="fa-solid fa-bars-staggered text-xl sm:text-2xl text-slate-300"></i>
                     </button>
 
                     {!avatar ? (

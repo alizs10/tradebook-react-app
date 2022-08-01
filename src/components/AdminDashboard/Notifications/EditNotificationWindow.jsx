@@ -80,19 +80,19 @@ const EditNotificationWindow = ({ setDoUserNeedEditNotificationWindow, notificat
         <section className="absolute top-4 z-40 p-2 w-full">
 
             <div
-                className="flex flex-col gap-y-1 mx-2 rounded-lg shadow-lg bg-slate-100 dark:bg-slate-900 dark:text-white overflow-hidden">
+                className="flex flex-col gap-y-1 mx-2 rounded-lg shadow-lg bg-slate-900 text-white overflow-hidden">
 
                 <div className="flex justify-between items-center p-2">
                     <h2 className="text-sm">جزییات اعلان</h2>
 
-                    <button className="p-2 text-lg dark:text-slate-300" onClick={() => setDoUserNeedEditNotificationWindow(false)}>
+                    <button className="p-2 text-lg text-slate-300" onClick={() => setDoUserNeedEditNotificationWindow(false)}>
                         <i className="fa-regular fa-xmark"></i>
                     </button>
                 </div>
 
                 <div className="grid grid-cols-2 p-2 gap-2">
 
-                    <div className="col-span-1 flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
+                    <div className="col-span-1 flex flex-col gap-y-1 rounded-lg bg-slate-800 p-2">
                         <label htmlFor="userId">کاربر</label>
                         <select className='form-input' id="userId" value={userId} onChange={event => {
                             setUserId(event.target.value);
@@ -108,7 +108,7 @@ const EditNotificationWindow = ({ setDoUserNeedEditNotificationWindow, notificat
                     </div>
 
 
-                    <div className="col-span-1 flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
+                    <div className="col-span-1 flex flex-col gap-y-1 rounded-lg bg-slate-800 p-2">
                         <label htmlFor="seen">وضعیت</label>
                         <select className='form-input' id="seen" value={seen} onChange={event => {
                             setSeen(event.target.value);
@@ -120,7 +120,7 @@ const EditNotificationWindow = ({ setDoUserNeedEditNotificationWindow, notificat
 
                     </div>
 
-                    <div className="col-span-1 flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
+                    <div className="col-span-1 flex flex-col gap-y-1 rounded-lg bg-slate-800 p-2">
                         <label htmlFor="type">نوع اعلان</label>
                         <select className='form-input' id="type" value={type} onChange={event => {
                             setType(event.target.value);
@@ -134,7 +134,7 @@ const EditNotificationWindow = ({ setDoUserNeedEditNotificationWindow, notificat
                         {errors.type && (<span className='text-xxs text-red-400'>{errors.type}</span>)}
 
                     </div>
-                    <div className="col-span-1 flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
+                    <div className="col-span-1 flex flex-col gap-y-1 rounded-lg bg-slate-800 p-2">
                         <label htmlFor="section">انتخاب بخش</label>
                         <select className='form-input' id="section" value={section} onChange={event => {
                             setSection(event.target.value);
@@ -146,7 +146,7 @@ const EditNotificationWindow = ({ setDoUserNeedEditNotificationWindow, notificat
                         {errors.section && (<span className='text-xxs text-red-400'>{errors.section}</span>)}
 
                     </div>
-                    <div className="col-span-2 flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
+                    <div className="col-span-2 flex flex-col gap-y-1 rounded-lg bg-slate-800 p-2">
                         <label htmlFor="message">متن اعلان</label>
                         <textarea className='form-input' rows={5} id="message" value={message} onChange={event => {
                             setMessage(event.target.value);

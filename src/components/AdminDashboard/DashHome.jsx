@@ -56,7 +56,7 @@ const DashHome = () => {
             </Helmet>
             <section className="mx-2 mt-4 grid grid-cols-2 lg:grid-cols-3 gap-x-2 gap-y-4">
 
-                <div className="grid grid-cols-2 items-center rounded-lg shadow bg-white dark:bg-slate-800 p-1 lg:h-20">
+                <div className="grid grid-cols-2 items-center rounded-lg shadow bg-slate-800 p-1 lg:h-20">
 
                     <span>
                         <i className="fa-light fa-eye text-2xl lg:text-4xl mr-2 text-gray-400"></i>
@@ -64,11 +64,11 @@ const DashHome = () => {
 
                     <span className="grid grid-rows-2 text-left ml-2">
                         <span className="text-base lg:text-xl font-bold text-blue-600">332</span>
-                        <span className="text-xs lg:text-base font-light text-gray-600 dark:text-slate-300">بازدید ها</span>
+                        <span className="text-xs lg:text-base font-light text-slate-300">بازدید ها</span>
                     </span>
 
                 </div>
-                <div className="grid grid-cols-2 items-center rounded-lg shadow bg-white dark:bg-slate-800 p-1 lg:h-20">
+                <div className="grid grid-cols-2 items-center rounded-lg shadow bg-slate-800 p-1 lg:h-20">
 
                     <span>
                         <i className="fa-light fa-users text-2xl lg:text-4xl mr-2 text-gray-400"></i>
@@ -80,11 +80,11 @@ const DashHome = () => {
                                 <ClipLoader color={'#fff'} size={15} />
                             ) : (homeStat.usersCount)}
                         </span>
-                        <span className="text-xs lg:text-base font-light text-gray-600 dark:text-slate-300">کاربران</span>
+                        <span className="text-xs lg:text-base font-light text-slate-300">کاربران</span>
                     </span>
 
                 </div>
-                <div className="grid grid-cols-2 items-center rounded-lg shadow bg-white dark:bg-slate-800 p-1 lg:h-20">
+                <div className="grid grid-cols-2 items-center rounded-lg shadow bg-slate-800 p-1 lg:h-20">
 
                     <span>
                         <i className="fa-light fa-cart-shopping text-2xl lg:text-4xl mr-2 text-gray-400"></i>
@@ -96,11 +96,11 @@ const DashHome = () => {
                                 <ClipLoader color={'#fff'} size={15} />
                             ) : (homeStat.paymentsCount)}
                         </span>
-                        <span className="text-xs lg:text-base font-light text-gray-600 dark:text-slate-300">فروش</span>
+                        <span className="text-xs lg:text-base font-light text-slate-300">فروش</span>
                     </span>
 
                 </div>
-                <div className="grid grid-cols-2 items-center rounded-lg shadow bg-white dark:bg-slate-800 p-1 lg:h-20">
+                <div className="grid grid-cols-2 items-center rounded-lg shadow bg-slate-800 p-1 lg:h-20">
 
                     <span>
                         <i className="fa-light fa-user-gear  text-2xl lg:text-4xl mr-2 text-gray-400"></i>
@@ -112,11 +112,11 @@ const DashHome = () => {
                                 <ClipLoader color={'#fff'} size={15} />
                             ) : (homeStat.plansCount)}
                         </span>
-                        <span className="text-xs lg:text-base font-light text-gray-600 dark:text-slate-300">محصولات</span>
+                        <span className="text-xs lg:text-base font-light text-slate-300">محصولات</span>
                     </span>
 
                 </div>
-                <div className="grid grid-cols-2 items-center rounded-lg shadow bg-white dark:bg-slate-800 p-1 lg:h-20">
+                <div className="grid grid-cols-2 items-center rounded-lg shadow bg-slate-800 p-1 lg:h-20">
 
                     <span>
                         <i className="fa-light fa-sack-dollar text-2xl lg:text-4xl mr-2 text-gray-400"></i>
@@ -128,11 +128,11 @@ const DashHome = () => {
                                 <ClipLoader color={'#fff'} size={15} />
                             ) : (isNumber(homeStat.income) ? homeStat.income.toLocaleString() : homeStat.income)}
                         </span>
-                        <span className="text-xs lg:text-base font-light text-gray-600 dark:text-slate-300">درآمد</span>
+                        <span className="text-xs lg:text-base font-light text-slate-300">درآمد</span>
                     </span>
 
                 </div>
-                <div className="grid grid-cols-2 items-center rounded-lg shadow bg-white dark:bg-slate-800 p-1 lg:h-20">
+                <div className="grid grid-cols-2 items-center rounded-lg shadow bg-slate-800 p-1 lg:h-20">
 
                     <span>
                         <i className="fa-light fa-coins text-2xl lg:text-4xl mr-2 text-gray-400"></i>
@@ -144,7 +144,7 @@ const DashHome = () => {
                                 <ClipLoader color={'#fff'} size={15} />
                             ) : (homeStat.pairsCount)}
                         </span>
-                        <span className="text-xs lg:text-base font-light text-gray-600 dark:text-slate-300">جفت ارزها</span>
+                        <span className="text-xs lg:text-base font-light text-slate-300">جفت ارزها</span>
                     </span>
 
                 </div>
@@ -162,13 +162,13 @@ const DashHome = () => {
                 </div>
 
 
-                <section className="py-2 mt-2 bg-white dark:bg-slate-800  shadow-md rounded-xl">
+                <section className="py-2 mt-2 bg-slate-800  shadow-md rounded-xl">
 
                     <table className="border-collapse text-right min-w-full">
 
                         <thead>
                             <tr
-                                className="text-xs lg:text-lg font-semibold border-b border-gray-200 dark:text-slate-500">
+                                className="text-xs lg:text-lg font-semibold border-b border-gray-200 text-slate-500">
                                 <th className="py-2 pr-1">#</th>
                                 <th className="py-2">کاربر</th>
                                 <th className="py-2">محصول</th>
@@ -181,7 +181,7 @@ const DashHome = () => {
                         <tbody>
 
                             {lastPayments.map((payment, index) => (
-                                <tr key={index} className="text-xxs lg:text-base font-light dark:text-slate-300">
+                                <tr key={index} className="text-xxs lg:text-base font-light text-slate-300">
                                     <td className="py-2 pr-1">{index + 1}</td>
                                     <td className="py-2">{payment.user.name}</td>
                                     <td className="py-2">{payment.plan_name}</td>

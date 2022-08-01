@@ -196,7 +196,7 @@ const BuyProduct = () => {
                         <span className="text-xxs text-justify">{responseMessage.message}</span>
                     )}
                 </div>
-                <div className="col-span-2 bg-slate-300 text-slate-900 p-2 mx-2 rounded-lg flex flex-col gap-y-4">
+                <div className="col-span-2 bg-slate-700 text-white text-slate-900 p-2 mx-2 rounded-lg flex flex-col gap-y-4">
 
                     <div className="flex justify-between">
                         <span className="font-bold text-sm">تایید فاکتور</span>

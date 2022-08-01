@@ -75,18 +75,18 @@ const EditOrderWindow = ({ setDoUserNeedEditOrderWindow, order }) => {
         <section className="absolute top-4 z-40 p-2 w-full">
 
             <div
-                className="flex flex-col gap-y-1 mx-2 rounded-lg shadow-lg bg-slate-100 dark:bg-slate-900 dark:text-white overflow-hidden">
+                className="flex flex-col gap-y-1 mx-2 rounded-lg shadow-lg bg-slate-900 text-white overflow-hidden">
 
                 <div className="flex justify-between items-center p-2">
                     <h2 className="text-sm">ویرایش سفارش</h2>
 
-                    <button className="p-2 text-lg dark:text-slate-300" onClick={() => setDoUserNeedEditOrderWindow(false)}>
+                    <button className="p-2 text-lg text-slate-300" onClick={() => setDoUserNeedEditOrderWindow(false)}>
                         <i className="fa-regular fa-xmark"></i>
                     </button>
                 </div>
 
                 <div className="p-2 flex flex-col gap-y-1">
-                    <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
+                    <div className="flex flex-col gap-y-1 rounded-lg bg-slate-800 p-2">
                         <label htmlFor="userId">کاربر</label>
                         <select className='form-input' id="userId" value={userId} onChange={event => {
                             setUserId(event.target.value);
@@ -98,7 +98,7 @@ const EditOrderWindow = ({ setDoUserNeedEditOrderWindow, order }) => {
 
                         </select>
                     </div>
-                    <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
+                    <div className="flex flex-col gap-y-1 rounded-lg bg-slate-800 p-2">
                         <label htmlFor="planId">محصول</label>
                         <select className='form-input' id="planId" value={planId} onChange={event => {
                             setPlanId(event.target.value);
@@ -110,7 +110,7 @@ const EditOrderWindow = ({ setDoUserNeedEditOrderWindow, order }) => {
 
                         </select>
                     </div>
-                    <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
+                    <div className="flex flex-col gap-y-1 rounded-lg bg-slate-800 p-2">
                         <label className="text-xs h-fit">کد تخفیف</label>
                         <input type="text" className="form-input" value={discountCode} onChange={event => {
                             setDiscountCode(event.target.value);
@@ -118,7 +118,7 @@ const EditOrderWindow = ({ setDoUserNeedEditOrderWindow, order }) => {
 
                     </div>
 
-                    <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
+                    <div className="flex flex-col gap-y-1 rounded-lg bg-slate-800 p-2">
                         <label className="text-xs h-fit">تاریخ سفارش</label>
                         <input type="date" className="form-input" value={orderDate} onChange={event => {
                             setOrderDate(event.target.value);
@@ -126,7 +126,7 @@ const EditOrderWindow = ({ setDoUserNeedEditOrderWindow, order }) => {
 
                     </div>
 
-                    <div className="flex flex-col gap-y-1 rounded-lg bg-slate-200 dark:bg-slate-800 p-2">
+                    <div className="flex flex-col gap-y-1 rounded-lg bg-slate-800 p-2">
                         <label htmlFor="status">وضعیت</label>
                         <select className='form-input' id="status" value={status} onChange={event => {
                             setStatus(event.target.value);

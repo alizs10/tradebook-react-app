@@ -98,7 +98,7 @@ const PanelTickets = () => {
                 <h2 className="text-slate-300 text-lg">تیکت ها</h2>
 
                 <div
-                    className="p-2 rounded-lg bg-white dark:bg-slate-800 dark:text-slate-300 shadow-md flex gap-2 lg:gap-4 items-center">
+                    className="p-2 rounded-lg bg-slate-800 text-slate-300 shadow-md flex gap-2 lg:gap-4 items-center">
                     <span className={`cursor-pointer text-xxxs lg:text-xs ${filterMode === 'all' ? ' p-2 rounded-lg bg-slate-900' : ''}`} onClick={() => handleFiltringOnTickets('all')}>همه</span>
                     <span className={`cursor-pointer text-xxxs lg:text-xs ${filterMode === 'open' ? ' p-2 rounded-lg bg-slate-900' : ''}`} onClick={() => handleFiltringOnTickets('open')}>باز</span>
                     <span className={`cursor-pointer text-xxxs lg:text-xs ${filterMode === 'close' ? ' p-2 rounded-lg bg-slate-900' : ''}`} onClick={() => handleFiltringOnTickets('close')}>بسته</span>

@@ -114,7 +114,7 @@ const PanelOrders = () => {
                 <h2 className="text-slate-300 text-lg">سفارشات شما</h2>
 
                 <div
-                    className="p-2 rounded-lg bg-white dark:bg-slate-800 dark:text-slate-300 shadow-md flex gap-2 lg:gap-4 items-center">
+                    className="p-2 rounded-lg bg-slate-800 text-slate-300 shadow-md flex gap-2 lg:gap-4 items-center">
                     <span className={`cursor-pointer text-xxxs lg:text-xs ${filterMode === 'all' ? ' p-2 rounded-lg bg-slate-900' : ''}`} onClick={() => handleFiltringOnOrders('all')}>همه</span>
                     <span className={`cursor-pointer text-xxxs lg:text-xs ${filterMode === 'still' ? ' p-2 rounded-lg bg-slate-900' : ''}`} onClick={() => handleFiltringOnOrders('still')}>در انتظار پرداخت</span>
                     <span className={`cursor-pointer text-xxxs lg:text-xs ${filterMode === 'paid' ? ' p-2 rounded-lg bg-slate-900' : ''}`} onClick={() => handleFiltringOnOrders('paid')}>پرداخت شده</span>

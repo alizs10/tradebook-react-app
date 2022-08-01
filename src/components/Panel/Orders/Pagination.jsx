@@ -21,19 +21,19 @@ const Pagination = ({ currentPage, pages, setCurrentPage, total, startIndex, end
     }
     return (
         <div className="border-t-2 mx-2 mt-2 border-gray-100 flex justify-between pt-2 items-center gap-4">
-            <span className="text-xs text-slate-600 dark:text-slate-400 mr-2">
+            <span className="text-xs text-slate-400 mr-2">
                 نمایش {startIndex + 1} تا {endIndex} از {total} مورد
             </span>
             <div className="flex items-center gap-4 ml-2">
-                <button className="rounded-lg px-2 py-1 bg-slate-800 dark:text-slate-400" onClick={() => handlePageBack()}>
+                <button className="rounded-lg px-2 py-1 text-slate-400" onClick={() => handlePageBack()}>
                     <i className="fa-light fa-angle-right"></i>
                 </button>
 
-                <span className="text-xxs dark:text-slate-400">
+                <span className="text-xxs text-slate-400">
                     {currentPage} از {pages}
                 </span>
 
-                <button className="rounded-lg px-2 py-1 bg-slate-800 dark:text-slate-400" onClick={() => handlePageForward()}>
+                <button className="rounded-lg px-2 py-1 text-slate-400" onClick={() => handlePageForward()}>
                     <i className="fa-light fa-angle-left"></i>
                 </button>
             </div>

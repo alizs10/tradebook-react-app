@@ -116,7 +116,7 @@ const AdminDashSidebar = ({ toggleSideBar, handleLogout }) => {
                             </NavLink>
                         </li>
                         <li className="mt-2 flex gap-2 items-center">
-                            <span className="text-xs dark:text-slate-500">حالت شب</span>
+                            <span className="text-xs text-slate-500">حالت شب</span>
                             <div className="w-12 rounded-full p-1 bg-gray-300 flex items-center justify-start"
                                 id="dark-mode">
                                 <div className="w-4 h-4 rounded-full bg-slate-900 cursor-pointer">

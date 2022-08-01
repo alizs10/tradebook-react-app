@@ -40,12 +40,12 @@ const DetailsOrderWindow = ({ setDoUserNeedDetailsOrderWindow, order, handleDelO
         <section className="absolute top-4 z-40 p-2 w-full">
 
             <div
-                className="grid grid-cols-2 gap-2 mx-2 rounded-lg shadow-lg bg-slate-100 dark:bg-slate-900 dark:text-white overflow-hidden">
+                className="grid grid-cols-2 gap-2 mx-2 rounded-lg shadow-lg bg-slate-900 text-white overflow-hidden">
 
                 <div className="col-span-2 flex justify-between items-center p-2">
                     <h2 className="text-sm">جزییات سفارش</h2>
 
-                    <button className="p-2 text-lg dark:text-slate-300" onClick={() => setDoUserNeedDetailsOrderWindow(false)}>
+                    <button className="p-2 text-lg text-slate-300" onClick={() => setDoUserNeedDetailsOrderWindow(false)}>
                         <i className="fa-regular fa-xmark"></i>
                     </button>
                 </div>

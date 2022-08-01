@@ -20,7 +20,7 @@ const AuthLayouts = ({ children }) => {
                 </h1>
             </header>
 
-            <main>
+            <main className='bg-slate-900'>
 
                 <section className="flex flex-col items-center md:flex-row gap-y-8 mt-4 md:mt-10">
 
@@ -31,7 +31,7 @@ const AuthLayouts = ({ children }) => {
                     </div>
 
 
-                    <div className=" text-slate-300 w-full md:w-1/2 lg:flex lg:justify-center">
+                    <div className="text-slate-300 w-full md:w-1/2 lg:flex lg:justify-center">
 
                         <div className="flex flex-col gap-y-4 mx-2 lg:w-1/2">
 

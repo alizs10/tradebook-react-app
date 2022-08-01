@@ -222,7 +222,7 @@ const AccountMain = () => {
 
                 </div>
 
-                <section className="py-2 mx-2 bg-white dark:bg-slate-800  shadow-md rounded-xl">
+                <section className="py-2 mx-2 bg-slate-800  shadow-md rounded-xl">
                     {trades.length === 0 ? (
                         <div className='row-head w-100'>
                             <p className='text-center w-100'>اولین ترید خود را ثبت کنید</p>
@@ -231,7 +231,7 @@ const AccountMain = () => {
                         <table className="border-collapse text-right min-w-full">
 
                             <thead>
-                                <tr className="text-xs lg:text-lg font-semibold border-b border-gray-200 dark:text-slate-500">
+                                <tr className="text-xs lg:text-lg font-semibold border-b border-gray-200 text-slate-500">
                                     <th className="py-2 pr-1">#</th>
                                     <th className="py-2">جفت ارز</th>
                                     <th className="py-2">نوع</th>
@@ -244,7 +244,7 @@ const AccountMain = () => {
 
                             <tbody>
                                 {showArr.sliced_array.map((trade, index) => (
-                                    <tr key={trade.id} className="text-xxs lg:text-base font-light mt-2 py-2 dark:text-slate-300">
+                                    <tr key={trade.id} className="text-xxs lg:text-base font-light mt-2 py-2 text-slate-300">
                                         <td className="py-4 pr-1">{index + 1}</td>
                                         <td className="py-4">{moment(trade.trade_date, 'YYYY-jM-jD').format('YYYY/MM/DD')}</td>
                                         <td className="py-4">{trade.pair_name}</td>

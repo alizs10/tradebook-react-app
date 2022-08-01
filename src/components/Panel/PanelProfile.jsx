@@ -162,15 +162,15 @@ const PanelProfile = () => {
                     <div className="flex flex-col gap-y-4">
                         <div className="flex flex-col gap-y-1">
                             <span className="text-xs font-light text-slate-400">نام و نام خانوداگی:</span>
-                            <span className="text-sm font-semibold dark:text-slate-300">{user.name}</span>
+                            <span className="text-sm font-semibold text-slate-300">{user.name}</span>
                         </div>
                         <div className="flex flex-col gap-y-1">
                             <span className="text-xs font-light text-slate-400">ایمیل:</span>
-                            <span className="text-sm font-semibold dark:text-slate-300">{user.email}</span>
+                            <span className="text-sm font-semibold text-slate-300">{user.email}</span>
                         </div>
                         <div className="flex flex-col gap-y-1">
                             <span className="text-xs font-light text-slate-400">شماره موبایل:</span>
-                            <span className="text-sm font-semibold dark:text-slate-300">{user.mobile}</span>
+                            <span className="text-sm font-semibold text-slate-300">{user.mobile}</span>
                         </div>
                         <span className="text-base text-slate-300">کد معرف شما: <span
                             className="text-emerald-400 font-bold">{user.referral_code}</span></span>

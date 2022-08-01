@@ -95,21 +95,21 @@ const DashProfile = () => {
                 </div>
 
 
-                <section className="py-2 mt-2 bg-white dark:bg-slate-800  shadow-md rounded-xl">
+                <section className="py-2 mt-2 bg-slate-800  shadow-md rounded-xl">
                     <div className="flex justify-between mx-2">
 
                         <div className="flex flex-col gap-y-4">
                             <div className="flex flex-col gap-y-1">
-                                <span className="text-xs font-light dark:text-slate-500 dark:text-slate-200">نام و نام خانوداگی:</span>
-                                <span className="text-sm font-semibold dark:text-slate-300">{user.name}</span>
+                                <span className="text-xs font-light text-slate-500 text-slate-200">نام و نام خانوداگی:</span>
+                                <span className="text-sm font-semibold text-slate-300">{user.name}</span>
                             </div>
                             <div className="flex flex-col gap-y-1">
-                                <span className="text-xs font-light dark:text-slate-500 dark:text-slate-200">ایمیل:</span>
-                                <span className="text-sm font-semibold dark:text-slate-300">{user.email}</span>
+                                <span className="text-xs font-light text-slate-500 text-slate-200">ایمیل:</span>
+                                <span className="text-sm font-semibold text-slate-300">{user.email}</span>
                             </div>
                             <div className="flex flex-col gap-y-1">
-                                <span className="text-xs font-light dark:text-slate-500 dark:text-slate-200">شماره موبایل:</span>
-                                <span className="text-sm font-semibold dark:text-slate-300">{user.mobile}</span>
+                                <span className="text-xs font-light text-slate-500 text-slate-200">شماره موبایل:</span>
+                                <span className="text-sm font-semibold text-slate-300">{user.mobile}</span>
                             </div>
 
                         </div>
